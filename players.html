@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топ Игроков - Geometry Dash Demon List</title>
+    <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-red: #ff3333;
+            --accent-blue: #3366ff;
+            --accent-purple: #9933ff;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-red);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 15px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-red), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Players List */
+        .players-list {
+            padding: 40px 0;
+        }
+        
+        .list-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .list-header h2 {
+            font-size: 28px;
+        }
+        
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .player-row {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            gap: 25px;
+            position: relative;
+        }
+        
+        .player-row:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: var(--bg-tertiary);
+        }
+        
+        .player-rank {
+            font-size: 28px;
+            font-weight: bold;
+            width: 60px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .rank.top-1 {
+            color: gold;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        
+        .rank.top-3 {
+            color: silver;
+        }
+        
+        .rank.top-10 {
+            color: #cd7f32; /* bronze */
+        }
+        
+        .player-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--accent-red);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .player-avatar:hover {
+            transform: scale(1.1);
+        }
+        
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .player-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .player-name {
+            font-size: 24px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .player-name:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--accent-blue);
+        }
+        
+        .player-score {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--accent-red);
+            min-width: 100px;
+            text-align: right;
+        }
+        
+        .player-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        .action-btn.delete:hover {
+            background-color: var(--accent-red);
+            border-color: var(--accent-red);
+        }
+
+        /* Секция прогресса демонов */
+        .demon-progress-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .demon-progress-section h3 {
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .player-selector {
+            margin-bottom: 20px;
+        }
+
+        .player-select {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .demon-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .demon-item {
+            background-color: var(--bg-tertiary);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .demon-item:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .demon-info {
+            flex: 1;
+        }
+
+        .demon-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .demon-points {
+            font-size: 14px;
+            color: var(--accent-red);
+        }
+
+        .completion-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .completion-btn.completed {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .completion-btn:hover:not(.completed) {
+            background: var(--accent-purple);
+            color: white;
+            border-color: var(--accent-purple);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--bg-tertiary);
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .stats-item {
+            text-align: center;
+        }
+
+        .stats-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .stats-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .player-demons {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .player-demons span {
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        /* Модальное окно для выбора демонов */
+        .demon-selector {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .demon-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: var(--bg-tertiary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .demon-option:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .demon-option.selected {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+
+        .demon-option input {
+            margin-right: 10px;
+        }
+
+        /* Edit Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--accent-blue);
+        }
+        
+        .modal h3 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .modal-btn.save {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+        
+        .modal-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid var(--accent-blue);
+        }
+        
+        .admin-panel h3 {
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .admin-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-btn {
+            padding: 10px 15px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .admin-btn:hover {
+            background: var(--accent-purple);
+        }
+        
+        .admin-btn.reset {
+            background: var(--accent-red);
+        }
+        
+        .sync-status {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .sync-status.synced {
+            color: #00cc66;
+            border-left: 3px solid #00cc66;
+        }
+        
+        .sync-status.error {
+            color: var(--accent-red);
+            border-left: 3px solid var(--accent-red);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .player-row {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px;
+                gap: 20px;
+            }
+            
+            .player-info {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .player-score {
+                text-align: center;
+                min-width: auto;
+            }
+            
+            .player-actions {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .demon-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .admin-buttons {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Geometry Dash <span>Demon List</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="players.html" style="color: var(--text-primary);">Топ игроков</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="breadcrumb container">
+        <a href="index.html">Главная</a> &gt; Топ игроков
+    </div>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Топ Игроков</h1>
+            <p>Рейтинг лучших игроков Geometry Dash</p>
+        </div>
+    </section>
+    
+    <section class="players-list">
+        <div class="container">
+            <div class="list-header">
+                <h2>Лучшие игроки 2023</h2>
+            </div>
+            
+            <!-- СЕКЦИЯ ПРОГРЕССА ПРОХОЖДЕНИЯ ДЕМОНОВ -->
+            <div class="demon-progress-section">
+                <h3>👹 Прогресс прохождения демонов</h3>
+                
+                <div class="player-selector">
+                    <select class="player-select" id="playerSelect" onchange="selectPlayer(this.value)">
+                        <option value="">Выберите игрока...</option>
+                    </select>
+                </div>
+                
+                <div class="demon-list" id="demonList">
+                    <!-- Демоны будут добавлены автоматически -->
+                </div>
+                
+                <div class="progress-stats">
+                    <div class="stats-item">
+                        <div class="stats-value" id="completedCount">0</div>
+                        <div class="stats-label">Пройдено</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="totalPoints">0</div>
+                        <div class="stats-label">Всего очков</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="totalDemons">0</div>
+                        <div class="stats-label">Всего демонов</div>
+                    </div>
+                    <div class="stats-item">
+                        <div class="stats-value" id="completionRate">0%</div>
+                        <div class="stats-label">Процент завершения</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="list-container" id="playersList">
+                <!-- Игроки будут добавлены автоматически через JavaScript -->
+            </div>
+
+            <!-- Модальное окно редактирования -->
+            <div id="editModal" class="modal">
+                <div class="modal-content">
+                    <h3>✏️ Редактировать игрока</h3>
+                    <div class="form-group">
+                        <label for="editName">Имя игрока:</label>
+                        <input type="text" id="editName" placeholder="Введите имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="editAvatar">Аватар (1 символ):</label>
+                        <input type="text" id="editAvatar" maxlength="1" placeholder="A">
+                    </div>
+                    <div class="form-group">
+                        <label>Пройденные демоны:</label>
+                        <div class="demon-selector" id="demonSelector">
+                            <!-- Демоны для выбора будут добавлены автоматически -->
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="modal-btn cancel" onclick="closeEditModal()">Отмена</button>
+                        <button class="modal-btn save" onclick="savePlayerEdit()">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Панель администратора -->
+            <div class="admin-panel">
+                <h3>⚙️ Панель управления</h3>
+                <div class="admin-buttons">
+                    <button class="admin-btn" onclick="addExampleData()">➕ Добавить тестовые данные</button>
+                    <button class="admin-btn" onclick="addNewPlayer()">🎮 Добавить игрока</button>
+                    <button class="admin-btn" onclick="addNewDemon()">👹 Добавить демона</button>
+                    <button class="admin-btn" onclick="showStats()">📊 Статистика</button>
+                    <button class="admin-btn reset" onclick="resetData()">🔄 Сбросить данные</button>
+                    <button class="admin-btn" onclick="forceSync()">🔄 Синхронизировать</button>
+                </div>
+                <div id="syncStatus" class="sync-status"></div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Geometry Dash Demon List</h3>
+                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Ссылки</h3>
+                    <a href="index.html">Главная</a>
+                    <a href="players.html">Топ игроков</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="contacts.html">Команда</a>
+                    <a href="#">Discord</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // БАЗА ДАННЫХ ПО УМОЛЧАНИЮ
+        const defaultDemons = [
+            { id: 'bloodbath', name: 'Bloodbath', points: 1000 },
+            { id: 'cataclysm', name: 'Cataclysm', points: 950 },
+            { id: 'sakupen-hell', name: 'Sakupen Hell', points: 900 }
+        ];
+
+        const defaultPlayers = [
+            {
+                id: 'riot',
+                name: 'Riot',
+                avatar: 'R',
+                completedDemons: ['bloodbath', 'cataclysm']
+            },
+            {
+                id: 'sunix',
+                name: 'Sunix',
+                avatar: 'S',
+                completedDemons: ['bloodbath']
+            }
+        ];
+
+        // ЗАГРУЗКА ДАННЫХ ИЗ LOCALSTORAGE С СИНХРОНИЗАЦИЕЙ
+        let demons = [];
+        let players = [];
+        let selectedPlayerId = null;
+
+        function loadData() {
+            // Загружаем демонов из index.html
+            const savedDemons = localStorage.getItem('gd_demons');
+            if (savedDemons) {
+                demons = JSON.parse(savedDemons);
+                console.log('👹 Демоны загружены из index.html:', demons.length);
+            } else {
+                demons = [...defaultDemons];
+                console.log('👹 Использованы демоны по умолчанию');
+            }
+
+            // Загружаем игроков
+            const savedPlayers = localStorage.getItem('gd_players');
+            if (savedPlayers) {
+                players = JSON.parse(savedPlayers);
+                console.log('🎮 Игроки загружены:', players.length);
+            } else {
+                players = [...defaultPlayers];
+                console.log('🎮 Использованы игроки по умолчанию');
+            }
+
+            updateSyncStatus();
+        }
+
+        // ПЕРЕМЕННЫЕ ДЛЯ РЕДАКТИРОВАНИЯ
+        let currentEditingPlayer = null;
+
+        // ФУНКЦИЯ СОХРАНЕНИЯ ДАННЫХ
+        function saveData() {
+            localStorage.setItem('gd_players', JSON.stringify(players));
+            console.log('💾 Данные игроков сохранены!');
+            updateSyncStatus();
+        }
+
+        // Функция для подсчета очков игрока
+        function calculatePlayerPoints(player) {
+            let totalPoints = 0;
+            if (player.completedDemons) {
+                player.completedDemons.forEach(demonId => {
+                    const demon = demons.find(d => d.id === demonId);
+                    if (demon) {
+                        totalPoints += demon.points;
+                    }
+                });
+            }
+            return totalPoints;
+        }
+
+        // Функция для отображения игроков
+        function renderPlayers() {
+            const playersList = document.getElementById('playersList');
+            playersList.innerHTML = '';
+            
+            // Считаем очки для каждого игрока
+            players.forEach(player => {
+                player.totalPoints = calculatePlayerPoints(player);
+            });
+            
+            // Сортируем игроков по очкам (от большего к меньшему)
+            players.sort((a, b) => b.totalPoints - a.totalPoints);
+            
+            // Отображаем игроков
+            players.forEach((player, index) => {
+                const rank = index + 1;
+                const rankClass = rank === 1 ? 'top-1' : 
+                                rank <= 3 ? 'top-3' : 
+                                rank <= 10 ? 'top-10' : '';
+                
+                const completedCount = player.completedDemons ? player.completedDemons.length : 0;
+                
+                const playerRow = document.createElement('div');
+                playerRow.className = 'player-row';
+                playerRow.innerHTML = `
+                    <div class="player-rank ${rankClass}">${rank}</div>
+                    <div class="player-avatar" onclick="selectPlayer('${player.id}')">
+                        <div class="avatar-placeholder">${player.avatar}</div>
+                    </div>
+                    <div class="player-info">
+                        <span class="player-name" onclick="selectPlayer('${player.id}')">${player.name}</span>
+                        <div class="player-score">${player.totalPoints} pts</div>
+                        <div class="player-demons">Пройдено демонов: <span>${completedCount}</span></div>
+                    </div>
+                    <div class="player-actions">
+                        <button class="action-btn" onclick="editPlayer('${player.id}')">✏️</button>
+                        <button class="action-btn delete" onclick="deletePlayer('${player.id}')">🗑️</button>
+                    </div>
+                `;
+                playersList.appendChild(playerRow);
+            });
+
+            // Обновляем селектор игроков
+            updatePlayerSelector();
+
+            // Сохраняем данные после рендеринга
+            saveData();
+        }
+
+        // Функция для обновления селектора игроков
+        function updatePlayerSelector() {
+            const playerSelect = document.getElementById('playerSelect');
+            playerSelect.innerHTML = '<option value="">Выберите игрока...</option>';
+            
+            players.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player.id;
+                option.textContent = player.name;
+                if (player.id === selectedPlayerId) {
+                    option.selected = true;
+                }
+                playerSelect.appendChild(option);
+            });
+        }
+
+        // Функция для выбора игрока
+        function selectPlayer(playerId) {
+            selectedPlayerId = playerId;
+            updatePlayerSelector();
+            renderDemonList();
+        }
+
+        // Функция для получения текущего выбранного игрока
+        function getCurrentPlayer() {
+            return players.find(p => p.id === selectedPlayerId) || null;
+        }
+
+        // Функция для отображения списка демонов
+        function renderDemonList() {
+            const demonList = document.getElementById('demonList');
+            demonList.innerHTML = '';
+            
+            const currentPlayer = getCurrentPlayer();
+            
+            demons.forEach(demon => {
+                const isCompleted = currentPlayer?.completedDemons?.includes(demon.id) || false;
+                
+                const demonItem = document.createElement('div');
+                demonItem.className = 'demon-item';
+                demonItem.innerHTML = `
+                    <div class="demon-info">
+                        <div class="demon-name">${demon.name}</div>
+                        <div class="demon-points">${demon.points} очков</div>
+                    </div>
+                    <button class="completion-btn ${isCompleted ? 'completed' : ''}" 
+                            onclick="toggleDemonCompletion('${demon.id}')"
+                            ${!currentPlayer ? 'disabled' : ''}>
+                        ${isCompleted ? '✅ Пройден' : '❌ Не пройден'}
+                    </button>
+                `;
+                demonList.appendChild(demonItem);
+            });
+            
+            updateProgressStats();
+        }
+
+        // Функция для переключения статуса прохождения демона
+        function toggleDemonCompletion(demonId) {
+            const currentPlayer = getCurrentPlayer();
+            if (!currentPlayer) {
+                alert('Сначала выберите игрока!');
+                return;
+            }
+            
+            if (!currentPlayer.completedDemons) {
+                currentPlayer.completedDemons = [];
+            }
+            
+            const index = currentPlayer.completedDemons.indexOf(demonId);
+            if (index > -1) {
+                // Удаляем из пройденных
+                currentPlayer.completedDemons.splice(index, 1);
+                console.log(`❌ Демон ${demonId} удален из пройденных для игрока ${currentPlayer.name}`);
+            } else {
+                // Добавляем в пройденные
+                currentPlayer.completedDemons.push(demonId);
+                console.log(`✅ Демон ${demonId} добавлен в пройденные для игрока ${currentPlayer.name}`);
+            }
+            
+            renderDemonList();
+            renderPlayers();
+            saveData();
+        }
+
+        // Функция для обновления статистики прогресса
+        function updateProgressStats() {
+            const currentPlayer = getCurrentPlayer();
+            if (!currentPlayer || !currentPlayer.completedDemons) {
+                document.getElementById('completedCount').textContent = '0';
+                document.getElementById('totalPoints').textContent = '0';
+                document.getElementById('totalDemons').textContent = demons.length;
+                document.getElementById('completionRate').textContent = '0%';
+                return;
+            }
+            
+            const completedCount = currentPlayer.completedDemons.length;
+            const totalPoints = calculatePlayerPoints(currentPlayer);
+            const completionRate = Math.round((completedCount / demons.length) * 100);
+            
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('totalDemons').textContent = demons.length;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
+
+        // === ФУНКЦИИ РЕДАКТИРОВАНИЯ ИГРОКОВ ===
+
+        function editPlayer(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (player) {
+                currentEditingPlayer = player;
+                document.getElementById('editName').value = player.name;
+                document.getElementById('editAvatar').value = player.avatar;
+                
+                // Заполняем селектор демонов
+                const demonSelector = document.getElementById('demonSelector');
+                demonSelector.innerHTML = '';
+                
+                demons.forEach(demon => {
+                    const isSelected = player.completedDemons?.includes(demon.id) || false;
+                    
+                    const demonOption = document.createElement('div');
+                    demonOption.className = `demon-option ${isSelected ? 'selected' : ''}`;
+                    demonOption.innerHTML = `
+                        <label style="display: flex; align-items: center; width: 100%; cursor: pointer;">
+                            <input type="checkbox" ${isSelected ? 'checked' : ''} 
+                                   onchange="toggleDemonSelection('${demon.id}')" 
+                                   style="margin-right: 10px;">
+                            <span>${demon.name} (${demon.points} pts)</span>
+                        </label>
+                    `;
+                    demonSelector.appendChild(demonOption);
+                });
+                
+                document.getElementById('editModal').style.display = 'flex';
+            }
+        }
+
+        function editPlayerName(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (player) {
+                const newName = prompt('Введите новое имя игрока:', player.name);
+                if (newName && newName.trim() !== '') {
+                    player.name = newName.trim();
+                    console.log(`✏️ Имя игрока изменено на: ${player.name}`);
+                    renderPlayers();
+                }
+            }
+        }
+
+        function editPlayerAvatar(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (player) {
+                const newAvatar = prompt('Введите новый аватар (1 символ):', player.avatar);
+                if (newAvatar && newAvatar.trim() !== '') {
+                    player.avatar = newAvatar.trim().charAt(0).toUpperCase();
+                    console.log(`🖼️ Аватар игрока изменен на: ${player.avatar}`);
+                    renderPlayers();
+                }
+            }
+        }
+
+        function savePlayerEdit() {
+            if (currentEditingPlayer) {
+                const newName = document.getElementById('editName').value.trim();
+                const newAvatar = document.getElementById('editAvatar').value.trim().charAt(0).toUpperCase();
+                
+                if (newName && newAvatar) {
+                    currentEditingPlayer.name = newName;
+                    currentEditingPlayer.avatar = newAvatar;
+                    console.log(`✅ Игрок обновлен: ${newName} (${newAvatar})`);
+                    renderPlayers();
+                    closeEditModal();
+                } else {
+                    alert('Пожалуйста, заполните все поля!');
+                }
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditingPlayer = null;
+        }
+
+        function toggleDemonSelection(demonId) {
+            if (!currentEditingPlayer) return;
+            
+            if (!currentEditingPlayer.completedDemons) {
+                currentEditingPlayer.completedDemons = [];
+            }
+            
+            const index = currentEditingPlayer.completedDemons.indexOf(demonId);
+            if (index > -1) {
+                currentEditingPlayer.completedDemons.splice(index, 1);
+            } else {
+                currentEditingPlayer.completedDemons.push(demonId);
+            }
+            
+            // Обновляем визуальное состояние
+            const options = document.querySelectorAll('.demon-option');
+            options.forEach(option => {
+                const checkbox = option.querySelector('input');
+                const demonIdFromOption = checkbox.getAttribute('onchange').match(/'([^']+)'/)[1];
+                if (demonIdFromOption === demonId) {
+                    option.className = `demon-option ${checkbox.checked ? 'selected' : ''}`;
+                }
+            });
+        }
+
+        function deletePlayer(playerId) {
+            const player = players.find(p => p.id === playerId);
+            if (player && confirm(`Вы уверены, что хотите удалить игрока "${player.name}"?`)) {
+                players = players.filter(p => p.id !== playerId);
+                console.log(`🗑️ Игрок удален: ${player.name}`);
+                if (selectedPlayerId === playerId) {
+                    selectedPlayerId = null;
+                }
+                renderPlayers();
+                renderDemonList();
+            }
+        }
+
+        // === ФУНКЦИИ СИНХРОНИЗАЦИИ ===
+
+        function updateSyncStatus() {
+            const statusElement = document.getElementById('syncStatus');
+            const demonsCount = demons.length;
+            const playersCount = players.length;
+            
+            statusElement.textContent = `Синхронизировано: ${demonsCount} демонов, ${playersCount} игроков`;
+            statusElement.className = 'sync-status synced';
+        }
+
+        function forceSync() {
+            loadData();
+            renderPlayers();
+            renderDemonList();
+            console.log('🔄 Принудительная синхронизация выполнена');
+        }
+
+        // === ОСНОВНЫЕ ФУНКЦИИ ===
+
+        function addDemon(demonId, demonName, demonPoints) {
+            demons.push({
+                id: demonId,
+                name: demonName,
+                points: demonPoints
+            });
+            console.log(`✅ Добавлен демон: ${demonName} (${demonPoints} pts)`);
+            // Сохраняем демонов обратно в localStorage для синхронизации
+            localStorage.setItem('gd_demons', JSON.stringify(demons));
+            renderPlayers();
+            renderDemonList();
+        }
+
+        function addPlayer(playerId, playerName, playerAvatar = '?') {
+            players.push({
+                id: playerId,
+                name: playerName,
+                avatar: playerAvatar.charAt(0).toUpperCase(),
+                completedDemons: []
+            });
+            console.log(`✅ Добавлен игрок: ${playerName}`);
+            renderPlayers();
+        }
+
+        function addCompletion(playerId, demonId) {
+            const player = players.find(p => p.id === playerId);
+            const demon = demons.find(d => d.id === demonId);
+            
+            if (!player) {
+                console.log(`❌ Игрок ${playerId} не найден`);
+                return;
+            }
+            if (!demon) {
+                console.log(`❌ Демон ${demonId} не найден`);
+                return;
+            }
+            if (player.completedDemons.includes(demonId)) {
+                console.log(`ℹ️ Игрок ${playerId} уже прошел ${demonId}`);
+                return;
+            }
+            
+            player.completedDemons.push(demonId);
+            console.log(`✅ Игрок ${playerId} прошел демона: ${demon.name}`);
+            renderPlayers();
+            renderDemonList();
+        }
+
+        function showStats() {
+            console.log('=== СТАТИСТИКА ===');
+            console.log(`Демонов: ${demons.length}`);
+            console.log(`Игроков: ${players.length}`);
+            players.forEach(player => {
+                console.log(`${player.name}: ${player.completedDemons ? player.completedDemons.length : 0} демонов, ${calculatePlayerPoints(player)} pts`);
+            });
+            alert(`📊 Статистика:\nДемонов: ${demons.length}\nИгроков: ${players.length}\n(подробности в консоли)`);
+        }
+
+        function resetData() {
+            if (confirm('Вы уверены, что хотите сбросить все данные?')) {
+                localStorage.removeItem('gd_players');
+                players = [...defaultPlayers];
+                selectedPlayerId = null;
+                renderPlayers();
+                renderDemonList();
+                console.log('🔄 Данные игроков сброшены к значениям по умолчанию');
+            }
+        }
+
+        function addExampleData() {
+            addDemon('aftercatabath', 'Aftercatabath', 850);
+            addDemon('artificial-ascent', 'Artificial Ascent', 800);
+            addPlayer('cursed', 'Cursed', 'C');
+            addCompletion('cursed', 'bloodbath');
+            addCompletion('cursed', 'cataclysm');
+            addCompletion('riot', 'sakupen-hell');
+            alert('✅ Тестовые данные добавлены!');
+        }
+
+        function addNewPlayer() {
+            const name = prompt('Введите имя игрока:');
+            if (name) {
+                const id = name.toLowerCase().replace(/\s+/g, '-');
+                const avatar = name.charAt(0).toUpperCase();
+                addPlayer(id, name, avatar);
+            }
+        }
+
+        function addNewDemon() {
+            const name = prompt('Введите название демона:');
+            if (name) {
+                const points = parseInt(prompt('Введите очки за прохождение:'));
+                if (points && points > 0) {
+                    const id = name.toLowerCase().replace(/\s+/g, '-');
+                    addDemon(id, name, points);
+                }
+            }
+        }
+
+        // === КОМАНДЫ ДЛЯ КОНСОЛИ ===
+        window.addDemon = addDemon;
+        window.addPlayer = addPlayer;
+        window.addCompletion = addCompletion;
+        window.editPlayer = editPlayer;
+        window.showStats = showStats;
+        window.forceSync = forceSync;
+        window.selectPlayer = selectPlayer;
+
+        // Загружаем игроков при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            renderPlayers();
+            renderDemonList();
+            
+            // Добавляем анимацию
+            setTimeout(() => {
+                document.querySelectorAll('.player-row').forEach((row, index) => {
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(-20px)';
+                    
+                    setTimeout(() => {
+                        row.style.transition = 'opacity 0.5s, transform 0.5s';
+                        row.style.opacity = '1';
+                        row.style.transform = 'translateX(0)';
+                    }, index * 100);
+                });
+            }, 100);
+
+            console.log('🎮 Команды для консоли:');
+            console.log('addDemon("id", "Название", очки)');
+            console.log('addPlayer("id", "Имя", "Аватар")');
+            console.log('addCompletion("id_игрока", "id_демона")');
+            console.log('editPlayer("id_игрока")');
+            console.log('selectPlayer("id_игрока")');
+            console.log('showStats()');
+            console.log('forceSync() - принудительная синхронизация');
+        });
+
+        // Закрытие модального окна при клике вне его
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        });
+
+        // Синхронизация при возвращении на страницу
+        window.addEventListener('focus', function() {
+            console.log('🔄 Проверка синхронизации...');
+            loadData();
+            renderPlayers();
+            renderDemonList();
+        });
+    </script>
+</body>
+</html>
