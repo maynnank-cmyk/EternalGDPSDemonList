@@ -271,6 +271,17 @@
             border-color: var(--accent-red);
         }
 
+        .action-btn.admin-only {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .action-btn.admin-only:hover {
+            background: none;
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+
         /* Секция прогресса демонов */
         .demon-progress-section {
             margin: 30px 0;
@@ -361,6 +372,17 @@
             background: var(--accent-purple);
             color: white;
             border-color: var(--accent-purple);
+        }
+
+        .completion-btn.admin-only {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .completion-btn.admin-only:hover:not(.completed) {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-color: var(--border-color);
         }
 
         .progress-stats {
@@ -576,6 +598,18 @@
             color: var(--accent-red);
             border-left: 3px solid var(--accent-red);
         }
+
+        /* Admin badge */
+        .admin-badge {
+            display: inline-block;
+            background: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 10px;
+            vertical-align: super;
+        }
         
         /* Footer */
         footer {
@@ -775,9 +809,9 @@
 
             <!-- Панель администратора (скрыта по умолчанию) -->
             <div class="admin-panel" id="adminPanel" style="display: none;">
-                <h3>⚙️ Панель управления</h3>
+                <h3>⚙️ Панель управления <span class="admin-badge">ADMIN</span></h3>
                 <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px;">
-                    🔒 Админ режим активирован
+                    🔒 Админ режим активирован. Все функции редактирования теперь доступны.
                 </div>
                 <div class="admin-buttons">
                     <button class="admin-btn" onclick="addExampleData()">➕ Тестовые данные</button>
@@ -786,7 +820,7 @@
                     <button class="admin-btn" onclick="showStats()">📊 Статистика</button>
                     <button class="admin-btn reset" onclick="resetData()">🔄 Сбросить</button>
                     <button class="admin-btn" onclick="forceSync()">🔄 Синхронизация</button>
-                    <button class="admin-btn" onclick="hideAdminPanel()" style="background: var(--accent-red);">👋 Скрыть</button>
+                    <button class="admin-btn" onclick="hideAdminPanel()" style="background: var(--accent-red);">👋 Выйти из админки</button>
                 </div>
                 <div id="syncStatus" class="sync-status"></div>
             </div>
@@ -891,12 +925,13 @@
         let players = [];
         let selectedPlayerId = 'riot'; // Выбираем первого игрока по умолчанию
         let currentEditingPlayer = null;
+        let isAdminMode = false; // Флаг админ режима
 
         // ========== СИСТЕМА БЕЗОПАСНОСТИ АДМИН ПАНЕЛИ ==========
         
         function checkAdminAccess() {
             const password = prompt('Введите пароль для доступа к админ панели:');
-            if (password === 'demon123' || password === 'admin' || password === 'geometry') {
+            if (password === 'eternalgdpspl123') {
                 showAdminPanel();
             } else if (password) {
                 alert('❌ Неверный пароль!');
@@ -906,49 +941,19 @@
         function initAdminSecurity() {
             // Скрываем панель при загрузке
             hideAdminPanel();
-            
-            // Комбинация клавиш: ↑ ↑ ↓ ↓ ← → ← → B A
-            let keySequence = [];
-            const secretCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-            
-            document.addEventListener('keydown', function(event) {
-                keySequence.push(event.code);
-                if (keySequence.length > secretCode.length) {
-                    keySequence.shift();
-                }
-                if (JSON.stringify(keySequence) === JSON.stringify(secretCode)) {
-                    showAdminPanel();
-                    keySequence = [];
-                }
-            });
-            
-            // Двойной клик по логотипу
-            const logo = document.querySelector('.logo');
-            if (logo) {
-                let clickCount = 0;
-                let clickTimer;
-                
-                logo.addEventListener('click', function() {
-                    clickCount++;
-                    if (clickCount === 1) {
-                        clickTimer = setTimeout(() => {
-                            clickCount = 0;
-                        }, 500);
-                    } else if (clickCount === 2) {
-                        clearTimeout(clickTimer);
-                        clickCount = 0;
-                        showAdminPanel();
-                    }
-                });
-            }
         }
 
         function showAdminPanel() {
             const adminPanel = document.getElementById('adminPanel');
             if (adminPanel) {
                 adminPanel.style.display = 'block';
-                console.log('🔓 Админ панель активирована');
-                showNotification('🔓 Админ панель активирована!', 'success');
+                isAdminMode = true;
+                console.log('🔓 Админ режим активирован');
+                showNotification('🔓 Админ режим активирован! Все функции редактирования теперь доступны.', 'success');
+                
+                // Перерисовываем интерфейс с включенными кнопками
+                renderPlayers();
+                renderDemonList();
             }
         }
 
@@ -956,8 +961,13 @@
             const adminPanel = document.getElementById('adminPanel');
             if (adminPanel) {
                 adminPanel.style.display = 'none';
-                console.log('🔒 Админ панель скрыта');
-                showNotification('🔒 Админ панель скрыта', 'info');
+                isAdminMode = false;
+                console.log('🔒 Админ режим выключен');
+                showNotification('🔒 Админ режим выключен. Функции редактирования заблокированы.', 'info');
+                
+                // Перерисовываем интерфейс с выключенными кнопками
+                renderPlayers();
+                renderDemonList();
             }
         }
 
@@ -983,7 +993,7 @@
                 notification.style.opacity = '0';
                 notification.style.transition = 'opacity 0.5s';
                 setTimeout(() => notification.remove(), 500);
-            }, 2000);
+            }, 3000);
         }
 
         // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
@@ -998,16 +1008,10 @@
             console.log('✅ Загружено демонов:', demons.length);
             console.log('✅ Загружено игроков:', players.length);
             
-            // Показываем демонов в консоли для отладки
-            demons.forEach(demon => {
-                console.log(`👹 ${demon.name}: ${demon.points} очков`);
-            });
-            
             updateSyncStatus();
         }
 
         function saveData() {
-            // Для GitHub Pages просто логируем
             console.log('💾 Данные сохранены (в памяти)');
             updateSyncStatus();
         }
@@ -1055,6 +1059,13 @@
                 
                 const playerRow = document.createElement('div');
                 playerRow.className = 'player-row';
+                
+                // Определяем классы для кнопок в зависимости от админ режима
+                const editBtnClass = isAdminMode ? 'action-btn' : 'action-btn admin-only';
+                const deleteBtnClass = isAdminMode ? 'action-btn delete' : 'action-btn delete admin-only';
+                const editFunction = isAdminMode ? `editPlayer('${player.id}')` : 'showAdminRequiredMessage()';
+                const deleteFunction = isAdminMode ? `deletePlayer('${player.id}')` : 'showAdminRequiredMessage()';
+                
                 playerRow.innerHTML = `
                     <div class="player-rank ${rankClass}">${rank}</div>
                     <div class="player-avatar" onclick="selectPlayer('${player.id}')">
@@ -1066,8 +1077,8 @@
                         <div class="player-demons">Пройдено демонов: <span>${completedCount}</span></div>
                     </div>
                     <div class="player-actions">
-                        <button class="action-btn" onclick="editPlayer('${player.id}')">✏️</button>
-                        <button class="action-btn delete" onclick="deletePlayer('${player.id}')">🗑️</button>
+                        <button class="${editBtnClass}" onclick="${editFunction}">✏️</button>
+                        <button class="${deleteBtnClass}" onclick="${deleteFunction}">🗑️</button>
                     </div>
                 `;
                 playersList.appendChild(playerRow);
@@ -1108,6 +1119,14 @@
             demons.forEach(demon => {
                 const isCompleted = currentPlayer?.completedDemons?.includes(demon.id) || false;
                 
+                // Определяем класс и функцию для кнопки в зависимости от админ режима
+                const completionBtnClass = isAdminMode ? 
+                    `completion-btn ${isCompleted ? 'completed' : ''}` : 
+                    `completion-btn ${isCompleted ? 'completed' : ''} admin-only`;
+                const completionFunction = isAdminMode ? 
+                    `toggleDemonCompletion('${demon.id}')` : 
+                    'showAdminRequiredMessage()';
+                
                 const demonItem = document.createElement('div');
                 demonItem.className = 'demon-item';
                 demonItem.innerHTML = `
@@ -1115,8 +1134,8 @@
                         <div class="demon-name">${demon.name}</div>
                         <div class="demon-points">${demon.points} очков</div>
                     </div>
-                    <button class="completion-btn ${isCompleted ? 'completed' : ''}" 
-                            onclick="toggleDemonCompletion('${demon.id}')"
+                    <button class="${completionBtnClass}" 
+                            onclick="${completionFunction}"
                             ${!currentPlayer ? 'disabled' : ''}>
                         ${isCompleted ? '✅ Пройден' : '❌ Не пройден'}
                     </button>
@@ -1147,8 +1166,6 @@
             document.getElementById('totalPoints').textContent = totalPoints;
             document.getElementById('totalDemons').textContent = demons.length;
             document.getElementById('completionRate').textContent = completionRate + '%';
-            
-            console.log(`📊 Статистика: ${completedCount}/${demons.length} демонов, ${totalPoints} очков`);
         }
 
         // ========== ФУНКЦИИ ВЗАИМОДЕЙСТВИЯ ==========
@@ -1165,6 +1182,11 @@
         }
 
         function toggleDemonCompletion(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const currentPlayer = getCurrentPlayer();
             if (!currentPlayer) {
                 alert('Сначала выберите игрока!');
@@ -1190,9 +1212,18 @@
             renderPlayers();
         }
 
+        function showAdminRequiredMessage() {
+            alert('🔒 Эта функция доступна только в админ режиме!\n\nДля доступа нажмите кнопку "⚙️ Админ" и введите пароль.');
+        }
+
         // ========== РЕДАКТИРОВАНИЕ ИГРОКОВ ==========
 
         function editPlayer(playerId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const player = players.find(p => p.id === playerId);
             if (player) {
                 currentEditingPlayer = player;
@@ -1223,6 +1254,11 @@
         }
 
         function savePlayerEdit() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             if (currentEditingPlayer) {
                 const newName = document.getElementById('editName').value.trim();
                 const newAvatar = document.getElementById('editAvatar').value.trim().charAt(0).toUpperCase();
@@ -1245,7 +1281,7 @@
         }
 
         function toggleDemonSelection(demonId) {
-            if (!currentEditingPlayer) return;
+            if (!isAdminMode || !currentEditingPlayer) return;
             
             if (!currentEditingPlayer.completedDemons) {
                 currentEditingPlayer.completedDemons = [];
@@ -1269,6 +1305,11 @@
         }
 
         function deletePlayer(playerId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const player = players.find(p => p.id === playerId);
             if (player && confirm(`Вы уверены, что хотите удалить игрока "${player.name}"?`)) {
                 players = players.filter(p => p.id !== playerId);
@@ -1286,7 +1327,8 @@
         function updateSyncStatus() {
             const statusElement = document.getElementById('syncStatus');
             if (statusElement) {
-                statusElement.textContent = `Демонов: ${demons.length}, Игроков: ${players.length}`;
+                const adminStatus = isAdminMode ? ' | 🔓 АДМИН РЕЖИМ' : ' | 🔒 ОБЫЧНЫЙ РЕЖИМ';
+                statusElement.textContent = `Демонов: ${demons.length}, Игроков: ${players.length}${adminStatus}`;
                 statusElement.className = 'sync-status synced';
             }
         }
@@ -1299,6 +1341,11 @@
         }
 
         function addExampleData() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             // Добавляем тестовые данные
             const newDemon = {
                 id: 'digital-descent',
@@ -1324,6 +1371,11 @@
         }
 
         function addNewPlayer() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const name = prompt('Введите имя игрока:');
             if (name) {
                 const id = name.toLowerCase().replace(/\s+/g, '-');
@@ -1341,6 +1393,11 @@
         }
 
         function addNewDemon() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const name = prompt('Введите название демона:');
             if (name) {
                 const points = parseInt(prompt('Введите очки за прохождение:'));
@@ -1375,6 +1432,11 @@
         }
 
         function resetData() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             if (confirm('Вы уверены, что хотите сбросить все данные к начальным значениям?')) {
                 initializeData();
                 renderPlayers();
@@ -1395,6 +1457,7 @@
         window.selectPlayer = selectPlayer;
         window.checkAdminAccess = checkAdminAccess;
         window.hideAdminPanel = hideAdminPanel;
+        window.showAdminRequiredMessage = showAdminRequiredMessage;
 
         // Запуск при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
@@ -1424,8 +1487,8 @@
             }, 100);
 
             console.log('✅ Players page ready!');
-            console.log('💡 Команды: addDemon(), addPlayer(), showStats(), forceSync()');
-            console.log('🔐 Админ панель скрыта. Для доступа: пароль/double-click logo/↑↑↓↓←→←→BA');
+            console.log('🔒 Режим: Обычный (админ функции заблокированы)');
+            console.log('💡 Для админ доступа нажмите кнопку "⚙️ Админ" и введите пароль');
         });
 
         // Закрытие модального окна
