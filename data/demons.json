@@ -4,18 +4,22 @@
       "id": "bloodbath",
       "name": "Bloodbath",
       "creator": "Riot & more",
-      "rank": 1,
       "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Bloodbath",
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      "videoUrl": "https://youtu.be/пример"
     },
     {
-      "id": "cataclysm", 
-      "name": "Cataclysm",
+      "id": "cataclysm",
+      "name": "Cataclysm", 
       "creator": "Ggb0y",
-      "rank": 2,
       "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      "videoUrl": "https://youtu.be/пример"
+    },
+    {
+      "id": "sakupen-hell",
+      "name": "Sakupen Hell",
+      "creator": "Noobas",
+      "image": "https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell", 
+      "videoUrl": "https://youtu.be/пример"
     }
-  ],
-  "lastUpdated": "2024-01-01T00:00:00.000Z"
+  ]
 }
