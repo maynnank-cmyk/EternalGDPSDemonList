@@ -15,19 +15,19 @@
       "id": "sunix",
       "name": "Sunix",
       "avatar": "S", 
-      "completedDemons": ["bloodbath", "cataclysm"],
+      "completedDemons": ["mihadifficult", "voidstorm"],
       "completions": {
-        "bloodbath": "2023-01-20",
-        "cataclysm": "2023-02-25"
+        "mihadifficult": "2023-01-20",
+        "voidstorm": "2023-02-25"
       }
     },
     {
       "id": "cursed", 
       "name": "Cursed",
       "avatar": "C",
-      "completedDemons": ["bloodbath", "sakupen-hell"],
+      "completedDemons": ["mihadifficult", "sakupen-hell"],
       "completions": {
-        "bloodbath": "2023-02-01",
+        "mihadifficult": "2023-02-01",
         "sakupen-hell": "2023-03-15"
       }
     }
