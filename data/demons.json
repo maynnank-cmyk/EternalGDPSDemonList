@@ -5,14 +5,24 @@
       "name": "Bloodbath",
       "creator": "Riot & more",
       "image": "images/bloodbath.jpg",
-      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID_HERE"
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "description": "Легендарный экстрим демон созданный Riot"
     },
     {
-      "id": "cataclysm",
-      "name": "Cataclysm", 
+      "id": "cataclysm", 
+      "name": "Cataclysm",
       "creator": "Ggb0y",
       "image": "images/cataclysm.jpg",
-      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID_HERE"
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "description": "Один из самых известных экстрим демонов"
+    },
+    {
+      "id": "sakupen-hell",
+      "name": "Sakupen Hell",
+      "creator": "Noobas",
+      "image": "images/sakupen-hell.jpg", 
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "description": "Сложный демон с уникальным геймплеем"
     }
   ]
 }
