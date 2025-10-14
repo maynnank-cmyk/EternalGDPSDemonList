@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demon Name - Geometry Dash Demon List</title>
+    <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-red: #ff3333;
+            --accent-blue: #3366ff;
+            --accent-purple: #9933ff;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-red);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 15px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Demon Header */
+        .demon-header {
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .demon-header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-red), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .demon-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            text-align: center;
+        }
+        
+        .meta-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+        
+        .meta-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        /* Demon Content */
+        .demon-content {
+            padding: 40px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .demon-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Video Section */
+        .video-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .video-section h2 {
+            margin-bottom: 20px;
+            color: var(--accent-red);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Completions Section */
+        .completions-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .completions-section h2 {
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
+        
+        .completions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .completion-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        
+        .completion-item:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-blue);
+        }
+        
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .player-info {
+            flex: 1;
+        }
+        
+        .player-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .completion-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .no-completions {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Geometry Dash <span>Demon List</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="players.html">Топ игроков</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="breadcrumb container">
+        <a href="index.html">Главная</a> &gt; <span id="breadcrumbDemonName">Демон</span>
+    </div>
+    
+    <section class="demon-header">
+        <div class="container">
+            <h1 id="demonName">Название Демона</h1>
+            <div class="demon-meta">
+                <div class="meta-item">
+                    <div class="meta-value" id="demonRank">#1</div>
+                    <div class="meta-label">Ранг</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value" id="demonPoints">1000 pts</div>
+                    <div class="meta-label">Очки</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value" id="demonCreator">Создатель</div>
+                    <div class="meta-label">Создатель</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-value" id="completionsCount">0</div>
+                    <div class="meta-label">Пройдено игроками</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="demon-content">
+        <div class="container">
+            <div class="video-section">
+                <h2>🎥 Видео верификация</h2>
+                <div class="video-container" id="videoContainer">
+                    <!-- Видео будет вставлено через JavaScript -->
+                </div>
+            </div>
+            
+            <div class="completions-section">
+                <h2>🏆 Игроки, прошедшие демона</h2>
+                <div class="completions-list" id="completionsList">
+                    <!-- Список игроков будет добавлен через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Geometry Dash Demon List</h3>
+                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Ссылки</h3>
+                    <a href="index.html">Главная</a>
+                    <a href="players.html">Топ игроков</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="contacts.html">Команда</a>
+                    <a href="#">Discord</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== DEMON PAGE SYSTEM ==========
+        
+        let currentDemon = null;
+        let players = [];
+        let demons = [];
+
+        // Получаем ID демона из названия файла
+        function getDemonIdFromFilename() {
+            const filename = window.location.pathname.split('/').pop();
+            return filename.replace('demon-', '').replace('.html', '');
+        }
+
+        async function loadDemonData() {
+            const demonId = getDemonIdFromFilename();
+            
+            try {
+                // Загружаем demons.json
+                const demonsResponse = await fetch('./data/demons.json');
+                const demonsData = await demonsResponse.json();
+                demons = demonsData.demons || [];
+                
+                // Находим текущего демона
+                currentDemon = demons.find(d => d.id === demonId);
+                
+                if (!currentDemon) {
+                    document.body.innerHTML = `
+                        <div style="text-align: center; padding: 100px; color: var(--text-secondary);">
+                            <h1>😔 Демон не найден</h1>
+                            <p>Вернитесь на <a href="index.html" style="color: var(--accent-blue);">главную страницу</a></p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Загружаем players.json
+                const playersResponse = await fetch('./data/players.json');
+                const playersData = await playersResponse.json();
+                players = playersData.players || [];
+                
+                renderDemonPage();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 100px; color: var(--text-secondary);">
+                        <h1>❌ Ошибка загрузки</h1>
+                        <p>Попробуйте обновить страницу</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderDemonPage() {
+            if (!currentDemon) return;
+            
+            // Обновляем заголовок страницы
+            document.title = `${currentDemon.name} - Geometry Dash Demon List`;
+            
+            // Обновляем хлебные крошки
+            document.getElementById('breadcrumbDemonName').textContent = currentDemon.name;
+            
+            // Обновляем заголовок
+            document.getElementById('demonName').textContent = currentDemon.name;
+            
+            // Обновляем мета-информацию
+            const rank = demons.findIndex(d => d.id === currentDemon.id) + 1;
+            const points = Math.max(1000 - (rank - 1) * 50, 100);
+            
+            document.getElementById('demonRank').textContent = `#${rank}`;
+            document.getElementById('demonPoints').textContent = `${points} pts`;
+            document.getElementById('demonCreator').textContent = currentDemon.creator;
+            
+            // Вставляем видео
+            const videoContainer = document.getElementById('videoContainer');
+            if (currentDemon.videoUrl) {
+                const videoId = extractYouTubeId(currentDemon.videoUrl);
+                if (videoId) {
+                    videoContainer.innerHTML = `
+                        <iframe src="https://www.youtube.com/embed/${videoId}" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    `;
+                } else {
+                    videoContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                            <p>Видео недоступно</p>
+                            <a href="${currentDemon.videoUrl}" target="_blank" style="color: var(--accent-blue);">Смотреть на YouTube</a>
+                        </div>
+                    `;
+                }
+            } else {
+                videoContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <p>Видео верификация отсутствует</p>
+                    </div>
+                `;
+            }
+            
+            // Рендерим список игроков
+            renderCompletionsList();
+        }
+
+        function renderCompletionsList() {
+            const completionsList = document.getElementById('completionsList');
+            const completionsCount = document.getElementById('completionsCount');
+            
+            // Находим игроков, прошедших этого демона
+            const playersWhoCompleted = players.filter(player => 
+                player.completedDemons && player.completedDemons.includes(currentDemon.id)
+            );
+            
+            completionsCount.textContent = playersWhoCompleted.length;
+            
+            if (playersWhoCompleted.length === 0) {
+                completionsList.innerHTML = `
+                    <div class="no-completions">
+                        <div style="font-size: 48px; margin-bottom: 20px;">😔</div>
+                        <div>Пока никто не прошел этого демона</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Будьте первым!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            completionsList.innerHTML = '';
+            
+            playersWhoCompleted.forEach(player => {
+                const completionItem = document.createElement('div');
+                completionItem.className = 'completion-item';
+                completionItem.innerHTML = `
+                    <div class="player-avatar">${player.avatar}</div>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="completion-date">Прошел демона</div>
+                    </div>
+                `;
+                completionsList.appendChild(completionItem);
+            });
+        }
+
+        function extractYouTubeId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        // Запускаем при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadDemonData);
+    </script>
+</body>
+</html>
