@@ -1,12 +1,12 @@
 {
   "demons": [
     {
-      "id": "bloodbath",
-      "name": "Bloodbath",
-      "creator": "Riot & more",
-      "image": "images/bloodbath.jpg",
-      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
-      "description": "Легендарный экстрим демон созданный Riot"
+      "id": "mihadifficult",
+      "name": "Miha Difficult",
+      "creator": "KuraTheGuy",
+      "image": "images/mihadifficult.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
+      "description": "Легендарный экстрим демон созданный KuraTheGuy"
     },
     {
       "id": "cataclysm", 
