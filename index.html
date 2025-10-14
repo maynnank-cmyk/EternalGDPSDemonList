@@ -724,13 +724,17 @@
         </div>
     </footer>
 
-   <script>
+<script>
     // ========== GITHUB AS DATABASE SOLUTION ==========
     
-    const GITHUB_DATA_URL = 'https://raw.githubusercontent.com/ВАШ_USERNAME/ВАШ_REPO/gh-pages/data/demons.json';
-    const GITHUB_API_URL = 'https://api.github.com/repos/ВАШ_USERNAME/ВАШ_REPO/contents/data/demons.json';
+    // ЗАМЕНИТЕ НА ВАШИ ДАННЫЕ:
+    const GITHUB_USERNAME = 'ВАШ_USERNAME';
+    const GITHUB_REPO = 'ВАШ_REPO_NAME';
     
-    // Демоны по умолчанию (на случай если GitHub данные недоступны)
+    const GITHUB_DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/gh-pages/data/demons.json`;
+    const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data/demons.json`;
+    
+    // Демоны по умолчанию
     const defaultDemons = [
         {
             id: 'bloodbath',
@@ -747,6 +751,14 @@
             rank: 2,
             image: 'https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm',
             videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        {
+            id: 'sakupen-hell',
+            name: 'Sakupen Hell',
+            creator: 'Noobas',
+            rank: 3,
+            image: 'https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell',
+            videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         }
     ];
 
@@ -754,7 +766,7 @@
     let demons = [];
     let currentEditingDemon = null;
     let isAdminMode = false;
-    let githubToken = ''; // Токен для доступа к GitHub API
+    let githubToken = '';
 
     // ========== GITHUB API FUNCTIONS ==========
 
@@ -767,7 +779,7 @@
             if (!response.ok) throw new Error('Network response was not ok');
             
             const data = await response.json();
-            demons = data.demons || [];
+            demons = data.demons || defaultDemons;
             
             console.log('✅ Данные загружены из GitHub:', demons.length);
             updateSyncStatus('✅ Синхронизировано с GitHub');
@@ -775,45 +787,39 @@
             
         } catch (error) {
             console.error('❌ Ошибка загрузки из GitHub:', error);
-            // Используем локальные данные как fallback
             demons = JSON.parse(JSON.stringify(defaultDemons));
             updateSyncStatus('❌ Используются локальные данные');
             return false;
         }
     }
 
-    // Сохранение данных в GitHub (требует токен)
+    // Упрощенная версия сохранения (для тестирования)
     async function saveDataToGitHub() {
-        if (!githubToken) {
-            alert('❌ GitHub токен не настроен. Не могу сохранить изменения.');
+        if (!isAdminMode) {
+            alert('❌ Требуется админ доступ');
             return false;
+        }
+
+        if (!githubToken) {
+            // Режим тестирования - сохраняем локально
+            console.log('💾 Локальное сохранение (без GitHub)');
+            localStorage.setItem('gd_demons', JSON.stringify(demons));
+            updateSyncStatus('✅ Изменения сохранены локально');
+            return true;
         }
 
         try {
             console.log('📤 Сохранение данных в GitHub...');
             
-            // Сначала получаем текущий файл чтобы узнать sha
-            const getResponse = await fetch(GITHUB_API_URL, {
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-            
-            const fileInfo = await getResponse.json();
-            const sha = fileInfo.sha;
-            
-            // Подготавливаем данные для сохранения
+            // Для простоты - всегда создаем новый файл
             const dataToSave = {
                 demons: demons,
-                lastUpdated: new Date().toISOString(),
-                updatedBy: 'admin'
+                lastUpdated: new Date().toISOString()
             };
             
             const content = btoa(unescape(encodeURIComponent(JSON.stringify(dataToSave, null, 2))));
             
-            // Обновляем файл
-            const updateResponse = await fetch(GITHUB_API_URL, {
+            const response = await fetch(GITHUB_API_URL, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `token ${githubToken}`,
@@ -823,12 +829,11 @@
                 body: JSON.stringify({
                     message: `Update demon list: ${new Date().toISOString()}`,
                     content: content,
-                    sha: sha,
                     branch: 'gh-pages'
                 })
             });
             
-            if (updateResponse.ok) {
+            if (response.ok) {
                 console.log('✅ Данные сохранены в GitHub!');
                 updateSyncStatus('✅ Изменения отправлены в GitHub');
                 return true;
@@ -838,7 +843,7 @@
             
         } catch (error) {
             console.error('❌ Ошибка сохранения в GitHub:', error);
-            updateSyncStatus('❌ Ошибка сохранения в GitHub');
+            updateSyncStatus('❌ Ошибка сохранения');
             return false;
         }
     }
@@ -848,12 +853,12 @@
     function checkAdminAccess() {
         const password = prompt('Введите пароль для доступа к админ панели:');
         if (password === 'eternalgdpspl123') {
-            // Запрашиваем GitHub токен у админа
-            const token = prompt('Введите GitHub Personal Access Token:');
+            // Спросим токен, но если не введут - будет локальный режим
+            const token = prompt('Введите GitHub Token (или оставьте пустым для локального режима):');
             if (token) {
                 githubToken = token;
-                showAdminPanel();
             }
+            showAdminPanel();
         } else if (password) {
             alert('❌ Неверный пароль!');
         }
@@ -866,7 +871,7 @@
             isAdminMode = true;
             console.log('🔓 Админ режим активирован');
             renderDemons();
-            updateSyncStatus('🔓 Админ режим - можно сохранять в GitHub');
+            updateSyncStatus('🔓 Админ режим активен');
         }
     }
 
@@ -875,11 +880,15 @@
         if (adminPanel) {
             adminPanel.style.display = 'none';
             isAdminMode = false;
-            githubToken = ''; // Очищаем токен для безопасности
+            githubToken = '';
             console.log('🔒 Админ режим выключен');
             renderDemons();
-            updateSyncStatus('✅ Синхронизировано с GitHub');
+            updateSyncStatus('✅ Синхронизировано');
         }
+    }
+
+    function showAdminRequiredMessage() {
+        alert('🔒 Эта функция доступна только в админ режиме!');
     }
 
     // ========== CORE FUNCTIONS ==========
@@ -888,6 +897,20 @@
         console.log('🚀 Инициализация данных...');
         await loadDataFromGitHub();
         renderDemons();
+        
+        // Анимация загрузки
+        setTimeout(() => {
+            document.querySelectorAll('.demon-row').forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.5s, transform 0.5s';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        }, 100);
     }
 
     function calculatePointsByRank(rank) {
@@ -898,7 +921,7 @@
         const statusElement = document.getElementById('syncStatus');
         if (statusElement) {
             statusElement.textContent = message;
-            statusElement.className = 'sync-status ' + (message.includes('✅') ? 'synced' : '');
+            statusElement.className = 'sync-status ' + (message.includes('✅') || message.includes('🔓') ? 'synced' : '');
         }
     }
 
@@ -906,9 +929,14 @@
 
     function renderDemons() {
         const demonList = document.getElementById('demonList');
-        if (!demonList) return;
+        if (!demonList) {
+            console.error('❌ Element demonList not found');
+            return;
+        }
         
         demonList.innerHTML = '';
+        
+        // Сортируем по рангу
         demons.sort((a, b) => a.rank - b.rank);
         
         demons.forEach(demon => {
@@ -916,6 +944,17 @@
             const rankClass = demon.rank === 1 ? 'top-1' : 
                             demon.rank <= 3 ? 'top-3' : 
                             demon.rank <= 10 ? 'top-10' : '';
+            
+            // Определяем классы кнопок
+            const upBtnClass = isAdminMode ? 'action-btn up' : 'action-btn up admin-only';
+            const downBtnClass = isAdminMode ? 'action-btn down' : 'action-btn down admin-only';
+            const editBtnClass = isAdminMode ? 'action-btn' : 'action-btn admin-only';
+            const deleteBtnClass = isAdminMode ? 'action-btn delete' : 'action-btn delete admin-only';
+            
+            const upFunction = isAdminMode ? `moveDemonUp('${demon.id}')` : 'showAdminRequiredMessage()';
+            const downFunction = isAdminMode ? `moveDemonDown('${demon.id}')` : 'showAdminRequiredMessage()';
+            const editFunction = isAdminMode ? `editDemon('${demon.id}')` : 'showAdminRequiredMessage()';
+            const deleteFunction = isAdminMode ? `deleteDemon('${demon.id}')` : 'showAdminRequiredMessage()';
             
             const demonRow = document.createElement('div');
             demonRow.className = 'demon-row';
@@ -933,66 +972,246 @@
                         <div class="demon-points">${points} pts</div>
                         <div class="points-info">Автоматически по позиции #${demon.rank}</div>
                     </div>
-                    ${isAdminMode ? `
                     <div class="demon-actions">
-                        <button class="action-btn up" onclick="moveDemonUp('${demon.id}')">⬆️</button>
-                        <button class="action-btn down" onclick="moveDemonDown('${demon.id}')">⬇️</button>
-                        <button class="action-btn" onclick="editDemon('${demon.id}')">✏️</button>
-                        <button class="action-btn delete" onclick="deleteDemon('${demon.id}')">🗑️</button>
+                        <button class="${upBtnClass}" onclick="${upFunction}">⬆️</button>
+                        <button class="${downBtnClass}" onclick="${downFunction}">⬇️</button>
+                        <button class="${editBtnClass}" onclick="${editFunction}">✏️</button>
+                        <button class="${deleteBtnClass}" onclick="${deleteFunction}">🗑️</button>
                     </div>
-                    ` : ''}
                 </div>
             `;
             demonList.appendChild(demonRow);
         });
     }
 
-    // Все функции редактирования (editDemon, moveDemonUp, etc.) остаются такими же
-    // но добавляем вызов saveDataToGitHub() после каждого изменения
+    // ========== EDITING FUNCTIONS ==========
+
+    async function editDemon(demonId) {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        const demon = demons.find(d => d.id === demonId);
+        if (demon) {
+            currentEditingDemon = demon;
+            document.getElementById('editName').value = demon.name;
+            document.getElementById('editCreator').value = demon.creator;
+            document.getElementById('editImage').value = demon.image;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+    }
+
+    async function saveDemonEdit() {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        if (currentEditingDemon) {
+            const newName = document.getElementById('editName').value.trim();
+            const newCreator = document.getElementById('editCreator').value.trim();
+            const newImage = document.getElementById('editImage').value.trim();
+            
+            if (newName && newCreator && newImage) {
+                currentEditingDemon.name = newName;
+                currentEditingDemon.creator = newCreator;
+                currentEditingDemon.image = newImage;
+                
+                await saveDataToGitHub();
+                renderDemons();
+                closeEditModal();
+            } else {
+                alert('Пожалуйста, заполните все поля!');
+            }
+        }
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+        currentEditingDemon = null;
+    }
+
+    async function deleteDemon(demonId) {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        const demon = demons.find(d => d.id === demonId);
+        if (demon && confirm(`Удалить демона "${demon.name}"?`)) {
+            demons = demons.filter(d => d.id !== demonId);
+            // Обновляем ранги
+            demons.forEach((d, index) => {
+                d.rank = index + 1;
+            });
+            
+            await saveDataToGitHub();
+            renderDemons();
+        }
+    }
 
     async function moveDemonUp(demonId) {
-        if (!isAdminMode) return;
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
         
         const demonIndex = demons.findIndex(d => d.id === demonId);
         if (demonIndex > 0) {
             [demons[demonIndex], demons[demonIndex - 1]] = [demons[demonIndex - 1], demons[demonIndex]];
-            demons.forEach((d, index) => { d.rank = index + 1; });
+            demons.forEach((d, index) => {
+                d.rank = index + 1;
+            });
             
-            const success = await saveDataToGitHub();
-            if (success) {
+            await saveDataToGitHub();
+            renderDemons();
+        }
+    }
+
+    async function moveDemonDown(demonId) {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        const demonIndex = demons.findIndex(d => d.id === demonId);
+        if (demonIndex < demons.length - 1) {
+            [demons[demonIndex], demons[demonIndex + 1]] = [demons[demonIndex + 1], demons[demonIndex]];
+            demons.forEach((d, index) => {
+                d.rank = index + 1;
+            });
+            
+            await saveDataToGitHub();
+            renderDemons();
+        }
+    }
+
+    // ========== ADMIN PANEL FUNCTIONS ==========
+
+    async function addExampleDemons() {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        // Добавляем тестовых демонов
+        const newDemons = [
+            {
+                id: 'aftercatabath',
+                name: 'Aftercatabath',
+                creator: 'Player',
+                rank: demons.length + 1,
+                image: 'https://via.placeholder.com/240x135/666666/ffffff?text=Aftercatabath',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+            {
+                id: 'artificial-ascent',
+                name: 'Artificial Ascent',
+                creator: 'Viprin',
+                rank: demons.length + 2,
+                image: 'https://via.placeholder.com/240x135/666666/ffffff?text=Artificial+Ascent',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            }
+        ];
+        
+        demons.push(...newDemons);
+        await saveDataToGitHub();
+        renderDemons();
+        alert('✅ Тестовые демоны добавлены!');
+    }
+
+    async function addNewDemon() {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        const name = prompt('Название демона:');
+        if (name) {
+            const creator = prompt('Создатель:');
+            if (creator) {
+                const id = name.toLowerCase().replace(/\s+/g, '-');
+                const newDemon = {
+                    id: id,
+                    name: name,
+                    creator: creator,
+                    rank: demons.length + 1,
+                    image: `https://via.placeholder.com/240x135/666666/ffffff?text=${encodeURIComponent(name)}`,
+                    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                };
+                
+                demons.push(newDemon);
+                await saveDataToGitHub();
                 renderDemons();
             }
         }
     }
 
-    // Аналогично для других функций редактирования...
-
-    // ========== ADMIN PANEL FUNCTIONS ==========
+    async function resetDemons() {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
+        
+        if (confirm('Сбросить к демонам по умолчанию?')) {
+            demons = JSON.parse(JSON.stringify(defaultDemons));
+            await saveDataToGitHub();
+            renderDemons();
+        }
+    }
 
     async function forceSync() {
         await loadDataFromGitHub();
         renderDemons();
     }
 
-    async function resetDemons() {
-        if (!isAdminMode) return;
+    function showDemonStats() {
+        if (!isAdminMode) {
+            showAdminRequiredMessage();
+            return;
+        }
         
-        if (confirm('Сбросить к демонам по умолчанию?')) {
-            demons = JSON.parse(JSON.stringify(defaultDemons));
-            const success = await saveDataToGitHub();
-            if (success) {
-                renderDemons();
-            }
+        let statsText = `📊 Статистика:\nДемонов: ${demons.length}\n\n`;
+        demons.forEach(demon => {
+            const points = calculatePointsByRank(demon.rank);
+            statsText += `#${demon.rank} ${demon.name}: ${points} pts\n`;
+        });
+        
+        alert(statsText);
+    }
+
+    function openVideo(demonId) {
+        const demon = demons.find(d => d.id === demonId);
+        if (demon && demon.videoUrl) {
+            window.open(demon.videoUrl, '_blank');
         }
     }
 
-    // Остальные функции...
+    // ========== GLOBAL FUNCTIONS ==========
+    window.addDemon = addNewDemon;
+    window.editDemon = editDemon;
+    window.showDemonStats = showDemonStats;
+    window.calculatePointsByRank = calculatePointsByRank;
+    window.checkAdminAccess = checkAdminAccess;
+    window.hideAdminPanel = hideAdminPanel;
+    window.showAdminRequiredMessage = showAdminRequiredMessage;
+    window.forceSync = forceSync;
 
     // ========== INITIALIZATION ==========
-
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('🎮 Загрузка Geometry Dash Demon List...');
         initializeData();
-        // Анимация и т.д.
+        
+        // Закрытие модального окна
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        });
+        
+        console.log('✅ Demon List ready!');
     });
 </script>
 </body>
