@@ -478,6 +478,21 @@
             margin-left: 10px;
             vertical-align: super;
         }
+
+        /* Sync status */
+        .sync-status {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .sync-status.synced {
+            color: #00cc66;
+            border-left: 3px solid #00cc66;
+        }
         
         /* Footer */
         footer {
@@ -644,8 +659,10 @@
                     <button class="admin-btn" onclick="addNewDemon()">👹 Добавить демона</button>
                     <button class="admin-btn" onclick="showDemonStats()">📊 Статистика</button>
                     <button class="admin-btn reset" onclick="resetDemons()">🔄 Сбросить</button>
+                    <button class="admin-btn" onclick="forceSync()">🔄 Синхронизация</button>
                     <button class="admin-btn" onclick="hideAdminPanel()" style="background: var(--accent-red);">👋 Выйти из админки</button>
                 </div>
+                <div id="syncStatus" class="sync-status"></div>
             </div>
 
             <!-- Модальное окно редактирования -->
@@ -768,6 +785,7 @@
                 
                 // Перерисовываем интерфейс с включенными кнопками
                 renderDemons();
+                updateSyncStatus();
             }
         }
 
@@ -780,6 +798,7 @@
                 
                 // Перерисовываем интерфейс с выключенными кнопками
                 renderDemons();
+                updateSyncStatus();
             }
         }
 
@@ -792,10 +811,33 @@
         function initializeData() {
             console.log('🚀 Инициализация данных для GitHub Pages...');
             
-            // Всегда используем данные по умолчанию для GitHub Pages
-            demons = JSON.parse(JSON.stringify(defaultDemons));
+            // Загружаем из localStorage или используем default
+            const savedDemons = localStorage.getItem('gd_demons');
+            if (savedDemons) {
+                demons = JSON.parse(savedDemons);
+                console.log('✅ Загружено демонов из localStorage:', demons.length);
+            } else {
+                demons = JSON.parse(JSON.stringify(defaultDemons));
+                saveData();
+                console.log('✅ Использованы демоны по умолчанию:', demons.length);
+            }
             
-            console.log('✅ Загружено демонов:', demons.length);
+            updateSyncStatus();
+        }
+
+        function saveData() {
+            localStorage.setItem('gd_demons', JSON.stringify(demons));
+            console.log('💾 Данные демонов сохранены в localStorage!');
+            updateSyncStatus();
+        }
+
+        function updateSyncStatus() {
+            const statusElement = document.getElementById('syncStatus');
+            if (statusElement) {
+                const adminStatus = isAdminMode ? ' | 🔓 АДМИН РЕЖИМ' : ' | 🔒 ОБЫЧНЫЙ РЕЖИМ';
+                statusElement.textContent = `Демонов: ${demons.length}${adminStatus}`;
+                statusElement.className = 'sync-status synced';
+            }
         }
 
         // ФУНКЦИЯ ДЛЯ РАСЧЕТА ОЧКОВ ПО РАНГУ
@@ -898,6 +940,7 @@
                 if (newName && newName.trim() !== '') {
                     demon.name = newName.trim();
                     console.log(`✏️ Название демона изменено на: ${demon.name}`);
+                    saveData();
                     renderDemons();
                 }
             }
@@ -916,6 +959,7 @@
                 if (newCreator && newCreator.trim() !== '') {
                     demon.creator = newCreator.trim();
                     console.log(`👤 Создатель демона изменен на: ${demon.creator}`);
+                    saveData();
                     renderDemons();
                 }
             }
@@ -938,6 +982,7 @@
                     currentEditingDemon.creator = newCreator;
                     currentEditingDemon.image = newImage;
                     console.log(`✅ Демон обновлен: ${newName} by ${newCreator}`);
+                    saveData();
                     renderDemons();
                     closeEditModal();
                 } else {
@@ -967,6 +1012,7 @@
                     d.rank = index + 1;
                 });
                 console.log(`🗑️ Демон удален: ${demon.name}`);
+                saveData();
                 renderDemons();
             }
         }
@@ -987,6 +1033,7 @@
                     d.rank = index + 1;
                 });
                 console.log(`⬆️ Демон перемещен вверх: ${demons[demonIndex - 1].name}`);
+                saveData();
                 renderDemons();
             }
         }
@@ -1007,6 +1054,7 @@
                     d.rank = index + 1;
                 });
                 console.log(`⬇️ Демон перемещен вниз: ${demons[demonIndex + 1].name}`);
+                saveData();
                 renderDemons();
             }
         }
@@ -1030,6 +1078,7 @@
                 videoUrl: 'https://www.youtube.com/results?search_query=Geometry+Dash+' + encodeURIComponent(demonName)
             });
             console.log(`✅ Добавлен демон: ${demonName} by ${demonCreator} (ранг ${newRank})`);
+            saveData();
             renderDemons();
         }
 
@@ -1069,6 +1118,7 @@
             
             if (confirm('Вы уверены, что хотите сбросить всех демонов?')) {
                 demons = JSON.parse(JSON.stringify(defaultDemons));
+                saveData();
                 renderDemons();
                 console.log('🔄 Демоны сброшены к значениям по умолчанию');
             }
@@ -1104,6 +1154,18 @@
             }
         }
 
+        // Принудительная синхронизация
+        function forceSync() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
+            console.log('🔄 Принудительное обновление данных');
+            initializeData();
+            renderDemons();
+        }
+
         // Функция для открытия видео
         function openVideo(demonId) {
             const demon = demons.find(d => d.id === demonId);
@@ -1122,6 +1184,7 @@
         window.checkAdminAccess = checkAdminAccess;
         window.hideAdminPanel = hideAdminPanel;
         window.showAdminRequiredMessage = showAdminRequiredMessage;
+        window.forceSync = forceSync;
 
         // === ИНИЦИАЛИЗАЦИЯ ===
         document.addEventListener('DOMContentLoaded', function() {
