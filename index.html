@@ -605,7 +605,7 @@
                     </div>
                     <div class="demon-info">
                         <div class="demon-details">
-                            <div class="demon-name">${demon.name}</div>
+                            <div class="demon-name" onclick="openDemonPage('${demon.id}')">${demon.name}</div>
                             <div class="demon-creator">by ${demon.creator}</div>
                             <div class="demon-points">${points} pts</div>
                             <div class="points-info">Автоматически по позиции #${demon.rank}</div>
@@ -617,6 +617,10 @@
         }
 
         // ========== UTILITY FUNCTIONS ==========
+
+        function openDemonPage(demonId) {
+            window.location.href = `demon-${demonId}.html`;
+        }
 
         async function refreshData() {
             await loadDataFromJSON();
@@ -671,6 +675,7 @@
         // Глобальные функции
         window.refreshData = refreshData;
         window.openVideo = openVideo;
+        window.openDemonPage = openDemonPage;
 
         // Запуск при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
