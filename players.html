@@ -822,528 +822,530 @@
             </div>
         </div>
     </footer>
-<script src="data.js"></script>
 
-    <script>
-        // БАЗА ДАННЫХ ПО УМОЛЧАНИЮ
-        const defaultDemons = [
-            { id: 'bloodbath', name: 'Bloodbath', points: 1000 },
-            { id: 'cataclysm', name: 'Cataclysm', points: 950 },
-            { id: 'sakupen-hell', name: 'Sakupen Hell', points: 900 }
-        ];
+   
+<script>
+    // БАЗА ДАННЫХ ДЛЯ GITHUB PAGES
+    const defaultDemons = [
+        { id: 'bloodbath', name: 'Bloodbath', points: 1000 },
+        { id: 'cataclysm', name: 'Cataclysm', points: 950 },
+        { id: 'sakupen-hell', name: 'Sakupen Hell', points: 900 },
+        { id: 'aftercatabath', name: 'Aftercatabath', points: 850 },
+        { id: 'artificial-ascent', name: 'Artificial Ascent', points: 800 }
+    ];
 
-        const defaultPlayers = [
-            {
-                id: 'riot',
-                name: 'Riot',
-                avatar: 'R',
-                completedDemons: ['bloodbath', 'cataclysm']
-            },
-            {
-                id: 'sunix',
-                name: 'Sunix',
-                avatar: 'S',
-                completedDemons: ['bloodbath']
-            }
-        ];
-
-        // ЗАГРУЗКА ДАННЫХ ИЗ LOCALSTORAGE С СИНХРОНИЗАЦИЕЙ
-        let demons = [];
-        let players = [];
-        let selectedPlayerId = null;
-
-        function loadData() {
-            // Загружаем демонов из index.html
-            const savedDemons = localStorage.getItem('gd_demons');
-            if (savedDemons) {
-                demons = JSON.parse(savedDemons);
-                console.log('👹 Демоны загружены из index.html:', demons.length);
-            } else {
-                demons = [...defaultDemons];
-                console.log('👹 Использованы демоны по умолчанию');
-            }
-
-            // Загружаем игроков
-            const savedPlayers = localStorage.getItem('gd_players');
-            if (savedPlayers) {
-                players = JSON.parse(savedPlayers);
-                console.log('🎮 Игроки загружены:', players.length);
-            } else {
-                players = [...defaultPlayers];
-                console.log('🎮 Использованы игроки по умолчанию');
-            }
-
-            updateSyncStatus();
+    const defaultPlayers = [
+        {
+            id: 'riot',
+            name: 'Riot',
+            avatar: 'R',
+            completedDemons: ['bloodbath', 'cataclysm', 'sakupen-hell']
+        },
+        {
+            id: 'sunix',
+            name: 'Sunix',
+            avatar: 'S',
+            completedDemons: ['bloodbath', 'aftercatabath']
+        },
+        {
+            id: 'cursed',
+            name: 'Cursed',
+            avatar: 'C',
+            completedDemons: ['bloodbath', 'cataclysm']
         }
+    ];
 
-        // ПЕРЕМЕННЫЕ ДЛЯ РЕДАКТИРОВАНИЯ
-        let currentEditingPlayer = null;
+    // ЗАГРУЗКА ДАННЫХ
+    let demons = [];
+    let players = [];
+    let selectedPlayerId = null;
 
-        // ФУНКЦИЯ СОХРАНЕНИЯ ДАННЫХ
-        function saveData() {
-            localStorage.setItem('gd_players', JSON.stringify(players));
-            console.log('💾 Данные игроков сохранены!');
-            updateSyncStatus();
-        }
-
-        // Функция для подсчета очков игрока
-        function calculatePlayerPoints(player) {
-            let totalPoints = 0;
-            if (player.completedDemons) {
-                player.completedDemons.forEach(demonId => {
-                    const demon = demons.find(d => d.id === demonId);
-                    if (demon) {
-                        totalPoints += demon.points;
-                    }
-                });
-            }
-            return totalPoints;
-        }
-
-        // Функция для отображения игроков
-        function renderPlayers() {
-            const playersList = document.getElementById('playersList');
-            playersList.innerHTML = '';
+    function loadData() {
+        // Пробуем загрузить из localStorage
+        const savedDemons = localStorage.getItem('gd_demons');
+        const savedPlayers = localStorage.getItem('gd_players');
+        
+        if (savedDemons && savedPlayers) {
+            demons = JSON.parse(savedDemons);
+            players = JSON.parse(savedPlayers);
+            console.log('📁 Данные загружены из localStorage');
+        } else {
+            // Используем данные по умолчанию
+            demons = [...defaultDemons];
+            players = [...defaultPlayers];
+            console.log('⚡ Использованы данные по умолчанию');
             
-            // Считаем очки для каждого игрока
-            players.forEach(player => {
-                player.totalPoints = calculatePlayerPoints(player);
-            });
-            
-            // Сортируем игроков по очкам (от большего к меньшему)
-            players.sort((a, b) => b.totalPoints - a.totalPoints);
-            
-            // Отображаем игроков
-            players.forEach((player, index) => {
-                const rank = index + 1;
-                const rankClass = rank === 1 ? 'top-1' : 
-                                rank <= 3 ? 'top-3' : 
-                                rank <= 10 ? 'top-10' : '';
-                
-                const completedCount = player.completedDemons ? player.completedDemons.length : 0;
-                
-                const playerRow = document.createElement('div');
-                playerRow.className = 'player-row';
-                playerRow.innerHTML = `
-                    <div class="player-rank ${rankClass}">${rank}</div>
-                    <div class="player-avatar" onclick="selectPlayer('${player.id}')">
-                        <div class="avatar-placeholder">${player.avatar}</div>
-                    </div>
-                    <div class="player-info">
-                        <span class="player-name" onclick="selectPlayer('${player.id}')">${player.name}</span>
-                        <div class="player-score">${player.totalPoints} pts</div>
-                        <div class="player-demons">Пройдено демонов: <span>${completedCount}</span></div>
-                    </div>
-                    <div class="player-actions">
-                        <button class="action-btn" onclick="editPlayer('${player.id}')">✏️</button>
-                        <button class="action-btn delete" onclick="deletePlayer('${player.id}')">🗑️</button>
-                    </div>
-                `;
-                playersList.appendChild(playerRow);
-            });
-
-            // Обновляем селектор игроков
-            updatePlayerSelector();
-
-            // Сохраняем данные после рендеринга
+            // Сохраняем данные по умолчанию в localStorage
             saveData();
         }
+        
+        updateSyncStatus();
+    }
 
-        // Функция для обновления селектора игроков
-        function updatePlayerSelector() {
-            const playerSelect = document.getElementById('playerSelect');
-            playerSelect.innerHTML = '<option value="">Выберите игрока...</option>';
-            
-            players.forEach(player => {
-                const option = document.createElement('option');
-                option.value = player.id;
-                option.textContent = player.name;
-                if (player.id === selectedPlayerId) {
-                    option.selected = true;
+    // ПЕРЕМЕННЫЕ ДЛЯ РЕДАКТИРОВАНИЯ
+    let currentEditingPlayer = null;
+
+    // ФУНКЦИЯ СОХРАНЕНИЯ ДАННЫХ
+    function saveData() {
+        localStorage.setItem('gd_players', JSON.stringify(players));
+        localStorage.setItem('gd_demons', JSON.stringify(demons));
+        console.log('💾 Данные сохранены в localStorage!');
+        updateSyncStatus();
+    }
+
+    // Функция для подсчета очков игрока
+    function calculatePlayerPoints(player) {
+        let totalPoints = 0;
+        if (player.completedDemons) {
+            player.completedDemons.forEach(demonId => {
+                const demon = demons.find(d => d.id === demonId);
+                if (demon) {
+                    totalPoints += demon.points;
                 }
-                playerSelect.appendChild(option);
             });
         }
+        return totalPoints;
+    }
 
-        // Функция для выбора игрока
-        function selectPlayer(playerId) {
-            selectedPlayerId = playerId;
-            updatePlayerSelector();
-            renderDemonList();
-        }
-
-        // Функция для получения текущего выбранного игрока
-        function getCurrentPlayer() {
-            return players.find(p => p.id === selectedPlayerId) || null;
-        }
-
-        // Функция для отображения списка демонов
-        function renderDemonList() {
-            const demonList = document.getElementById('demonList');
-            demonList.innerHTML = '';
+    // Функция для отображения игроков
+    function renderPlayers() {
+        const playersList = document.getElementById('playersList');
+        playersList.innerHTML = '';
+        
+        // Считаем очки для каждого игрока
+        players.forEach(player => {
+            player.totalPoints = calculatePlayerPoints(player);
+        });
+        
+        // Сортируем игроков по очкам (от большего к меньшему)
+        players.sort((a, b) => b.totalPoints - a.totalPoints);
+        
+        // Отображаем игроков
+        players.forEach((player, index) => {
+            const rank = index + 1;
+            const rankClass = rank === 1 ? 'top-1' : 
+                            rank <= 3 ? 'top-3' : 
+                            rank <= 10 ? 'top-10' : '';
             
-            const currentPlayer = getCurrentPlayer();
+            const completedCount = player.completedDemons ? player.completedDemons.length : 0;
+            
+            const playerRow = document.createElement('div');
+            playerRow.className = 'player-row';
+            playerRow.innerHTML = `
+                <div class="player-rank ${rankClass}">${rank}</div>
+                <div class="player-avatar" onclick="selectPlayer('${player.id}')">
+                    <div class="avatar-placeholder">${player.avatar}</div>
+                </div>
+                <div class="player-info">
+                    <span class="player-name" onclick="selectPlayer('${player.id}')">${player.name}</span>
+                    <div class="player-score">${player.totalPoints} pts</div>
+                    <div class="player-demons">Пройдено демонов: <span>${completedCount}</span></div>
+                </div>
+                <div class="player-actions">
+                    <button class="action-btn" onclick="editPlayer('${player.id}')">✏️</button>
+                    <button class="action-btn delete" onclick="deletePlayer('${player.id}')">🗑️</button>
+                </div>
+            `;
+            playersList.appendChild(playerRow);
+        });
+
+        // Обновляем селектор игроков
+        updatePlayerSelector();
+
+        // Сохраняем данные после рендеринга
+        saveData();
+    }
+
+    // Функция для обновления селектора игроков
+    function updatePlayerSelector() {
+        const playerSelect = document.getElementById('playerSelect');
+        playerSelect.innerHTML = '<option value="">Выберите игрока...</option>';
+        
+        players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player.id;
+            option.textContent = player.name;
+            if (player.id === selectedPlayerId) {
+                option.selected = true;
+            }
+            playerSelect.appendChild(option);
+        });
+    }
+
+    // Функция для выбора игрока
+    function selectPlayer(playerId) {
+        selectedPlayerId = playerId;
+        updatePlayerSelector();
+        renderDemonList();
+    }
+
+    // Функция для получения текущего выбранного игрока
+    function getCurrentPlayer() {
+        return players.find(p => p.id === selectedPlayerId) || null;
+    }
+
+    // Функция для отображения списка демонов
+    function renderDemonList() {
+        const demonList = document.getElementById('demonList');
+        demonList.innerHTML = '';
+        
+        const currentPlayer = getCurrentPlayer();
+        
+        demons.forEach(demon => {
+            const isCompleted = currentPlayer?.completedDemons?.includes(demon.id) || false;
+            
+            const demonItem = document.createElement('div');
+            demonItem.className = 'demon-item';
+            demonItem.innerHTML = `
+                <div class="demon-info">
+                    <div class="demon-name">${demon.name}</div>
+                    <div class="demon-points">${demon.points} очков</div>
+                </div>
+                <button class="completion-btn ${isCompleted ? 'completed' : ''}" 
+                        onclick="toggleDemonCompletion('${demon.id}')"
+                        ${!currentPlayer ? 'disabled' : ''}>
+                    ${isCompleted ? '✅ Пройден' : '❌ Не пройден'}
+                </button>
+            `;
+            demonList.appendChild(demonItem);
+        });
+        
+        updateProgressStats();
+    }
+
+    // Функция для переключения статуса прохождения демона
+    function toggleDemonCompletion(demonId) {
+        const currentPlayer = getCurrentPlayer();
+        if (!currentPlayer) {
+            alert('Сначала выберите игрока!');
+            return;
+        }
+        
+        if (!currentPlayer.completedDemons) {
+            currentPlayer.completedDemons = [];
+        }
+        
+        const index = currentPlayer.completedDemons.indexOf(demonId);
+        if (index > -1) {
+            // Удаляем из пройденных
+            currentPlayer.completedDemons.splice(index, 1);
+            console.log(`❌ Демон ${demonId} удален из пройденных для игрока ${currentPlayer.name}`);
+        } else {
+            // Добавляем в пройденные
+            currentPlayer.completedDemons.push(demonId);
+            console.log(`✅ Демон ${demonId} добавлен в пройденные для игрока ${currentPlayer.name}`);
+        }
+        
+        renderDemonList();
+        renderPlayers();
+        saveData();
+    }
+
+    // Функция для обновления статистики прогресса
+    function updateProgressStats() {
+        const currentPlayer = getCurrentPlayer();
+        if (!currentPlayer || !currentPlayer.completedDemons) {
+            document.getElementById('completedCount').textContent = '0';
+            document.getElementById('totalPoints').textContent = '0';
+            document.getElementById('totalDemons').textContent = demons.length;
+            document.getElementById('completionRate').textContent = '0%';
+            return;
+        }
+        
+        const completedCount = currentPlayer.completedDemons.length;
+        const totalPoints = calculatePlayerPoints(currentPlayer);
+        const completionRate = Math.round((completedCount / demons.length) * 100);
+        
+        document.getElementById('completedCount').textContent = completedCount;
+        document.getElementById('totalPoints').textContent = totalPoints;
+        document.getElementById('totalDemons').textContent = demons.length;
+        document.getElementById('completionRate').textContent = completionRate + '%';
+    }
+
+    // === ФУНКЦИИ РЕДАКТИРОВАНИЯ ИГРОКОВ ===
+
+    function editPlayer(playerId) {
+        const player = players.find(p => p.id === playerId);
+        if (player) {
+            currentEditingPlayer = player;
+            document.getElementById('editName').value = player.name;
+            document.getElementById('editAvatar').value = player.avatar;
+            
+            // Заполняем селектор демонов
+            const demonSelector = document.getElementById('demonSelector');
+            demonSelector.innerHTML = '';
             
             demons.forEach(demon => {
-                const isCompleted = currentPlayer?.completedDemons?.includes(demon.id) || false;
+                const isSelected = player.completedDemons?.includes(demon.id) || false;
                 
-                const demonItem = document.createElement('div');
-                demonItem.className = 'demon-item';
-                demonItem.innerHTML = `
-                    <div class="demon-info">
-                        <div class="demon-name">${demon.name}</div>
-                        <div class="demon-points">${demon.points} очков</div>
-                    </div>
-                    <button class="completion-btn ${isCompleted ? 'completed' : ''}" 
-                            onclick="toggleDemonCompletion('${demon.id}')"
-                            ${!currentPlayer ? 'disabled' : ''}>
-                        ${isCompleted ? '✅ Пройден' : '❌ Не пройден'}
-                    </button>
+                const demonOption = document.createElement('div');
+                demonOption.className = `demon-option ${isSelected ? 'selected' : ''}`;
+                demonOption.innerHTML = `
+                    <label style="display: flex; align-items: center; width: 100%; cursor: pointer;">
+                        <input type="checkbox" ${isSelected ? 'checked' : ''} 
+                               onchange="toggleDemonSelection('${demon.id}')" 
+                               style="margin-right: 10px;">
+                        <span>${demon.name} (${demon.points} pts)</span>
+                    </label>
                 `;
-                demonList.appendChild(demonItem);
+                demonSelector.appendChild(demonOption);
             });
             
-            updateProgressStats();
+            document.getElementById('editModal').style.display = 'flex';
         }
+    }
 
-        // Функция для переключения статуса прохождения демона
-        function toggleDemonCompletion(demonId) {
-            const currentPlayer = getCurrentPlayer();
-            if (!currentPlayer) {
-                alert('Сначала выберите игрока!');
-                return;
-            }
-            
-            if (!currentPlayer.completedDemons) {
-                currentPlayer.completedDemons = [];
-            }
-            
-            const index = currentPlayer.completedDemons.indexOf(demonId);
-            if (index > -1) {
-                // Удаляем из пройденных
-                currentPlayer.completedDemons.splice(index, 1);
-                console.log(`❌ Демон ${demonId} удален из пройденных для игрока ${currentPlayer.name}`);
-            } else {
-                // Добавляем в пройденные
-                currentPlayer.completedDemons.push(demonId);
-                console.log(`✅ Демон ${demonId} добавлен в пройденные для игрока ${currentPlayer.name}`);
-            }
-            
-            renderDemonList();
-            renderPlayers();
-            saveData();
-        }
-
-        // Функция для обновления статистики прогресса
-        function updateProgressStats() {
-            const currentPlayer = getCurrentPlayer();
-            if (!currentPlayer || !currentPlayer.completedDemons) {
-                document.getElementById('completedCount').textContent = '0';
-                document.getElementById('totalPoints').textContent = '0';
-                document.getElementById('totalDemons').textContent = demons.length;
-                document.getElementById('completionRate').textContent = '0%';
-                return;
-            }
-            
-            const completedCount = currentPlayer.completedDemons.length;
-            const totalPoints = calculatePlayerPoints(currentPlayer);
-            const completionRate = Math.round((completedCount / demons.length) * 100);
-            
-            document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('totalPoints').textContent = totalPoints;
-            document.getElementById('totalDemons').textContent = demons.length;
-            document.getElementById('completionRate').textContent = completionRate + '%';
-        }
-
-        // === ФУНКЦИИ РЕДАКТИРОВАНИЯ ИГРОКОВ ===
-
-        function editPlayer(playerId) {
-            const player = players.find(p => p.id === playerId);
-            if (player) {
-                currentEditingPlayer = player;
-                document.getElementById('editName').value = player.name;
-                document.getElementById('editAvatar').value = player.avatar;
-                
-                // Заполняем селектор демонов
-                const demonSelector = document.getElementById('demonSelector');
-                demonSelector.innerHTML = '';
-                
-                demons.forEach(demon => {
-                    const isSelected = player.completedDemons?.includes(demon.id) || false;
-                    
-                    const demonOption = document.createElement('div');
-                    demonOption.className = `demon-option ${isSelected ? 'selected' : ''}`;
-                    demonOption.innerHTML = `
-                        <label style="display: flex; align-items: center; width: 100%; cursor: pointer;">
-                            <input type="checkbox" ${isSelected ? 'checked' : ''} 
-                                   onchange="toggleDemonSelection('${demon.id}')" 
-                                   style="margin-right: 10px;">
-                            <span>${demon.name} (${demon.points} pts)</span>
-                        </label>
-                    `;
-                    demonSelector.appendChild(demonOption);
-                });
-                
-                document.getElementById('editModal').style.display = 'flex';
-            }
-        }
-
-        function editPlayerName(playerId) {
-            const player = players.find(p => p.id === playerId);
-            if (player) {
-                const newName = prompt('Введите новое имя игрока:', player.name);
-                if (newName && newName.trim() !== '') {
-                    player.name = newName.trim();
-                    console.log(`✏️ Имя игрока изменено на: ${player.name}`);
-                    renderPlayers();
-                }
-            }
-        }
-
-        function editPlayerAvatar(playerId) {
-            const player = players.find(p => p.id === playerId);
-            if (player) {
-                const newAvatar = prompt('Введите новый аватар (1 символ):', player.avatar);
-                if (newAvatar && newAvatar.trim() !== '') {
-                    player.avatar = newAvatar.trim().charAt(0).toUpperCase();
-                    console.log(`🖼️ Аватар игрока изменен на: ${player.avatar}`);
-                    renderPlayers();
-                }
-            }
-        }
-
-        function savePlayerEdit() {
-            if (currentEditingPlayer) {
-                const newName = document.getElementById('editName').value.trim();
-                const newAvatar = document.getElementById('editAvatar').value.trim().charAt(0).toUpperCase();
-                
-                if (newName && newAvatar) {
-                    currentEditingPlayer.name = newName;
-                    currentEditingPlayer.avatar = newAvatar;
-                    console.log(`✅ Игрок обновлен: ${newName} (${newAvatar})`);
-                    renderPlayers();
-                    closeEditModal();
-                } else {
-                    alert('Пожалуйста, заполните все поля!');
-                }
-            }
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-            currentEditingPlayer = null;
-        }
-
-        function toggleDemonSelection(demonId) {
-            if (!currentEditingPlayer) return;
-            
-            if (!currentEditingPlayer.completedDemons) {
-                currentEditingPlayer.completedDemons = [];
-            }
-            
-            const index = currentEditingPlayer.completedDemons.indexOf(demonId);
-            if (index > -1) {
-                currentEditingPlayer.completedDemons.splice(index, 1);
-            } else {
-                currentEditingPlayer.completedDemons.push(demonId);
-            }
-            
-            // Обновляем визуальное состояние
-            const options = document.querySelectorAll('.demon-option');
-            options.forEach(option => {
-                const checkbox = option.querySelector('input');
-                const demonIdFromOption = checkbox.getAttribute('onchange').match(/'([^']+)'/)[1];
-                if (demonIdFromOption === demonId) {
-                    option.className = `demon-option ${checkbox.checked ? 'selected' : ''}`;
-                }
-            });
-        }
-
-        function deletePlayer(playerId) {
-            const player = players.find(p => p.id === playerId);
-            if (player && confirm(`Вы уверены, что хотите удалить игрока "${player.name}"?`)) {
-                players = players.filter(p => p.id !== playerId);
-                console.log(`🗑️ Игрок удален: ${player.name}`);
-                if (selectedPlayerId === playerId) {
-                    selectedPlayerId = null;
-                }
+    function editPlayerName(playerId) {
+        const player = players.find(p => p.id === playerId);
+        if (player) {
+            const newName = prompt('Введите новое имя игрока:', player.name);
+            if (newName && newName.trim() !== '') {
+                player.name = newName.trim();
+                console.log(`✏️ Имя игрока изменено на: ${player.name}`);
                 renderPlayers();
-                renderDemonList();
             }
         }
+    }
 
-        // === ФУНКЦИИ СИНХРОНИЗАЦИИ ===
-
-        function updateSyncStatus() {
-            const statusElement = document.getElementById('syncStatus');
-            const demonsCount = demons.length;
-            const playersCount = players.length;
-            
-            statusElement.textContent = `Синхронизировано: ${demonsCount} демонов, ${playersCount} игроков`;
-            statusElement.className = 'sync-status synced';
-        }
-
-        function forceSync() {
-            loadData();
-            renderPlayers();
-            renderDemonList();
-            console.log('🔄 Принудительная синхронизация выполнена');
-        }
-
-        // === ОСНОВНЫЕ ФУНКЦИИ ===
-
-        function addDemon(demonId, demonName, demonPoints) {
-            demons.push({
-                id: demonId,
-                name: demonName,
-                points: demonPoints
-            });
-            console.log(`✅ Добавлен демон: ${demonName} (${demonPoints} pts)`);
-            // Сохраняем демонов обратно в localStorage для синхронизации
-            localStorage.setItem('gd_demons', JSON.stringify(demons));
-            renderPlayers();
-            renderDemonList();
-        }
-
-        function addPlayer(playerId, playerName, playerAvatar = '?') {
-            players.push({
-                id: playerId,
-                name: playerName,
-                avatar: playerAvatar.charAt(0).toUpperCase(),
-                completedDemons: []
-            });
-            console.log(`✅ Добавлен игрок: ${playerName}`);
-            renderPlayers();
-        }
-
-        function addCompletion(playerId, demonId) {
-            const player = players.find(p => p.id === playerId);
-            const demon = demons.find(d => d.id === demonId);
-            
-            if (!player) {
-                console.log(`❌ Игрок ${playerId} не найден`);
-                return;
-            }
-            if (!demon) {
-                console.log(`❌ Демон ${demonId} не найден`);
-                return;
-            }
-            if (player.completedDemons.includes(demonId)) {
-                console.log(`ℹ️ Игрок ${playerId} уже прошел ${demonId}`);
-                return;
-            }
-            
-            player.completedDemons.push(demonId);
-            console.log(`✅ Игрок ${playerId} прошел демона: ${demon.name}`);
-            renderPlayers();
-            renderDemonList();
-        }
-
-        function showStats() {
-            console.log('=== СТАТИСТИКА ===');
-            console.log(`Демонов: ${demons.length}`);
-            console.log(`Игроков: ${players.length}`);
-            players.forEach(player => {
-                console.log(`${player.name}: ${player.completedDemons ? player.completedDemons.length : 0} демонов, ${calculatePlayerPoints(player)} pts`);
-            });
-            alert(`📊 Статистика:\nДемонов: ${demons.length}\nИгроков: ${players.length}\n(подробности в консоли)`);
-        }
-
-        function resetData() {
-            if (confirm('Вы уверены, что хотите сбросить все данные?')) {
-                localStorage.removeItem('gd_players');
-                players = [...defaultPlayers];
-                selectedPlayerId = null;
+    function editPlayerAvatar(playerId) {
+        const player = players.find(p => p.id === playerId);
+        if (player) {
+            const newAvatar = prompt('Введите новый аватар (1 символ):', player.avatar);
+            if (newAvatar && newAvatar.trim() !== '') {
+                player.avatar = newAvatar.trim().charAt(0).toUpperCase();
+                console.log(`🖼️ Аватар игрока изменен на: ${player.avatar}`);
                 renderPlayers();
-                renderDemonList();
-                console.log('🔄 Данные игроков сброшены к значениям по умолчанию');
             }
         }
+    }
 
-        function addExampleData() {
-            addDemon('aftercatabath', 'Aftercatabath', 850);
-            addDemon('artificial-ascent', 'Artificial Ascent', 800);
-            addPlayer('cursed', 'Cursed', 'C');
-            addCompletion('cursed', 'bloodbath');
-            addCompletion('cursed', 'cataclysm');
-            addCompletion('riot', 'sakupen-hell');
-            alert('✅ Тестовые данные добавлены!');
-        }
-
-        function addNewPlayer() {
-            const name = prompt('Введите имя игрока:');
-            if (name) {
-                const id = name.toLowerCase().replace(/\s+/g, '-');
-                const avatar = name.charAt(0).toUpperCase();
-                addPlayer(id, name, avatar);
-            }
-        }
-
-        function addNewDemon() {
-            const name = prompt('Введите название демона:');
-            if (name) {
-                const points = parseInt(prompt('Введите очки за прохождение:'));
-                if (points && points > 0) {
-                    const id = name.toLowerCase().replace(/\s+/g, '-');
-                    addDemon(id, name, points);
-                }
-            }
-        }
-
-        // === КОМАНДЫ ДЛЯ КОНСОЛИ ===
-        window.addDemon = addDemon;
-        window.addPlayer = addPlayer;
-        window.addCompletion = addCompletion;
-        window.editPlayer = editPlayer;
-        window.showStats = showStats;
-        window.forceSync = forceSync;
-        window.selectPlayer = selectPlayer;
-
-        // Загружаем игроков при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            renderPlayers();
-            renderDemonList();
+    function savePlayerEdit() {
+        if (currentEditingPlayer) {
+            const newName = document.getElementById('editName').value.trim();
+            const newAvatar = document.getElementById('editAvatar').value.trim().charAt(0).toUpperCase();
             
-            // Добавляем анимацию
-            setTimeout(() => {
-                document.querySelectorAll('.player-row').forEach((row, index) => {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(-20px)';
-                    
-                    setTimeout(() => {
-                        row.style.transition = 'opacity 0.5s, transform 0.5s';
-                        row.style.opacity = '1';
-                        row.style.transform = 'translateX(0)';
-                    }, index * 100);
-                });
-            }, 100);
-
-            console.log('🎮 Команды для консоли:');
-            console.log('addDemon("id", "Название", очки)');
-            console.log('addPlayer("id", "Имя", "Аватар")');
-            console.log('addCompletion("id_игрока", "id_демона")');
-            console.log('editPlayer("id_игрока")');
-            console.log('selectPlayer("id_игрока")');
-            console.log('showStats()');
-            console.log('forceSync() - принудительная синхронизация');
-        });
-
-        // Закрытие модального окна при клике вне его
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
+            if (newName && newAvatar) {
+                currentEditingPlayer.name = newName;
+                currentEditingPlayer.avatar = newAvatar;
+                console.log(`✅ Игрок обновлен: ${newName} (${newAvatar})`);
+                renderPlayers();
                 closeEditModal();
+            } else {
+                alert('Пожалуйста, заполните все поля!');
+            }
+        }
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+        currentEditingPlayer = null;
+    }
+
+    function toggleDemonSelection(demonId) {
+        if (!currentEditingPlayer) return;
+        
+        if (!currentEditingPlayer.completedDemons) {
+            currentEditingPlayer.completedDemons = [];
+        }
+        
+        const index = currentEditingPlayer.completedDemons.indexOf(demonId);
+        if (index > -1) {
+            currentEditingPlayer.completedDemons.splice(index, 1);
+        } else {
+            currentEditingPlayer.completedDemons.push(demonId);
+        }
+        
+        // Обновляем визуальное состояние
+        const options = document.querySelectorAll('.demon-option');
+        options.forEach(option => {
+            const checkbox = option.querySelector('input');
+            const demonIdFromOption = checkbox.getAttribute('onchange').match(/'([^']+)'/)[1];
+            if (demonIdFromOption === demonId) {
+                option.className = `demon-option ${checkbox.checked ? 'selected' : ''}`;
             }
         });
+    }
 
-        // Синхронизация при возвращении на страницу
-        window.addEventListener('focus', function() {
-            console.log('🔄 Проверка синхронизации...');
-            loadData();
+    function deletePlayer(playerId) {
+        const player = players.find(p => p.id === playerId);
+        if (player && confirm(`Вы уверены, что хотите удалить игрока "${player.name}"?`)) {
+            players = players.filter(p => p.id !== playerId);
+            console.log(`🗑️ Игрок удален: ${player.name}`);
+            if (selectedPlayerId === playerId) {
+                selectedPlayerId = null;
+            }
             renderPlayers();
             renderDemonList();
+        }
+    }
+
+    // === ФУНКЦИИ СИНХРОНИЗАЦИИ ===
+
+    function updateSyncStatus() {
+        const statusElement = document.getElementById('syncStatus');
+        const demonsCount = demons.length;
+        const playersCount = players.length;
+        
+        statusElement.textContent = `Демонов: ${demonsCount}, Игроков: ${playersCount}`;
+        statusElement.className = 'sync-status synced';
+    }
+
+    function forceSync() {
+        loadData();
+        renderPlayers();
+        renderDemonList();
+        console.log('🔄 Данные перезагружены');
+    }
+
+    // === ОСНОВНЫЕ ФУНКЦИИ ===
+
+    function addDemon(demonId, demonName, demonPoints) {
+        demons.push({
+            id: demonId,
+            name: demonName,
+            points: demonPoints
         });
-    </script>
+        console.log(`✅ Добавлен демон: ${demonName} (${demonPoints} pts)`);
+        saveData();
+        renderPlayers();
+        renderDemonList();
+    }
+
+    function addPlayer(playerId, playerName, playerAvatar = '?') {
+        players.push({
+            id: playerId,
+            name: playerName,
+            avatar: playerAvatar.charAt(0).toUpperCase(),
+            completedDemons: []
+        });
+        console.log(`✅ Добавлен игрок: ${playerName}`);
+        renderPlayers();
+    }
+
+    function addCompletion(playerId, demonId) {
+        const player = players.find(p => p.id === playerId);
+        const demon = demons.find(d => d.id === demonId);
+        
+        if (!player) {
+            console.log(`❌ Игрок ${playerId} не найден`);
+            return;
+        }
+        if (!demon) {
+            console.log(`❌ Демон ${demonId} не найден`);
+            return;
+        }
+        if (player.completedDemons.includes(demonId)) {
+            console.log(`ℹ️ Игрок ${playerId} уже прошел ${demonId}`);
+            return;
+        }
+        
+        player.completedDemons.push(demonId);
+        console.log(`✅ Игрок ${playerId} прошел демона: ${demon.name}`);
+        renderPlayers();
+        renderDemonList();
+    }
+
+    function showStats() {
+        console.log('=== СТАТИСТИКА ===');
+        console.log(`Демонов: ${demons.length}`);
+        console.log(`Игроков: ${players.length}`);
+        players.forEach(player => {
+            console.log(`${player.name}: ${player.completedDemons ? player.completedDemons.length : 0} демонов, ${calculatePlayerPoints(player)} pts`);
+        });
+        alert(`📊 Статистика:\nДемонов: ${demons.length}\nИгроков: ${players.length}\n(подробности в консоли)`);
+    }
+
+    function resetData() {
+        if (confirm('Вы уверены, что хотите сбросить все данные?')) {
+            localStorage.removeItem('gd_players');
+            localStorage.removeItem('gd_demons');
+            players = [...defaultPlayers];
+            demons = [...defaultDemons];
+            selectedPlayerId = null;
+            renderPlayers();
+            renderDemonList();
+            console.log('🔄 Данные сброшены к значениям по умолчанию');
+        }
+    }
+
+    function addExampleData() {
+        addDemon('killbot', 'Killbot', 750);
+        addDemon('digital-descent', 'Digital Descent', 700);
+        addPlayer('trust', 'TrusTa', 'T');
+        addCompletion('trust', 'bloodbath');
+        addCompletion('trust', 'cataclysm');
+        addCompletion('cursed', 'sakupen-hell');
+        alert('✅ Тестовые данные добавлены!');
+    }
+
+    function addNewPlayer() {
+        const name = prompt('Введите имя игрока:');
+        if (name) {
+            const id = name.toLowerCase().replace(/\s+/g, '-');
+            const avatar = name.charAt(0).toUpperCase();
+            addPlayer(id, name, avatar);
+        }
+    }
+
+    function addNewDemon() {
+        const name = prompt('Введите название демона:');
+        if (name) {
+            const points = parseInt(prompt('Введите очки за прохождение:'));
+            if (points && points > 0) {
+                const id = name.toLowerCase().replace(/\s+/g, '-');
+                addDemon(id, name, points);
+            }
+        }
+    }
+
+    // === КОМАНДЫ ДЛЯ КОНСОЛИ ===
+    window.addDemon = addDemon;
+    window.addPlayer = addPlayer;
+    window.addCompletion = addCompletion;
+    window.editPlayer = editPlayer;
+    window.showStats = showStats;
+    window.forceSync = forceSync;
+    window.selectPlayer = selectPlayer;
+
+    // Загружаем игроков при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        loadData();
+        renderPlayers();
+        renderDemonList();
+        
+        // Анимация
+        setTimeout(() => {
+            document.querySelectorAll('.player-row').forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.5s, transform 0.5s';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        }, 100);
+
+        console.log('🎮 Players page loaded with GitHub Pages support');
+    });
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('editModal');
+        if (event.target === modal) {
+            closeEditModal();
+        }
+    });
+
+    // Синхронизация при возвращении на страницу
+    window.addEventListener('focus', function() {
+        console.log('🔄 Проверка синхронизации...');
+        loadData();
+        renderPlayers();
+        renderDemonList();
+    });
+</script>
+
 </body>
 </html>
