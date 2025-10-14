@@ -1,0 +1,21 @@
+{
+  "demons": [
+    {
+      "id": "bloodbath",
+      "name": "Bloodbath",
+      "creator": "Riot & more",
+      "rank": 1,
+      "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Bloodbath",
+      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    },
+    {
+      "id": "cataclysm", 
+      "name": "Cataclysm",
+      "creator": "Ggb0y",
+      "rank": 2,
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    }
+  ],
+  "lastUpdated": "2024-01-01T00:00:00.000Z"
+}
