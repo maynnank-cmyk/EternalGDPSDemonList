@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Extreme Demon List</title>
+    <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-red: #ff3333;
+            --accent-blue: #3366ff;
+            --accent-purple: #9933ff;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-red);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a1a1a"/><path d="M0 0L100 100M100 0L0 100" stroke="%23333" stroke-width="1"/></svg>');
+            background-size: cover;
+            padding: 60px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-red), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Demon List */
+        .demon-list {
+            padding: 40px 0;
+        }
+        
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .list-header h2 {
+            font-size: 28px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-red);
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .list-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .demon-card {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .demon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .demon-image {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            overflow: hidden;
+        }
+        
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, var(--accent-red), var(--accent-purple));
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .demon-rank {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 2;
+        }
+        
+        .rank.top-1 {
+            background: rgba(255, 215, 0, 0.9);
+            color: black;
+        }
+        
+        .rank.top-3 {
+            background: rgba(192, 192, 192, 0.9);
+            color: black;
+        }
+        
+        .rank.top-10 {
+            background: rgba(205, 127, 50, 0.9);
+            color: white;
+        }
+        
+        .demon-info {
+            padding: 20px;
+        }
+        
+        .demon-name {
+            font-size: 22px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        .demon-creator {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .list-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats {
+                margin-top: 15px;
+            }
+            
+            .list-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">Geometry Dash <span>Demon List</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Демон Лист</a></li>
+                        <li><a href="#">Extended List</a></li>
+                        <li><a href="#">О проекте</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Extreme Demon List</h1>
+            <p>Рейтинг самых сложных уровней в Geometry Dash. Только экстрим демоны.</p>
+        </div>
+    </section>
+    
+    <section class="demon-list">
+        <div class="container">
+            <div class="list-header">
+                <h2>Топ Extreme Демонов</h2>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">75</div>
+                        <div class="stat-label">Всего демонов</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1.2M</div>
+                        <div class="stat-label">Попыток всего</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">97.8%</div>
+                        <div class="stat-label">Макс. сложность</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="list-container">
+                <!-- Demon 1 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank top-1">1</div>
+                        <div class="image-placeholder">Bloodbath</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Bloodbath</h3>
+                        <p class="demon-creator">by Riot & more</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 2 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank top-3">2</div>
+                        <div class="image-placeholder">Cataclysm</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Cataclysm</h3>
+                        <p class="demon-creator">by Ggb0y</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 3 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank top-3">3</div>
+                        <div class="image-placeholder">Sakupen Hell</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Sakupen Hell</h3>
+                        <p class="demon-creator">by Noobas</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 4 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank">4</div>
+                        <div class="image-placeholder">Aftercatabath</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Aftercatabath</h3>
+                        <p class="demon-creator">by Player</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 5 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank">5</div>
+                        <div class="image-placeholder">Artificial Ascent</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Artificial Ascent</h3>
+                        <p class="demon-creator">by Viprin</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 6 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank">6</div>
+                        <div class="image-placeholder">Killbot</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Killbot</h3>
+                        <p class="demon-creator">by MrSpaghetti</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 7 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank">7</div>
+                        <div class="image-placeholder">Digital Descent</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">Digital Descent</h3>
+                        <p class="demon-creator">by Viprin</p>
+                    </div>
+                </div>
+                
+                <!-- Demon 8 -->
+                <div class="demon-card">
+                    <div class="demon-image">
+                        <div class="demon-rank">8</div>
+                        <div class="image-placeholder">The Golden</div>
+                    </div>
+                    <div class="demon-info">
+                        <h3 class="demon-name">The Golden</h3>
+                        <p class="demon-creator">by Bo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Geometry Dash Demon List</h3>
+                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Ссылки</h3>
+                    <a href="#">Главная</a>
+                    <a href="#">Демон Лист</a>
+                    <a href="#">Extended List</a>
+                    <a href="#">О проекте</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="#">Discord</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">GitHub</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Добавляем интерактивность для карточек демонов
+        document.querySelectorAll('.demon-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const demonName = this.querySelector('.demon-name').textContent;
+                // В реальном приложении здесь будет переход на страницу демона
+                window.location.href = `demon.html?name=${encodeURIComponent(demonName)}`;
+            });
+            
+            card.style.cursor = 'pointer';
+        });
+        
+        // Добавляем анимацию при загрузке страницы
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.demon-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s, transform 0.5s';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
