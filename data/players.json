@@ -1,0 +1,34 @@
+{
+  "players": [
+    {
+      "id": "riot",
+      "name": "Riot",
+      "avatar": "R",
+      "completedDemons": ["bloodbath", "cataclysm", "sakupen-hell", "digital-descent"]
+    },
+    {
+      "id": "sunix",
+      "name": "Sunix", 
+      "avatar": "S",
+      "completedDemons": ["bloodbath", "aftercatabath", "artificial-ascent"]
+    },
+    {
+      "id": "cursed",
+      "name": "Cursed",
+      "avatar": "C",
+      "completedDemons": ["bloodbath", "cataclysm", "killbot", "sakupen-hell"]
+    },
+    {
+      "id": "trust",
+      "name": "TrusTa",
+      "avatar": "T",
+      "completedDemons": ["bloodbath", "digital-descent"]
+    },
+    {
+      "id": "neige",
+      "name": "Neigefeu",
+      "avatar": "N",
+      "completedDemons": ["cataclysm", "aftercatabath", "killbot"]
+    }
+  ]
+}
