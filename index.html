@@ -725,14 +725,7 @@
     </footer>
 
 <script>
-    // ========== GITHUB AS DATABASE SOLUTION ==========
-    
-    // ЗАМЕНИТЕ НА ВАШИ ДАННЫЕ:
-    const GITHUB_USERNAME = 'ВАШ_USERNAME';
-    const GITHUB_REPO = 'ВАШ_REPO_NAME';
-    
-    const GITHUB_DATA_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/gh-pages/data/demons.json`;
-    const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/data/demons.json`;
+    // ========== SIMPLE LOCALSTORAGE SOLUTION ==========
     
     // Демоны по умолчанию
     const defaultDemons = [
@@ -766,86 +759,43 @@
     let demons = [];
     let currentEditingDemon = null;
     let isAdminMode = false;
-    let githubToken = '';
 
-    // ========== GITHUB API FUNCTIONS ==========
+    // ========== DATA MANAGEMENT ==========
 
-    // Загрузка данных из GitHub
-    async function loadDataFromGitHub() {
-        try {
-            console.log('📥 Загрузка данных из GitHub...');
-            
-            const response = await fetch(GITHUB_DATA_URL + '?t=' + Date.now());
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            const data = await response.json();
-            demons = data.demons || defaultDemons;
-            
-            console.log('✅ Данные загружены из GitHub:', demons.length);
-            updateSyncStatus('✅ Синхронизировано с GitHub');
-            return true;
-            
-        } catch (error) {
-            console.error('❌ Ошибка загрузки из GitHub:', error);
+    function initializeData() {
+        console.log('🚀 Инициализация данных...');
+        
+        // Загружаем из localStorage или используем default
+        const savedDemons = localStorage.getItem('gd_demons');
+        if (savedDemons) {
+            demons = JSON.parse(savedDemons);
+            console.log('✅ Загружено из localStorage:', demons.length);
+        } else {
             demons = JSON.parse(JSON.stringify(defaultDemons));
-            updateSyncStatus('❌ Используются локальные данные');
-            return false;
+            saveData();
+            console.log('✅ Использованы демоны по умолчанию:', demons.length);
+        }
+        
+        updateSyncStatus();
+    }
+
+    function saveData() {
+        localStorage.setItem('gd_demons', JSON.stringify(demons));
+        console.log('💾 Данные сохранены в localStorage');
+        updateSyncStatus();
+    }
+
+    function updateSyncStatus() {
+        const statusElement = document.getElementById('syncStatus');
+        if (statusElement) {
+            const adminStatus = isAdminMode ? ' | 🔓 АДМИН РЕЖИМ' : ' | 🔒 ОБЫЧНЫЙ РЕЖИМ';
+            statusElement.textContent = `Демонов: ${demons.length}${adminStatus}`;
+            statusElement.className = 'sync-status synced';
         }
     }
 
-    // Упрощенная версия сохранения (для тестирования)
-    async function saveDataToGitHub() {
-        if (!isAdminMode) {
-            alert('❌ Требуется админ доступ');
-            return false;
-        }
-
-        if (!githubToken) {
-            // Режим тестирования - сохраняем локально
-            console.log('💾 Локальное сохранение (без GitHub)');
-            localStorage.setItem('gd_demons', JSON.stringify(demons));
-            updateSyncStatus('✅ Изменения сохранены локально');
-            return true;
-        }
-
-        try {
-            console.log('📤 Сохранение данных в GitHub...');
-            
-            // Для простоты - всегда создаем новый файл
-            const dataToSave = {
-                demons: demons,
-                lastUpdated: new Date().toISOString()
-            };
-            
-            const content = btoa(unescape(encodeURIComponent(JSON.stringify(dataToSave, null, 2))));
-            
-            const response = await fetch(GITHUB_API_URL, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: `Update demon list: ${new Date().toISOString()}`,
-                    content: content,
-                    branch: 'gh-pages'
-                })
-            });
-            
-            if (response.ok) {
-                console.log('✅ Данные сохранены в GitHub!');
-                updateSyncStatus('✅ Изменения отправлены в GitHub');
-                return true;
-            } else {
-                throw new Error('GitHub API error');
-            }
-            
-        } catch (error) {
-            console.error('❌ Ошибка сохранения в GitHub:', error);
-            updateSyncStatus('❌ Ошибка сохранения');
-            return false;
-        }
+    function calculatePointsByRank(rank) {
+        return 1000 - (rank - 1) * 50;
     }
 
     // ========== ADMIN SYSTEM ==========
@@ -853,11 +803,6 @@
     function checkAdminAccess() {
         const password = prompt('Введите пароль для доступа к админ панели:');
         if (password === 'eternalgdpspl123') {
-            // Спросим токен, но если не введут - будет локальный режим
-            const token = prompt('Введите GitHub Token (или оставьте пустым для локального режима):');
-            if (token) {
-                githubToken = token;
-            }
             showAdminPanel();
         } else if (password) {
             alert('❌ Неверный пароль!');
@@ -871,7 +816,7 @@
             isAdminMode = true;
             console.log('🔓 Админ режим активирован');
             renderDemons();
-            updateSyncStatus('🔓 Админ режим активен');
+            updateSyncStatus();
         }
     }
 
@@ -880,10 +825,9 @@
         if (adminPanel) {
             adminPanel.style.display = 'none';
             isAdminMode = false;
-            githubToken = '';
             console.log('🔒 Админ режим выключен');
             renderDemons();
-            updateSyncStatus('✅ Синхронизировано');
+            updateSyncStatus();
         }
     }
 
@@ -891,41 +835,7 @@
         alert('🔒 Эта функция доступна только в админ режиме!');
     }
 
-    // ========== CORE FUNCTIONS ==========
-
-    async function initializeData() {
-        console.log('🚀 Инициализация данных...');
-        await loadDataFromGitHub();
-        renderDemons();
-        
-        // Анимация загрузки
-        setTimeout(() => {
-            document.querySelectorAll('.demon-row').forEach((row, index) => {
-                row.style.opacity = '0';
-                row.style.transform = 'translateX(-20px)';
-                
-                setTimeout(() => {
-                    row.style.transition = 'opacity 0.5s, transform 0.5s';
-                    row.style.opacity = '1';
-                    row.style.transform = 'translateX(0)';
-                }, index * 100);
-            });
-        }, 100);
-    }
-
-    function calculatePointsByRank(rank) {
-        return 1000 - (rank - 1) * 50;
-    }
-
-    function updateSyncStatus(message) {
-        const statusElement = document.getElementById('syncStatus');
-        if (statusElement) {
-            statusElement.textContent = message;
-            statusElement.className = 'sync-status ' + (message.includes('✅') || message.includes('🔓') ? 'synced' : '');
-        }
-    }
-
-    // ========== DEMON MANAGEMENT ==========
+    // ========== DEMON RENDERING ==========
 
     function renderDemons() {
         const demonList = document.getElementById('demonList');
@@ -986,7 +896,7 @@
 
     // ========== EDITING FUNCTIONS ==========
 
-    async function editDemon(demonId) {
+    function editDemon(demonId) {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1002,7 +912,7 @@
         }
     }
 
-    async function saveDemonEdit() {
+    function saveDemonEdit() {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1018,11 +928,12 @@
                 currentEditingDemon.creator = newCreator;
                 currentEditingDemon.image = newImage;
                 
-                await saveDataToGitHub();
+                saveData();
                 renderDemons();
                 closeEditModal();
+                alert('✅ Демон обновлен!');
             } else {
-                alert('Пожалуйста, заполните все поля!');
+                alert('❌ Заполните все поля!');
             }
         }
     }
@@ -1032,7 +943,7 @@
         currentEditingDemon = null;
     }
 
-    async function deleteDemon(demonId) {
+    function deleteDemon(demonId) {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1046,12 +957,13 @@
                 d.rank = index + 1;
             });
             
-            await saveDataToGitHub();
+            saveData();
             renderDemons();
+            alert('✅ Демон удален!');
         }
     }
 
-    async function moveDemonUp(demonId) {
+    function moveDemonUp(demonId) {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1064,12 +976,13 @@
                 d.rank = index + 1;
             });
             
-            await saveDataToGitHub();
+            saveData();
             renderDemons();
+            console.log('⬆️ Демон перемещен вверх');
         }
     }
 
-    async function moveDemonDown(demonId) {
+    function moveDemonDown(demonId) {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1082,20 +995,20 @@
                 d.rank = index + 1;
             });
             
-            await saveDataToGitHub();
+            saveData();
             renderDemons();
+            console.log('⬇️ Демон перемещен вниз');
         }
     }
 
     // ========== ADMIN PANEL FUNCTIONS ==========
 
-    async function addExampleDemons() {
+    function addExampleDemons() {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
         }
         
-        // Добавляем тестовых демонов
         const newDemons = [
             {
                 id: 'aftercatabath',
@@ -1116,12 +1029,12 @@
         ];
         
         demons.push(...newDemons);
-        await saveDataToGitHub();
+        saveData();
         renderDemons();
         alert('✅ Тестовые демоны добавлены!');
     }
 
-    async function addNewDemon() {
+    function addNewDemon() {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1142,13 +1055,14 @@
                 };
                 
                 demons.push(newDemon);
-                await saveDataToGitHub();
+                saveData();
                 renderDemons();
+                alert('✅ Демон добавлен!');
             }
         }
     }
 
-    async function resetDemons() {
+    function resetDemons() {
         if (!isAdminMode) {
             showAdminRequiredMessage();
             return;
@@ -1156,14 +1070,16 @@
         
         if (confirm('Сбросить к демонам по умолчанию?')) {
             demons = JSON.parse(JSON.stringify(defaultDemons));
-            await saveDataToGitHub();
+            saveData();
             renderDemons();
+            alert('✅ Демоны сброшены!');
         }
     }
 
-    async function forceSync() {
-        await loadDataFromGitHub();
+    function forceSync() {
+        initializeData();
         renderDemons();
+        alert('✅ Данные обновлены!');
     }
 
     function showDemonStats() {
@@ -1173,7 +1089,7 @@
         }
         
         let statsText = `📊 Статистика:\nДемонов: ${demons.length}\n\n`;
-        demons.forEach(demon => {
+        demons.slice(0, 10).forEach(demon => {
             const points = calculatePointsByRank(demon.rank);
             statsText += `#${demon.rank} ${demon.name}: ${points} pts\n`;
         });
@@ -1202,6 +1118,20 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('🎮 Загрузка Geometry Dash Demon List...');
         initializeData();
+        
+        // Анимация
+        setTimeout(() => {
+            document.querySelectorAll('.demon-row').forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-20px)';
+                
+                setTimeout(() => {
+                    row.style.transition = 'opacity 0.5s, transform 0.5s';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateX(0)';
+                }, index * 100);
+            });
+        }, 100);
         
         // Закрытие модального окна
         window.addEventListener('click', function(event) {
