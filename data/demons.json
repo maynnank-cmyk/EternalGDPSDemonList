@@ -1,32 +1,18 @@
 {
   "demons": [
     {
-      "id": "Miha Difficult",
-      "name": "Miha Difficult",
-      "creator": "KuratheGuy",
-      "image": "images/mihadifficult.jpg",
-      "videoUrl": "https://youtu.be/пример"
+      "id": "bloodbath",
+      "name": "Bloodbath",
+      "creator": "Riot & more",
+      "image": "images/bloodbath.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID_HERE"
     },
     {
       "id": "cataclysm",
       "name": "Cataclysm", 
       "creator": "Ggb0y",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
-      "videoUrl": "https://youtu.be/пример"
-    },
-    {
-      "id": "sakupen-hell",
-      "name": "Sakupen Hell",
-      "creator": "Noobas",
-      "image": "https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell", 
-      "videoUrl": "https://youtu.be/пример"
-    },
-     {
-      "id": "sakupen-circles",
-      "name": "Sakupen Circles",
-      "creator": "Nick24",
-      "image": "https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell", 
-      "videoUrl": "https://youtu.be/пример"
+      "image": "images/cataclysm.jpg",
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID_HERE"
     }
   ]
 }
