@@ -319,6 +319,17 @@
             background-color: #00cc66;
             border-color: #00cc66;
         }
+
+        .action-btn.admin-only {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .action-btn.admin-only:hover {
+            background: none;
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
         
         /* Edit Modal */
         .modal {
@@ -452,6 +463,17 @@
         
         .admin-btn.reset {
             background: var(--accent-blue);
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 10px;
+            vertical-align: super;
         }
         
         /* Footer */
@@ -590,6 +612,39 @@
                 <!-- Демоны будут добавлены автоматически через JavaScript -->
             </div>
 
+            <!-- Секретная кнопка админа -->
+            <div style="text-align: center; margin: 20px 0;">
+                <button onclick="checkAdminAccess()" style="
+                    background: transparent;
+                    border: 1px solid var(--border-color);
+                    color: var(--text-secondary);
+                    padding: 8px 15px;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    opacity: 0.6;
+                    transition: all 0.3s;
+                " onmouseover="this.style.opacity='1'; this.style.background='var(--bg-tertiary)'" 
+                   onmouseout="this.style.opacity='0.6'; this.style.background='transparent'">
+                    ⚙️ Админ
+                </button>
+            </div>
+
+            <!-- Панель администратора (скрыта по умолчанию) -->
+            <div class="admin-panel" id="adminPanel" style="display: none;">
+                <h3>⚙️ Панель управления демонами <span class="admin-badge">ADMIN</span></h3>
+                <div style="background: var(--bg-tertiary); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px;">
+                    🔒 Админ режим активирован. Все функции редактирования теперь доступны.
+                </div>
+                <div class="admin-buttons">
+                    <button class="admin-btn" onclick="addExampleDemons()">➕ Добавить тестовые демоны</button>
+                    <button class="admin-btn" onclick="addNewDemon()">👹 Добавить демона</button>
+                    <button class="admin-btn" onclick="showDemonStats()">📊 Статистика</button>
+                    <button class="admin-btn reset" onclick="resetDemons()">🔄 Сбросить демонов</button>
+                    <button class="admin-btn" onclick="hideAdminPanel()" style="background: var(--accent-blue);">👋 Выйти из админки</button>
+                </div>
+            </div>
+
             <!-- Модальное окно редактирования -->
             <div id="editModal" class="modal">
                 <div class="modal-content">
@@ -617,17 +672,6 @@
                         <button class="modal-btn cancel" onclick="closeEditModal()">Отмена</button>
                         <button class="modal-btn save" onclick="saveDemonEdit()">Сохранить</button>
                     </div>
-                </div>
-            </div>
-
-            <!-- Панель администратора -->
-            <div class="admin-panel">
-                <h3>⚙️ Панель управления демонами</h3>
-                <div class="admin-buttons">
-                    <button class="admin-btn" onclick="addExampleDemons()">➕ Добавить тестовые демоны</button>
-                    <button class="admin-btn" onclick="addNewDemon()">👹 Добавить демона</button>
-                    <button class="admin-btn" onclick="showDemonStats()">📊 Статистика</button>
-                    <button class="admin-btn reset" onclick="resetDemons()">🔄 Сбросить демонов</button>
                 </div>
             </div>
         </div>
@@ -660,8 +704,6 @@
         </div>
     </footer>
 
-<script src="data.js"></script>
-
     <script>
         // БАЗА ДАННЫХ ДЕМОНОВ ПО УМОЛЧАНИЮ
         const defaultDemons = [
@@ -670,7 +712,7 @@
                 name: 'Bloodbath',
                 creator: 'Riot & more',
                 rank: 1,
-                image: 'images/bloodbath.jpg',
+                image: 'https://via.placeholder.com/240x135/ff3333/ffffff?text=Bloodbath',
                 videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             },
             {
@@ -678,7 +720,7 @@
                 name: 'Cataclysm',
                 creator: 'Ggb0y',
                 rank: 2,
-                image: 'images/cataclysm.jpg',
+                image: 'https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm',
                 videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             },
             {
@@ -686,7 +728,31 @@
                 name: 'Sakupen Hell',
                 creator: 'Noobas',
                 rank: 3,
-                image: 'images/sakupen-hell.jpg',
+                image: 'https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+            {
+                id: 'aftercatabath',
+                name: 'Aftercatabath',
+                creator: 'Player',
+                rank: 4,
+                image: 'https://via.placeholder.com/240x135/ff3366/ffffff?text=Aftercatabath',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+            {
+                id: 'artificial-ascent',
+                name: 'Artificial Ascent',
+                creator: 'Viprin',
+                rank: 5,
+                image: 'https://via.placeholder.com/240x135/33ff66/ffffff?text=Artificial+Ascent',
+                videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+            },
+            {
+                id: 'killbot',
+                name: 'Killbot',
+                creator: 'MrSpaghetti',
+                rank: 6,
+                image: 'https://via.placeholder.com/240x135/ff9933/ffffff?text=Killbot',
                 videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             }
         ];
@@ -696,10 +762,81 @@
 
         // ПЕРЕМЕННЫЕ ДЛЯ РЕДАКТИРОВАНИЯ
         let currentEditingDemon = null;
+        let isAdminMode = false; // Флаг админ режима
+
+        // ========== СИСТЕМА БЕЗОПАСНОСТИ АДМИН ПАНЕЛИ ==========
+        
+        function checkAdminAccess() {
+            const password = prompt('Введите пароль для доступа к админ панели:');
+            if (password === 'eternalgdpspl123') {
+                showAdminPanel();
+            } else if (password) {
+                alert('❌ Неверный пароль!');
+            }
+        }
+        
+        function initAdminSecurity() {
+            // Скрываем панель при загрузке
+            hideAdminPanel();
+        }
+
+        function showAdminPanel() {
+            const adminPanel = document.getElementById('adminPanel');
+            if (adminPanel) {
+                adminPanel.style.display = 'block';
+                isAdminMode = true;
+                console.log('🔓 Админ режим активирован');
+                showNotification('🔓 Админ режим активирован! Все функции редактирования теперь доступны.', 'success');
+                
+                // Перерисовываем интерфейс с включенными кнопками
+                renderDemons();
+            }
+        }
+
+        function hideAdminPanel() {
+            const adminPanel = document.getElementById('adminPanel');
+            if (adminPanel) {
+                adminPanel.style.display = 'none';
+                isAdminMode = false;
+                console.log('🔒 Админ режим выключен');
+                showNotification('🔒 Админ режим выключен. Функции редактирования заблокированы.', 'info');
+                
+                // Перерисовываем интерфейс с выключенными кнопками
+                renderDemons();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#00cc66' : '#3366ff'};
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                z-index: 10000;
+                font-weight: bold;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        function showAdminRequiredMessage() {
+            alert('🔒 Эта функция доступна только в админ режиме!\n\nДля доступа нажмите кнопку "⚙️ Админ" и введите пароль.');
+        }
 
         // ФУНКЦИЯ ДЛЯ РАСЧЕТА ОЧКОВ ПО РАНГУ
         function calculatePointsByRank(rank) {
-            // Формула: 1000 - (rank - 1) * 50
             return 1000 - (rank - 1) * 50;
         }
 
@@ -724,6 +861,17 @@
                                 demon.rank <= 3 ? 'top-3' : 
                                 demon.rank <= 10 ? 'top-10' : '';
                 
+                // Определяем классы для кнопок в зависимости от админ режима
+                const upBtnClass = isAdminMode ? 'action-btn up' : 'action-btn up admin-only';
+                const downBtnClass = isAdminMode ? 'action-btn down' : 'action-btn down admin-only';
+                const editBtnClass = isAdminMode ? 'action-btn' : 'action-btn admin-only';
+                const deleteBtnClass = isAdminMode ? 'action-btn delete' : 'action-btn delete admin-only';
+                
+                const upFunction = isAdminMode ? `moveDemonUp('${demon.id}')` : 'showAdminRequiredMessage()';
+                const downFunction = isAdminMode ? `moveDemonDown('${demon.id}')` : 'showAdminRequiredMessage()';
+                const editFunction = isAdminMode ? `editDemon('${demon.id}')` : 'showAdminRequiredMessage()';
+                const deleteFunction = isAdminMode ? `deleteDemon('${demon.id}')` : 'showAdminRequiredMessage()';
+                
                 const demonRow = document.createElement('div');
                 demonRow.className = 'demon-row';
                 demonRow.innerHTML = `
@@ -734,16 +882,16 @@
                     </div>
                     <div class="demon-info">
                         <div class="demon-details">
-                            <div class="demon-name" onclick="editDemonName('${demon.id}')">${demon.name}</div>
-                            <div class="demon-creator" onclick="editDemonCreator('${demon.id}')">by ${demon.creator}</div>
+                            <div class="demon-name" onclick="${isAdminMode ? `editDemonName('${demon.id}')` : ''}">${demon.name}</div>
+                            <div class="demon-creator" onclick="${isAdminMode ? `editDemonCreator('${demon.id}')` : ''}">by ${demon.creator}</div>
                             <div class="demon-points">${points} pts</div>
                             <div class="points-info">Автоматически по позиции #${demon.rank}</div>
                         </div>
                         <div class="demon-actions">
-                            <button class="action-btn up" onclick="moveDemonUp('${demon.id}')">⬆️</button>
-                            <button class="action-btn down" onclick="moveDemonDown('${demon.id}')">⬇️</button>
-                            <button class="action-btn" onclick="editDemon('${demon.id}')">✏️</button>
-                            <button class="action-btn delete" onclick="deleteDemon('${demon.id}')">🗑️</button>
+                            <button class="${upBtnClass}" onclick="${upFunction}">⬆️</button>
+                            <button class="${downBtnClass}" onclick="${downFunction}">⬇️</button>
+                            <button class="${editBtnClass}" onclick="${editFunction}">✏️</button>
+                            <button class="${deleteBtnClass}" onclick="${deleteFunction}">🗑️</button>
                         </div>
                     </div>
                 `;
@@ -758,6 +906,11 @@
 
         // 1. Открыть модальное окно редактирования
         function editDemon(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demon = demons.find(d => d.id === demonId);
             if (demon) {
                 currentEditingDemon = demon;
@@ -770,6 +923,11 @@
 
         // 2. Редактировать только название (клик по названию)
         function editDemonName(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demon = demons.find(d => d.id === demonId);
             if (demon) {
                 const newName = prompt('Введите новое название демона:', demon.name);
@@ -783,6 +941,11 @@
 
         // 3. Редактировать только создателя (клик по создателю)
         function editDemonCreator(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demon = demons.find(d => d.id === demonId);
             if (demon) {
                 const newCreator = prompt('Введите нового создателя:', demon.creator);
@@ -796,6 +959,11 @@
 
         // 4. Сохранить изменения из модального окна
         function saveDemonEdit() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             if (currentEditingDemon) {
                 const newName = document.getElementById('editName').value.trim();
                 const newCreator = document.getElementById('editCreator').value.trim();
@@ -822,6 +990,11 @@
 
         // 6. Удалить демона
         function deleteDemon(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demon = demons.find(d => d.id === demonId);
             if (demon && confirm(`Вы уверены, что хотите удалить демона "${demon.name}"?`)) {
                 demons = demons.filter(d => d.id !== demonId);
@@ -836,6 +1009,11 @@
 
         // 7. Переместить демона вверх
         function moveDemonUp(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demonIndex = demons.findIndex(d => d.id === demonId);
             if (demonIndex > 0) {
                 // Меняем местами с предыдущим демоном
@@ -851,6 +1029,11 @@
 
         // 8. Переместить демона вниз
         function moveDemonDown(demonId) {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const demonIndex = demons.findIndex(d => d.id === demonId);
             if (demonIndex < demons.length - 1) {
                 // Меняем местами со следующим демоном
@@ -867,7 +1050,12 @@
         // === ОСНОВНЫЕ ФУНКЦИИ ===
 
         // Добавить нового демона
-        function addDemon(demonId, demonName, demonCreator, demonImage = 'images/demon.jpg') {
+        function addDemon(demonId, demonName, demonCreator, demonImage = 'https://via.placeholder.com/240x135/666666/ffffff?text=New+Demon') {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const newRank = demons.length + 1;
             demons.push({
                 id: demonId,
@@ -883,6 +1071,11 @@
 
         // Показать статистику демонов
         function showDemonStats() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             console.log('=== СТАТИСТИКА ДЕМОНОВ ===');
             console.log(`Всего демонов: ${demons.length}`);
             demons.forEach(demon => {
@@ -905,6 +1098,11 @@
 
         // Сбросить демонов
         function resetDemons() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             if (confirm('Вы уверены, что хотите сбросить всех демонов?')) {
                 localStorage.removeItem('gd_demons');
                 demons = [...defaultDemons];
@@ -915,14 +1113,24 @@
 
         // Добавить тестовых демонов
         function addExampleDemons() {
-            addDemon('aftercatabath', 'Aftercatabath', 'Player');
-            addDemon('artificial-ascent', 'Artificial Ascent', 'Viprin');
-            addDemon('killbot', 'Killbot', 'MrSpaghetti');
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
+            addDemon('digital-descent', 'Digital Descent', 'Viprin');
+            addDemon('acu', 'Acu', 'Neigefeu');
+            addDemon('firework', 'Firework', 'Endevvor');
             alert('✅ Тестовые демоны добавлены!');
         }
 
         // Добавить нового демона (через prompt)
         function addNewDemon() {
+            if (!isAdminMode) {
+                showAdminRequiredMessage();
+                return;
+            }
+            
             const name = prompt('Введите название демона:');
             if (name) {
                 const creator = prompt('Введите создателя демона:');
@@ -948,9 +1156,15 @@
         window.editDemon = editDemon;
         window.showDemonStats = showDemonStats;
         window.calculatePointsByRank = calculatePointsByRank;
+        window.checkAdminAccess = checkAdminAccess;
+        window.hideAdminPanel = hideAdminPanel;
+        window.showAdminRequiredMessage = showAdminRequiredMessage;
 
         // Загружаем демонов при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем безопасность
+            initAdminSecurity();
+            
             renderDemons();
             
             // Добавляем анимацию
@@ -971,7 +1185,8 @@
             console.log('addDemon("id", "Название", "Создатель")');
             console.log('editDemon("id_демона")');
             console.log('showDemonStats()');
-            console.log('calculatePointsByRank(ранг) - посчитать очки для ранга');
+            console.log('🔒 Режим: Обычный (админ функции заблокированы)');
+            console.log('💡 Для админ доступа нажмите кнопку "⚙️ Админ" и введите пароль');
         });
 
         // Закрытие модального окна при клике вне его
