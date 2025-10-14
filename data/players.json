@@ -2,33 +2,34 @@
   "players": [
     {
       "id": "riot",
-      "name": "Riot",
+      "name": "Riot", 
       "avatar": "R",
-      "completedDemons": ["bloodbath", "cataclysm", "sakupen-hell", "digital-descent"]
+      "completedDemons": ["bloodbath", "cataclysm", "sakupen-hell"],
+      "completions": {
+        "bloodbath": "2023-01-15",
+        "cataclysm": "2023-02-20", 
+        "sakupen-hell": "2023-03-10"
+      }
     },
     {
       "id": "sunix",
-      "name": "Sunix", 
-      "avatar": "S",
-      "completedDemons": ["bloodbath", "aftercatabath", "artificial-ascent"]
+      "name": "Sunix",
+      "avatar": "S", 
+      "completedDemons": ["bloodbath", "cataclysm"],
+      "completions": {
+        "bloodbath": "2023-01-20",
+        "cataclysm": "2023-02-25"
+      }
     },
     {
-      "id": "cursed",
+      "id": "cursed", 
       "name": "Cursed",
       "avatar": "C",
-      "completedDemons": ["bloodbath", "cataclysm", "killbot", "sakupen-hell"]
-    },
-    {
-      "id": "trust",
-      "name": "TrusTa",
-      "avatar": "T",
-      "completedDemons": ["bloodbath", "digital-descent"]
-    },
-    {
-      "id": "neige",
-      "name": "Neigefeu",
-      "avatar": "N",
-      "completedDemons": ["cataclysm", "aftercatabath", "killbot"]
+      "completedDemons": ["bloodbath", "sakupen-hell"],
+      "completions": {
+        "bloodbath": "2023-02-01",
+        "sakupen-hell": "2023-03-15"
+      }
     }
   ]
 }
