@@ -1,5 +1,4 @@
-[file name]: data/players.json
-[file content begin]
+
 {
   "players": [
     {
@@ -13,4 +12,3 @@
     }
   ]
 }
-[file content end]
