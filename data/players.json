@@ -3,43 +3,12 @@
 {
   "players": [
     {
-      "id": "skoe",
-      "name": "SKOE", 
-      "avatar": "S",
-      "completedDemons": ["mihadifficult", "voidstorm", "sakupen-hell"],
+      "id": "testplayer",
+      "name": "Test Player",
+      "avatar": "T",
+      "completedDemons": ["test"],
       "completions": {
-        "mihadifficult": "2023-01-15",
-        "voidstorm": "2023-02-20", 
-        "sakupen-hell": "2023-03-10"
-      }
-    },
-    {
-      "id": "sunix",
-      "name": "Sunix",
-      "avatar": "S", 
-      "completedDemons": ["mihadifficult", "voidstorm"],
-      "completions": {
-        "mihadifficult": "2023-01-20",
-        "voidstorm": "2023-02-25"
-      }
-    },
-    {
-      "id": "cursed", 
-      "name": "Cursed",
-      "avatar": "C",
-      "completedDemons": ["mihadifficult", "sakupen-hell"],
-      "completions": {
-        "mihadifficult": "2023-02-01",
-        "sakupen-hell": "2023-03-15"
-      }
-    },
-    {
-      "id": "riot",
-      "name": "Riot",
-      "avatar": "R",
-      "completedDemons": ["mihadifficult"],
-      "completions": {
-        "mihadifficult": "2023-01-10"
+        "test": "2023-01-01"
       }
     }
   ]
