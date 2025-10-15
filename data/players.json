@@ -1,22 +1,21 @@
 {
   "players": [
     {
-      "id": "riot",
-      "name": "Riot",
-      "avatar": "R",
-      "completedDemons": ["bloodbath", "cataclysm"],
+      "id": "skoe",
+      "name": "SKOE",
+      "avatar": "S",
+      "completedDemons": ["mihadifficult"],
       "completions": {
-        "bloodbath": "2023-01-15",
-        "cataclysm": "2023-02-20"
+        "mihadifficult": "2023-01-15",
       }
     },
     {
-      "id": "sunix",
-      "name": "Sunix",
-      "avatar": "S",
-      "completedDemons": ["bloodbath"],
+      "id": "nicepeek",
+      "name": "NICEPEEK",
+      "avatar": "N",
+      "completedDemons": ["voidstorm"],
       "completions": {
-        "bloodbath": "2023-03-10"
+        "voidstorm": "2023-03-10"
       }
     }
   ]
