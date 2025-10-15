@@ -1,0 +1,58 @@
+[file name]: test-files.html
+[file content begin]
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Тест файлов</title>
+</head>
+<body>
+    <h1>Тестирование доступности файлов</h1>
+    
+    <button onclick="testFile('./data/demons.json')">Тест demons.json</button>
+    <button onclick="testFile('./data/players.json')">Тест players.json</button>
+    <button onclick="testFile('data/demons.json')">Тест data/demons.json</button>
+    <button onclick="testFile('data/players.json')">Тест data/players.json</button>
+    
+    <div id="result" style="margin-top: 20px; padding: 20px; background: #f0f0f0;"></div>
+
+    <script>
+        async function testFile(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                document.getElementById('result').innerHTML = `
+                    <h3>✅ ${url} загружен успешно!</h3>
+                    <p>Статус: ${response.status}</p>
+                    <p>Первые 500 символов:</p>
+                    <pre style="background: white; padding: 10px; border: 1px solid #ccc;">${text.substring(0, 500)}</pre>
+                    <button onclick="tryParse('${url}')">Попробовать распарсить JSON</button>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>❌ Ошибка загрузки ${url}</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        async function tryParse(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const data = JSON.parse(text);
+                document.getElementById('result').innerHTML += `
+                    <h4>✅ JSON парсится успешно!</h4>
+                    <pre style="background: white; padding: 10px; border: 1px solid #ccc;">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML += `
+                    <h4>❌ Ошибка парсинга JSON</h4>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
+[file content end]
