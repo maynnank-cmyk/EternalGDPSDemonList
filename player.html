@@ -1,0 +1,112 @@
+[file name]: players.html
+[file content begin]
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Топ Игроков - Geometry Dash Demon List</title>
+    <style>
+        /* ... существующие стили ... */
+        
+        .player-name {
+            font-size: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .player-name:hover {
+            color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* ... остальные существующие стили ... */
+    </style>
+</head>
+<body>
+    <!-- ... существующая разметка ... -->
+
+    <script>
+        // ========== PLAYERS DATA SYSTEM ==========
+        
+        // ... существующий код ...
+
+        // ========== RENDERING ==========
+
+        function renderPlayers() {
+            const playersList = document.getElementById('playersList');
+            if (!playersList) {
+                console.error('❌ Element playersList not found');
+                return;
+            }
+            
+            playersList.innerHTML = '';
+            
+            if (players.length === 0) {
+                playersList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">😔</div>
+                        <div>Игроки не найдены</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Проверьте файл data/players.json</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Считаем очки для каждого игрока и сортируем
+            players.forEach(player => {
+                player.totalPoints = calculatePlayerPoints(player);
+                player.completedCount = player.completedDemons ? player.completedDemons.length : 0;
+            });
+            
+            // Сортируем по очкам (по убыванию)
+            players.sort((a, b) => b.totalPoints - a.totalPoints);
+            
+            // Рендерим игроков
+            players.forEach((player, index) => {
+                const rank = index + 1;
+                const rankClass = rank === 1 ? 'top-1' : 
+                                rank <= 3 ? 'top-3' : 
+                                rank <= 10 ? 'top-10' : '';
+                
+                const playerRow = document.createElement('div');
+                playerRow.className = 'player-row';
+                playerRow.innerHTML = `
+                    <div class="player-rank ${rankClass}">${rank}</div>
+                    <div class="player-avatar">
+                        <div class="avatar-placeholder">${player.avatar}</div>
+                    </div>
+                    <div class="player-info">
+                        <div>
+                            <div class="player-name" onclick="openPlayerProfile('${player.id}')">${player.name}</div>
+                            <div class="player-demons">Пройдено демонов: <span>${player.completedCount}</span></div>
+                        </div>
+                        <div class="player-score">${player.totalPoints} pts</div>
+                    </div>
+                `;
+                playersList.appendChild(playerRow);
+            });
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+
+        function openPlayerProfile(playerId) {
+            window.location.href = `player.html?id=${playerId}`;
+        }
+
+        // ... остальной существующий код ...
+
+        // Глобальные функции
+        window.refreshData = refreshData;
+        window.openPlayerProfile = openPlayerProfile;
+
+        // ... остальной существующий код ...
+    </script>
+</body>
+</html>
+[file content end]
