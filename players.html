@@ -1,3 +1,5 @@
+[file name]: players.html
+[file content begin]
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,558 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Топ Игроков - Geometry Dash Demon List</title>
     <style>
-        :root {
-            --bg-primary: #0d0d0d;
-            --bg-secondary: #1a1a1a;
-            --bg-tertiary: #262626;
-            --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --accent-red: #ff3333;
-            --accent-blue: #3366ff;
-            --accent-purple: #9933ff;
-            --border-color: #333333;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
-        header {
-            background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--text-primary);
-            text-decoration: none;
-        }
-        
-        .logo span {
-            color: var(--accent-red);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 25px;
-        }
-        
-        nav ul li a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        nav ul li a:hover {
-            color: var(--text-primary);
-        }
-        
-        /* Breadcrumb */
-        .breadcrumb {
-            padding: 15px 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .breadcrumb a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--text-primary);
-        }
-        
-        /* Hero Section */
-        .hero {
-            padding: 40px 0;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, var(--accent-red), var(--accent-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .hero p {
-            font-size: 18px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Players List */
-        .players-list {
-            padding: 40px 0;
-        }
-        
-        .list-header {
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .list-header h2 {
-            font-size: 28px;
-        }
-        
-        .list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .player-row {
-            background-color: var(--bg-secondary);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            gap: 25px;
-            position: relative;
-        }
-        
-        .player-row:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            background-color: var(--bg-tertiary);
-        }
-        
-        .player-rank {
-            font-size: 28px;
-            font-weight: bold;
-            width: 60px;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-        
-        .rank.top-1 {
-            color: gold;
-            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-        }
-        
-        .rank.top-3 {
-            color: silver;
-        }
-        
-        .rank.top-10 {
-            color: #cd7f32; /* bronze */
-        }
-        
-        .player-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid var(--accent-red);
-        }
-        
-        .avatar-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .player-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+        /* ... существующие стили ... */
         
         .player-name {
             font-size: 24px;
             color: var(--text-primary);
             font-weight: 600;
-        }
-        
-        .player-score {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--accent-red);
-            min-width: 100px;
-            text-align: right;
-        }
-        
-        .player-demons {
-            margin-top: 10px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        .player-demons span {
-            color: var(--accent-blue);
-            font-weight: 500;
-        }
-
-        /* Refresh Button */
-        .refresh-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 12px 24px;
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .refresh-btn:hover {
-            background: var(--accent-purple);
-            transform: translateY(-2px);
-        }
-
-        /* Status */
-        .sync-status {
-            text-align: center;
-            padding: 10px;
-            background: var(--bg-tertiary);
+            transition: color 0.3s;
+            display: inline-block;
+            padding: 5px 10px;
             border-radius: 5px;
-            margin: 10px 0;
-            font-size: 14px;
-            color: var(--text-secondary);
         }
         
-        .sync-status.synced {
-            color: #00cc66;
-            border-left: 3px solid #00cc66;
+        .player-name:hover {
+            color: var(--accent-blue);
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
-        /* Footer */
-        footer {
-            background-color: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-        
-        .footer-section p, .footer-section a {
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: var(--text-primary);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .player-row {
-                flex-direction: column;
-                text-align: center;
-                padding: 25px;
-                gap: 20px;
-            }
-            
-            .player-info {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .player-score {
-                text-align: center;
-                min-width: auto;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-            }
-        }
+        /* ... остальные существующие стили ... */
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="index.html" class="logo">Geometry Dash <span>Demon List</span></a>
-                <nav>
-                    <ul>
-                        <li><a href="index.html">Главная</a></li>
-                        <li><a href="players.html" style="color: var(--text-primary);">Топ игроков</a></li>
-                        <li><a href="contacts.html">Контакты</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
-    
-    <div class="breadcrumb container">
-        <a href="index.html">Главная</a> &gt; Топ игроков
-    </div>
-    
-    <section class="hero">
-        <div class="container">
-            <h1>Топ Игроков</h1>
-            <p>Рейтинг лучших игроков Geometry Dash</p>
-        </div>
-    </section>
-    
-    <section class="players-list">
-        <div class="container">
-            <div class="list-header">
-                <h2>Лучшие игроки</h2>
-            </div>
-
-            <!-- Кнопка обновления и статус -->
-            <button class="refresh-btn" onclick="refreshData()">
-                🔄 Обновить список игроков
-            </button>
-            
-            <div id="syncStatus" class="sync-status">
-                Загрузка данных...
-            </div>
-            
-            <div class="list-container" id="playersList">
-                <!-- Игроки будут добавлены автоматически через JavaScript -->
-            </div>
-        </div>
-    </section>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Geometry Dash Demon List</h3>
-                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Ссылки</h3>
-                    <a href="index.html">Главная</a>
-                    <a href="players.html">Топ игроков</a>
-                    <a href="contacts.html">Контакты</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <a href="contacts.html">Команда</a>
-                    <a href="#">Discord</a>
-                    <a href="#">YouTube</a>
-                    <a href="#">Twitter</a>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- ... существующая разметка ... -->
 
     <script>
         // ========== PLAYERS DATA SYSTEM ==========
         
-        // Игроки по умолчанию (резервные)
-        const defaultPlayers = [
-            {
-                id: 'riot',
-                name: 'Riot',
-                avatar: 'R',
-                completedDemons: ['bloodbath', 'cataclysm', 'sakupen-hell']
-            },
-            {
-                id: 'sunix',
-                name: 'Sunix', 
-                avatar: 'S',
-                completedDemons: ['bloodbath', 'aftercatabath']
-            },
-            {
-                id: 'cursed',
-                name: 'Cursed',
-                avatar: 'C',
-                completedDemons: ['bloodbath', 'cataclysm', 'killbot']
-            },
-            {
-                id: 'trust',
-                name: 'TrusTa',
-                avatar: 'T',
-                completedDemons: ['bloodbath']
-            }
-        ];
-
-        // Демоны для расчета очков (должны совпадать с index.html)
-        const defaultDemons = [
-            { id: 'bloodbath', name: 'Bloodbath', points: 1000 },
-            { id: 'cataclysm', name: 'Cataclysm', points: 950 },
-            { id: 'sakupen-hell', name: 'Sakupen Hell', points: 900 },
-            { id: 'aftercatabath', name: 'Aftercatabath', points: 850 },
-            { id: 'artificial-ascent', name: 'Artificial Ascent', points: 800 },
-            { id: 'killbot', name: 'Killbot', points: 750 },
-            { id: 'digital-descent', name: 'Digital Descent', points: 700 }
-        ];
-
-        let players = [];
-        let demons = [];
-
-        // ========== DATA MANAGEMENT ==========
-
-        async function loadPlayersFromJSON() {
-            try {
-                console.log('📥 Загрузка игроков из players.json...');
-                
-                const response = await fetch('./data/players.json?t=' + Date.now());
-                if (!response.ok) throw new Error('Файл players.json не найден');
-                
-                const data = await response.json();
-                
-                if (data.players && Array.isArray(data.players)) {
-                    players = data.players;
-                    console.log('✅ Игроки загружены из players.json:', players.length);
-                    return true;
-                } else {
-                    throw new Error('Неверный формат players.json');
-                }
-                
-            } catch (error) {
-                console.error('❌ Ошибка загрузки игроков:', error);
-                players = JSON.parse(JSON.stringify(defaultPlayers));
-                return false;
-            }
-        }
-
-        async function loadDemonsFromJSON() {
-            try {
-                console.log('📥 Загрузка демонов для расчета очков...');
-                
-                const response = await fetch('./data/demons.json?t=' + Date.now());
-                if (!response.ok) throw new Error('Файл demons.json не найден');
-                
-                const data = await response.json();
-                
-                if (data.demons && Array.isArray(data.demons)) {
-                    // Сортируем демонов по рангу и назначаем очки
-                    demons = data.demons.map((demon, index) => ({
-                        ...demon,
-                        rank: index + 1,
-                        points: Math.max(1000 - index * 50, 100)
-                    }));
-                    console.log('✅ Демоны загружены для расчета очков:', demons.length);
-                    return true;
-                } else {
-                    throw new Error('Неверный формат demons.json');
-                }
-                
-            } catch (error) {
-                console.error('❌ Ошибка загрузки демонов:', error);
-                demons = JSON.parse(JSON.stringify(defaultDemons));
-                return false;
-            }
-        }
-
-        function calculatePlayerPoints(player) {
-            let totalPoints = 0;
-            if (player && player.completedDemons) {
-                player.completedDemons.forEach(demonId => {
-                    const demon = demons.find(d => d.id === demonId);
-                    if (demon) {
-                        totalPoints += demon.points;
-                    }
-                });
-            }
-            return totalPoints;
-        }
-
-        function updateSyncStatus(message) {
-            const statusElement = document.getElementById('syncStatus');
-            if (statusElement) {
-                statusElement.textContent = message;
-                statusElement.className = 'sync-status ' + (message.includes('✅') ? 'synced' : '');
-            }
-        }
+        // ... существующий код ...
 
         // ========== RENDERING ==========
 
@@ -605,7 +83,7 @@
                     </div>
                     <div class="player-info">
                         <div>
-                            <div class="player-name">${player.name}</div>
+                            <div class="player-name" onclick="openPlayerProfile('${player.id}')">${player.name}</div>
                             <div class="player-demons">Пройдено демонов: <span>${player.completedCount}</span></div>
                         </div>
                         <div class="player-score">${player.totalPoints} pts</div>
@@ -617,57 +95,18 @@
 
         // ========== UTILITY FUNCTIONS ==========
 
-        async function refreshData() {
-            await loadDemonsFromJSON();
-            await loadPlayersFromJSON();
-            renderPlayers();
-            updateSyncStatus(`✅ Загружено ${players.length} игроков`);
-            
-            // Анимация обновления
-            document.querySelectorAll('.player-row').forEach((row, index) => {
-                row.style.opacity = '0';
-                row.style.transform = 'translateX(-20px)';
-                
-                setTimeout(() => {
-                    row.style.transition = 'opacity 0.5s, transform 0.5s';
-                    row.style.opacity = '1';
-                    row.style.transform = 'translateX(0)';
-                }, index * 100);
-            });
+        function openPlayerProfile(playerId) {
+            window.location.href = `player.html?id=${playerId}`;
         }
 
-        // ========== INITIALIZATION ==========
-
-        async function initializeData() {
-            console.log('🎮 Инициализация списка игроков...');
-            await loadDemonsFromJSON();
-            await loadPlayersFromJSON();
-            renderPlayers();
-            updateSyncStatus(`✅ Загружено ${players.length} игроков`);
-            
-            // Анимация появления
-            setTimeout(() => {
-                document.querySelectorAll('.player-row').forEach((row, index) => {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(-20px)';
-                    
-                    setTimeout(() => {
-                        row.style.transition = 'opacity 0.5s, transform 0.5s';
-                        row.style.opacity = '1';
-                        row.style.transform = 'translateX(0)';
-                    }, index * 100);
-                });
-            }, 100);
-        }
+        // ... остальной существующий код ...
 
         // Глобальные функции
         window.refreshData = refreshData;
+        window.openPlayerProfile = openPlayerProfile;
 
-        // Запуск при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeData();
-            console.log('✅ Players List ready!');
-        });
+        // ... остальной существующий код ...
     </script>
 </body>
 </html>
+[file content end]
