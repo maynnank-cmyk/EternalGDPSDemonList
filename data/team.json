@@ -1,60 +1,25 @@
 {
   "team": [
     {
-      "id": "riot",
-      "name": "Riot",
-      "avatar": "R",
+      "id": "vladgmd",
+      "name": "VladGMD",
+      "avatar": "images/vladgmd.png",
       "role": "Основатель",
       "roleClass": "role-leader"
     },
     {
-      "id": "sunix",
-      "name": "Sunix",
-      "avatar": "S",
+      "id": "sintezz",
+      "name": "Sintezz",
+      "avatar": "images/sintezz.png",
       "role": "Главный модератор",
       "roleClass": "role-admin"
     },
     {
-      "id": "viprin",
-      "name": "ViPriN",
-      "avatar": "V",
+      "id": "maskexe",
+      "name": "MaskEXE",
+      "avatar": "images/maskexe.png",
       "role": "Администратор",
       "roleClass": "role-admin"
-    },
-    {
-      "id": "cursed",
-      "name": "Cursed",
-      "avatar": "C",
-      "role": "Модератор",
-      "roleClass": "role-moderator"
-    },
-    {
-      "id": "trust",
-      "name": "TrusTa",
-      "avatar": "T",
-      "role": "Модератор",
-      "roleClass": "role-moderator"
-    },
-    {
-      "id": "neigefeu",
-      "name": "Neigefeu",
-      "avatar": "N",
-      "role": "Модератор",
-      "roleClass": "role-moderator"
-    },
-    {
-      "id": "ggboy",
-      "name": "Ggb0y",
-      "avatar": "G",
-      "role": "Модератор",
-      "roleClass": "role-moderator"
-    },
-    {
-      "id": "zobros",
-      "name": "Zobros",
-      "avatar": "Z",
-      "role": "Модератор",
-      "roleClass": "role-moderator"
     }
   ]
 }
