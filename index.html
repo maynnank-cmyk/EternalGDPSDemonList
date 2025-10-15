@@ -320,6 +320,16 @@
             border-left: 3px solid #00cc66;
         }
         
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-red);
+            border-radius: 8px;
+            margin: 20px 0;
+            color: var(--accent-red);
+        }
+        
         /* Footer */
         footer {
             background-color: var(--bg-secondary);
@@ -451,6 +461,8 @@
             <div id="syncStatus" class="sync-status">
                 Загрузка данных...
             </div>
+
+            <div id="errorContainer"></div>
             
             <div class="list-container" id="demonList">
                 <!-- Демоны будут добавлены автоматически через JavaScript -->
@@ -517,28 +529,66 @@
 
         // ========== DATA MANAGEMENT ==========
 
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <strong>❌ Ошибка:</strong> ${message}
+                    <br><small>Проверьте консоль для подробностей</small>
+                </div>
+            `;
+        }
+
         async function loadDataFromJSON() {
             try {
                 console.log('📥 Загрузка данных из demons.json...');
                 
-                // Загружаем из data/demons.json
-                const response = await fetch('./data/demons.json');
-                if (!response.ok) throw new Error('Файл demons.json не найден');
+                // Пробуем разные пути
+                const paths = [
+                    './data/demons.json',
+                    'data/demons.json',
+                    '/EternalGDPSDemonList/data/demons.json',
+                    './EternalGDPSDemonList/data/demons.json'
+                ];
                 
-                const data = await response.json();
+                let demonsData = null;
+                let successfulPath = '';
+                
+                for (const path of paths) {
+                    try {
+                        console.log(`Пробуем путь: ${path}`);
+                        const response = await fetch(path);
+                        if (response.ok) {
+                            const text = await response.text();
+                            console.log(`✅ Файл найден по пути: ${path}`);
+                            console.log('Первые 200 символов:', text.substring(0, 200));
+                            
+                            demonsData = JSON.parse(text);
+                            successfulPath = path;
+                            break;
+                        }
+                    } catch (error) {
+                        console.log(`❌ Путь ${path} не сработал:`, error.message);
+                        continue;
+                    }
+                }
+                
+                if (!demonsData) {
+                    throw new Error('Не удалось загрузить demons.json ни по одному из путей');
+                }
                 
                 // Автоматически назначаем ранги по порядку
-                if (data.demons && Array.isArray(data.demons)) {
-                    demons = data.demons.map((demon, index) => ({
+                if (demonsData.demons && Array.isArray(demonsData.demons)) {
+                    demons = demonsData.demons.map((demon, index) => ({
                         ...demon,
-                        rank: index + 1  // Автоматическая нумерация
+                        rank: index + 1
                     }));
                     
                     console.log('✅ Данные загружены из demons.json:', demons.length);
-                    updateSyncStatus(`✅ Загружено ${demons.length} демонов`);
+                    updateSyncStatus(`✅ Загружено ${demons.length} демонов из ${successfulPath}`);
                     return true;
                 } else {
-                    throw new Error('Неверный формат demons.json');
+                    throw new Error('Неверный формат demons.json - отсутствует массив demons');
                 }
                 
             } catch (error) {
@@ -551,6 +601,7 @@
                 }));
                 
                 updateSyncStatus('❌ Используются стандартные демоны');
+                showError(error.message);
                 return false;
             }
         }
