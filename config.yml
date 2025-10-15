@@ -1,0 +1,15 @@
+[file name]: _config.yml
+[file content begin]
+title: "Geometry Dash Demon List"
+description: "Неофициальный рейтинг самых сложных уровней в Geometry Dash"
+baseurl: ""
+url: "https://your-username.github.io/your-repo-name"
+theme: jekyll-theme-cayman
+
+include:
+  - data/*.json
+
+exclude:
+  - generate-pages.yml
+  - generate-demon-pages.py
+[file content end]
