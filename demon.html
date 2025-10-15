@@ -1,5 +1,3 @@
-[file name]: demon.html
-[file content begin]
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -274,13 +272,6 @@
             font-weight: 600;
             margin-bottom: 5px;
             font-size: 18px; /* УВЕЛИЧЕН ШРИФТ */
-            cursor: pointer;
-            color: var(--text-primary);
-            transition: color 0.3s;
-        }
-        
-        .player-name:hover {
-            color: var(--accent-blue);
         }
         
         .completion-date {
@@ -472,11 +463,6 @@
             return urlParams.get('id');
         }
 
-        // Функция для открытия профиля игрока
-        function openPlayerProfile(playerId) {
-            window.location.href = `player.html?id=${playerId}`;
-        }
-
         async function loadDemonData() {
             const demonId = getDemonIdFromURL();
             
@@ -486,40 +472,29 @@
             }
 
             try {
-                console.log('🔍 Поиск демона с ID:', demonId);
-                
                 // Загружаем demons.json
                 const demonsResponse = await fetch('./data/demons.json');
-                if (!demonsResponse.ok) {
-                    throw new Error('Файл demons.json не найден');
-                }
                 const demonsData = await demonsResponse.json();
                 allDemons = demonsData.demons || [];
-                console.log('📋 Загружено демонов:', allDemons.length);
                 
                 // Находим текущего демона
                 currentDemon = allDemons.find(d => d.id === demonId);
-                console.log('🎯 Найден демон:', currentDemon);
                 
                 if (!currentDemon) {
-                    showError('Демон не найден. Доступные демоны: ' + allDemons.map(d => d.id).join(', '));
+                    showError('Демон не найден');
                     return;
                 }
                 
                 // Загружаем players.json
                 const playersResponse = await fetch('./data/players.json');
-                if (!playersResponse.ok) {
-                    throw new Error('Файл players.json не найден');
-                }
                 const playersData = await playersResponse.json();
                 players = playersData.players || [];
-                console.log('👥 Загружено игроков:', players.length);
                 
                 renderDemonPage();
                 
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
-                showError('Ошибка загрузки данных: ' + error.message);
+                showError('Ошибка загрузки данных');
             }
         }
 
@@ -561,9 +536,7 @@
                 return allDemons.indexOf(a) - allDemons.indexOf(b);
             });
             
-            const rank = sortedDemons.findIndex(d => d.id === currentDemon.id) + 1;
-            console.log(`🏆 Ранг демона ${currentDemon.name}: ${rank}`);
-            return rank;
+            return sortedDemons.findIndex(d => d.id === currentDemon.id) + 1;
         }
 
         function calculatePointsByRank(rank) {
@@ -609,7 +582,6 @@
             );
             
             completionsCount.textContent = playersWhoCompleted.length;
-            console.log(`🎯 Игроков прошло демон ${currentDemon.name}: ${playersWhoCompleted.length}`);
             
             if (playersWhoCompleted.length === 0) {
                 completionsList.innerHTML = `
@@ -632,7 +604,7 @@
                 completionItem.innerHTML = `
                     <div class="player-avatar">${player.avatar}</div>
                     <div class="player-info">
-                        <div class="player-name" onclick="openPlayerProfile('${player.id}')">${player.name}</div>
+                        <div class="player-name">${player.name}</div>
                         <div class="completion-date">Прошел: ${completionDate}</div>
                     </div>
                 `;
@@ -655,12 +627,8 @@
             `;
         }
 
-        // Глобальные функции
-        window.openPlayerProfile = openPlayerProfile;
-
         // Запускаем при загрузке страницы
         document.addEventListener('DOMContentLoaded', loadDemonData);
     </script>
 </body>
 </html>
-[file content end]
