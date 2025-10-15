@@ -3,21 +3,24 @@
     {
       "id": "vladgmd",
       "name": "VladGMD",
-      "avatar": "images/vladgmd.png",
+      "avatar": "V",
+      "avatarImage": "images/vladgmd.png", 
       "role": "Основатель",
       "roleClass": "role-leader"
     },
     {
       "id": "sintezz",
       "name": "Sintezz",
-      "avatar": "images/sintezz.png",
+      "avatar": "S",
+      "avatarImage": "images/sintezz.png", 
       "role": "Главный модератор",
       "roleClass": "role-admin"
     },
     {
       "id": "maskexe",
       "name": "MaskEXE",
-      "avatar": "images/maskexe.png",
+      "avatar": "M",
+      "avatarImage": "images/maskexe.png", 
       "role": "Администратор",
       "roleClass": "role-admin"
     }
