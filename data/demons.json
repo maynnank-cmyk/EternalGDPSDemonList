@@ -1,12 +1,10 @@
-[file name]: data/demons.json
-[file content begin]
 {
   "demons": [
     {
       "id": "mihadifficult",
       "name": "Miha Difficult",
       "creator": "KuraTheGuy",
-      "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Miha+Difficult",
+      "image": "images/mihadifficult.png",
       "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
       "description": "Легендарный экстрим демон созданный KuraTheGuy"
     },
@@ -14,7 +12,7 @@
       "id": "voidstorm", 
       "name": "Void Storm",
       "creator": "NICEPEEK",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Void+Storm",
+      "image": "images/cataclysm.jpg",
       "videoUrl": "https://www.youtube.com/watch?v=e9LSoF0s6hE",
       "description": "Один из самых известных экстрим демонов"
     },
@@ -22,10 +20,9 @@
       "id": "sakupen-hell",
       "name": "Sakupen Hell",
       "creator": "Noobas",
-      "image": "https://via.placeholder.com/240x135/9933ff/ffffff?text=Sakupen+Hell", 
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "image": "images/sakupen-hell.jpg", 
+      "videoUrl": "https://www.youtube.com/watch?v=VIDEO_ID",
       "description": "Сложный демон с уникальным геймплеем"
     }
   ]
 }
-[file content end]
