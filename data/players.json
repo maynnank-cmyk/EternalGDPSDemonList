@@ -13,9 +13,19 @@
       "id": "nicepeek",
       "name": "NICEPEEK",
       "avatar": "N",
-      "completedDemons": ["voidstorm"],
+      "completedDemons": ["voidstorm", "hardtimes"],
       "completions": {
         "voidstorm": "2023-03-10"
+        "hardtimes": "2023-03-10"
+      }
+    },
+          {
+      "id": "freedom",
+      "name": "Freedom",
+      "avatar": "F",
+      "completedDemons": ["tsfeeling"],
+      "completions": {
+        "tsfeeling": "2023-01-15"
       }
     }
   ]
