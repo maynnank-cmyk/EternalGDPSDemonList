@@ -88,6 +88,17 @@
             color: var(--accent-red);
         }
         
+        .demon-content {
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .demon-name {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
+        
         .debug-info {
             background: var(--bg-secondary);
             padding: 20px;
@@ -95,7 +106,7 @@
             margin: 20px 0;
             text-align: left;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -124,57 +135,110 @@
     </div>
 
     <script>
-        async function loadDemonData() {
+        // Простая функция для получения параметра из URL
+        function getURLParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
-            const demonId = urlParams.get('id');
+            return urlParams.get(name);
+        }
+
+        // Функция для показа ошибки
+        function showError(message, details = '') {
+            console.error('Ошибка:', message, details);
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="error-container">
+                    <div class="error-title">❌ Ошибка</div>
+                    <h2>${message}</h2>
+                    ${details ? `<div class="debug-info">${details}</div>` : ''}
+                    <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
+                </div>
+            `;
+        }
+
+        // Основная функция загрузки
+        async function loadDemonPage() {
+            const demonId = getURLParam('id');
+            console.log('ID демона из URL:', demonId);
             
             if (!demonId) {
-                showError('ID демона не указан');
+                showError('ID демона не указан в URL', 'Пример: demon.html?id=test');
                 return;
             }
 
             try {
-                console.log('Загрузка demons.json...');
-                const demonsResponse = await fetch('./data/demons.json');
-                if (!demonsResponse.ok) throw new Error('demons.json не найден');
-                
-                const demonsText = await demonsResponse.text();
-                console.log('Raw demons.json:', demonsText.substring(0, 200));
-                
-                const demonsData = JSON.parse(demonsText);
-                console.log('Parsed demons data:', demonsData);
-                
-                if (!demonsData.demons) throw new Error('Нет массива demons в JSON');
-                
-                const demon = demonsData.demons.find(d => d.id === demonId);
-                if (!demon) throw new Error(`Демон ${demonId} не найден`);
+                // Пробуем разные пути к файлам
+                const basePaths = [
+                    '',
+                    './',
+                    '/EternalGDPSDemonList/',
+                    './EternalGDPSDemonList/'
+                ];
 
-                // Загружаем players.json
-                const playersResponse = await fetch('./data/players.json');
-                if (!playersResponse.ok) throw new Error('players.json не найден');
-                
-                const playersText = await playersResponse.text();
-                console.log('Raw players.json:', playersText.substring(0, 200));
-                
-                const playersData = JSON.parse(playersText);
-                
-                renderDemonPage(demon, playersData.players || []);
-                
+                let demonsData = null;
+                let playersData = null;
+                let successfulPath = '';
+
+                // Загружаем demons.json
+                for (const basePath of basePaths) {
+                    const demonsPath = `${basePath}data/demons.json`;
+                    try {
+                        console.log('Пробуем путь:', demonsPath);
+                        const response = await fetch(demonsPath);
+                        if (response.ok) {
+                            const text = await response.text();
+                            console.log('✅ demons.json загружен');
+                            demonsData = JSON.parse(text);
+                            successfulPath = basePath;
+                            break;
+                        }
+                    } catch (error) {
+                        console.log('❌ Путь не сработал:', demonsPath);
+                        continue;
+                    }
+                }
+
+                if (!demonsData) {
+                    throw new Error('Не удалось загрузить demons.json');
+                }
+
+                // Загружаем players.json по успешному пути
+                const playersPath = `${successfulPath}data/players.json`;
+                console.log('Загружаем players.json по пути:', playersPath);
+                const playersResponse = await fetch(playersPath);
+                if (playersResponse.ok) {
+                    const playersText = await playersResponse.text();
+                    playersData = JSON.parse(playersText);
+                    console.log('✅ players.json загружен');
+                }
+
+                // Находим демона
+                const demon = demonsData.demons.find(d => d.id === demonId);
+                if (!demon) {
+                    const availableDemons = demonsData.demons.map(d => d.id).join(', ');
+                    throw new Error(`Демон "${demonId}" не найден`, `Доступные демоны: ${availableDemons}`);
+                }
+
+                // Отображаем страницу
+                renderDemonPage(demon, playersData ? playersData.players : []);
+
             } catch (error) {
-                console.error('Ошибка:', error);
-                showError('Ошибка загрузки: ' + error.message);
+                console.error('Критическая ошибка:', error);
+                showError('Ошибка загрузки данных', error.message + '\n\nПроверьте консоль для подробностей');
             }
         }
 
+        // Функция отображения страницы демона
         function renderDemonPage(demon, players) {
+            console.log('Рендерим демона:', demon);
+            
             const playersWhoCompleted = players.filter(player => 
                 player.completedDemons && player.completedDemons.includes(demon.id)
             );
 
             const content = document.getElementById('content');
             content.innerHTML = `
-                <div style="padding: 40px 0; text-align: center;">
-                    <h1 style="font-size: 48px; color: var(--accent-blue); margin-bottom: 20px;">${demon.name}</h1>
+                <div class="demon-content">
+                    <h1 class="demon-name">${demon.name}</h1>
                     <p><strong>Создатель:</strong> ${demon.creator}</p>
                     ${demon.description ? `<p>${demon.description}</p>` : ''}
                     
@@ -190,15 +254,30 @@
                         <h3>🏆 Игроки, прошедшие демона (${playersWhoCompleted.length})</h3>
                         ${playersWhoCompleted.length > 0 ? 
                             playersWhoCompleted.map(player => `
-                                <div style="background: var(--bg-secondary); padding: 10px; margin: 10px 0; border-radius: 5px;">
-                                    <strong>${player.name}</strong>
-                                    ${player.completions && player.completions[demon.id] ? 
-                                        ` - ${player.completions[demon.id]}` : ''
-                                    }
+                                <div style="background: var(--bg-secondary); padding: 15px; margin: 10px 0; border-radius: 8px; border: 1px solid var(--border-color);">
+                                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">${player.name}</div>
+                                    <div style="color: var(--text-secondary);">
+                                        ${player.completions && player.completions[demon.id] ? 
+                                            `Прошел: ${player.completions[demon.id]}` : 'Дата прохождения неизвестна'
+                                        }
+                                    </div>
                                 </div>
                             `).join('') :
-                            '<p>Пока никто не прошел этого демона</p>'
+                            '<div style="background: var(--bg-secondary); padding: 40px; border-radius: 8px; border: 1px solid var(--border-color);">' +
+                            '<div style="font-size: 48px; margin-bottom: 20px;">😔</div>' +
+                            '<p>Пока никто не прошел этого демона</p>' +
+                            '<p style="font-size: 14px; margin-top: 10px;">Будьте первым!</p>' +
+                            '</div>'
                         }
+                    </div>
+
+                    <div class="debug-info">
+                        <strong>Отладочная информация:</strong><br>
+                        - ID демона: ${demon.id}<br>
+                        - Всего демонов в базе: ${players.reduce((total, player) => total + (player.completedDemons ? player.completedDemons.length : 0), 0)}<br>
+                        - Всего игроков: ${players.length}<br>
+                        - URL: ${window.location.href}<br>
+                        - Демон найден: ✅
                     </div>
                 </div>
             `;
@@ -206,18 +285,8 @@
             document.title = `${demon.name} - Geometry Dash Demon List`;
         }
 
-        function showError(message) {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div class="error-container">
-                    <div class="error-title">❌ Ошибка</div>
-                    <h2>${message}</h2>
-                    <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
-                </div>
-            `;
-        }
-
-        document.addEventListener('DOMContentLoaded', loadDemonData);
+        // Запускаем при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadDemonPage);
     </script>
 </body>
 </html>
