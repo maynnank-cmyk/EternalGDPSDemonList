@@ -316,6 +316,16 @@
             border-left: 3px solid #00cc66;
         }
         
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-red);
+            border-radius: 8px;
+            margin: 20px 0;
+            color: var(--accent-red);
+        }
+        
         /* Footer */
         footer {
             background-color: var(--bg-secondary);
@@ -491,6 +501,8 @@
             <div id="syncStatus" class="sync-status">
                 Загрузка данных...
             </div>
+
+            <div id="errorContainer"></div>
             
             <div class="list-container" id="playersList">
                 <!-- Игроки будут добавлены автоматически через JavaScript -->
@@ -528,45 +540,6 @@
     <script>
         // ========== PLAYERS DATA SYSTEM ==========
         
-        // Игроки по умолчанию (резервные)
-        const defaultPlayers = [
-            {
-                id: 'riot',
-                name: 'Riot',
-                avatar: 'R',
-                completedDemons: ['bloodbath', 'cataclysm', 'sakupen-hell']
-            },
-            {
-                id: 'sunix',
-                name: 'Sunix', 
-                avatar: 'S',
-                completedDemons: ['bloodbath', 'aftercatabath']
-            },
-            {
-                id: 'cursed',
-                name: 'Cursed',
-                avatar: 'C',
-                completedDemons: ['bloodbath', 'cataclysm', 'killbot']
-            },
-            {
-                id: 'trust',
-                name: 'TrusTa',
-                avatar: 'T',
-                completedDemons: ['bloodbath']
-            }
-        ];
-
-        // Демоны для расчета очков
-        const defaultDemons = [
-            { id: 'bloodbath', name: 'Bloodbath', points: 1000 },
-            { id: 'cataclysm', name: 'Cataclysm', points: 950 },
-            { id: 'sakupen-hell', name: 'Sakupen Hell', points: 900 },
-            { id: 'aftercatabath', name: 'Aftercatabath', points: 850 },
-            { id: 'artificial-ascent', name: 'Artificial Ascent', points: 800 },
-            { id: 'killbot', name: 'Killbot', points: 750 },
-            { id: 'digital-descent', name: 'Digital Descent', points: 700 }
-        ];
-
         let players = [];
         let demons = [];
 
@@ -575,6 +548,16 @@
         // Функция для открытия профиля игрока
         function openPlayerProfile(playerId) {
             window.location.href = `player.html?id=${playerId}`;
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <strong>❌ Ошибка:</strong> ${message}
+                    <br><small>Проверьте консоль для подробностей</small>
+                </div>
+            `;
         }
 
         async function loadPlayersFromJSON() {
@@ -596,7 +579,7 @@
                 
             } catch (error) {
                 console.error('❌ Ошибка загрузки игроков:', error);
-                players = JSON.parse(JSON.stringify(defaultPlayers));
+                showError('Ошибка загрузки игроков: ' + error.message);
                 return false;
             }
         }
@@ -625,7 +608,7 @@
                 
             } catch (error) {
                 console.error('❌ Ошибка загрузки демонов:', error);
-                demons = JSON.parse(JSON.stringify(defaultDemons));
+                showError('Ошибка загрузки демонов: ' + error.message);
                 return false;
             }
         }
@@ -682,12 +665,17 @@
             // Сортируем по очкам (по убыванию)
             players.sort((a, b) => b.totalPoints - a.totalPoints);
             
+            console.log('🎯 Отсортированные игроки:', players);
+            
             // Рендерим игроков
             players.forEach((player, index) => {
                 const rank = index + 1;
                 const rankClass = rank === 1 ? 'top-1' : 
                                 rank <= 3 ? 'top-3' : 
                                 rank <= 10 ? 'top-10' : '';
+                
+                const firstCompletion = player.completions ? 
+                    Object.values(player.completions).sort()[0] : null;
                 
                 const playerRow = document.createElement('div');
                 playerRow.className = 'player-row';
@@ -712,10 +700,10 @@
                                     <span class="stat-value">${player.completedCount > 0 ? Math.round(player.totalPoints / player.completedCount) : 0}</span>
                                     <span>средний счёт</span>
                                 </div>
-                                ${player.completions ? `
+                                ${firstCompletion ? `
                                     <div class="stat-item">
                                         <span class="stat-icon">📅</span>
-                                        <span>в списке с ${Object.values(player.completions).sort()[0]}</span>
+                                        <span>с ${firstCompletion}</span>
                                     </div>
                                 ` : ''}
                             </div>
@@ -730,6 +718,7 @@
         // ========== UTILITY FUNCTIONS ==========
 
         async function refreshData() {
+            console.log('🔄 Обновление данных...');
             await loadDemonsFromJSON();
             await loadPlayersFromJSON();
             renderPlayers();
@@ -752,24 +741,29 @@
 
         async function initializeData() {
             console.log('🎮 Инициализация списка игроков...');
-            await loadDemonsFromJSON();
-            await loadPlayersFromJSON();
-            renderPlayers();
-            updateSyncStatus(`✅ Загружено ${players.length} игроков`);
-            
-            // Анимация появления
-            setTimeout(() => {
-                document.querySelectorAll('.player-row').forEach((row, index) => {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(-20px)';
-                    
-                    setTimeout(() => {
-                        row.style.transition = 'opacity 0.5s, transform 0.5s';
-                        row.style.opacity = '1';
-                        row.style.transform = 'translateX(0)';
-                    }, index * 100);
-                });
-            }, 100);
+            try {
+                await loadDemonsFromJSON();
+                await loadPlayersFromJSON();
+                renderPlayers();
+                updateSyncStatus(`✅ Загружено ${players.length} игроков`);
+                
+                // Анимация появления
+                setTimeout(() => {
+                    document.querySelectorAll('.player-row').forEach((row, index) => {
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(-20px)';
+                        
+                        setTimeout(() => {
+                            row.style.transition = 'opacity 0.5s, transform 0.5s';
+                            row.style.opacity = '1';
+                            row.style.transform = 'translateX(0)';
+                        }, index * 100);
+                    });
+                }, 100);
+            } catch (error) {
+                console.error('❌ Ошибка инициализации:', error);
+                showError('Ошибка загрузки данных: ' + error.message);
+            }
         }
 
         // Глобальные функции
@@ -778,8 +772,14 @@
 
         // Запуск при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Players.html загружен, начинаем инициализацию...');
             initializeData();
-            console.log('✅ Players List ready!');
+        });
+
+        // Обработчик глобальных ошибок
+        window.addEventListener('error', function(e) {
+            console.error('💥 Глобальная ошибка:', e.error);
+            showError('Произошла непредвиденная ошибка: ' + (e.error ? e.error.message : 'Неизвестная ошибка'));
         });
     </script>
 </body>
