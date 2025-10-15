@@ -1,5 +1,4 @@
-[file name]: data/demons.json
-[file content begin]
+
 {
   "demons": [
     {
@@ -20,4 +19,3 @@
     }
   ]
 }
-[file content end]
