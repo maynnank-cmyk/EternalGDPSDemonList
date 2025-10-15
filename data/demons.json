@@ -1,21 +1,20 @@
 {
   "demons": [
-        {
-      "id": "mihadifficult",
-      "name": "Miha Difficult",
-      "creator": "KuraTheGuy",
-      "image": "images/mihadifficult.png",
-      "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
+    {
+      "id": "bloodbath",
+      "name": "Bloodbath",
+      "creator": "Riot & more",
+      "videoUrl": "https://www.youtube.com/watch?v=...",
+      "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Bloodbath",
       "description": "Легендарный экстрим демон"
     },
     {
-      "id": "voidstorm",
-      "name": "Void Storm",
-      "creator": "NICEPEEK",
-      "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Test",
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "description": "Тестовый демон для проверки"
+      "id": "cataclysm",
+      "name": "Cataclysm",
+      "creator": "Ggb0y",
+      "videoUrl": "https://www.youtube.com/watch?v=...",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "description": "Один из самых известных демонов"
     }
-
   ]
 }
