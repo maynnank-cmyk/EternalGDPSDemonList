@@ -3,13 +3,26 @@
 title: "Geometry Dash Demon List"
 description: "Неофициальный рейтинг самых сложных уровней в Geometry Dash"
 baseurl: ""
-url: "https://your-username.github.io/your-repo-name"
-theme: jekyll-theme-cayman
+url: ""
+theme: null
 
 include:
-  - data/*.json
+  - data
 
 exclude:
+  - .github
   - generate-pages.yml
   - generate-demon-pages.py
+
+# Отключаем Jekyll обработку для статических файлов
+defaults:
+  - scope:
+      path: "data"
+      type: "pages"
+    values:
+      layout: null
+      permalink: null
+
+# Отключаем Jekyll полностью для GitHub Pages
+plugins: []
 [file content end]
