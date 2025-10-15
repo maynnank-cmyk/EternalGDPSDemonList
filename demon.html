@@ -1,3 +1,5 @@
+[file name]: demon.html
+[file content begin]
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -41,9 +43,6 @@
             background-color: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
         
         .header-content {
@@ -76,280 +75,40 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
         }
         
-        nav ul li a:hover {
-            color: var(--text-primary);
-        }
-        
-        /* Breadcrumb */
-        .breadcrumb {
-            padding: 15px 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .breadcrumb a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        
-        .breadcrumb a:hover {
-            color: var(--text-primary);
-        }
-        
-        /* Demon Header */
-        .demon-header {
-            padding: 40px 0;
+        /* Error and Debug Styles */
+        .error-container {
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
+            padding: 100px 20px;
+            color: var(--text-secondary);
         }
         
-        .demon-header h1 {
+        .error-title {
             font-size: 48px;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, var(--accent-red), var(--accent-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            margin-bottom: 20px;
+            color: var(--accent-red);
         }
         
-        .demon-description {
-            font-size: 18px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 20px;
-        }
-        
-        .demon-meta {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .meta-item {
-            text-align: center;
-        }
-        
-        .meta-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
-        
-        .meta-label {
+        .debug-info {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
             font-size: 14px;
-            color: var(--text-secondary);
-            margin-top: 5px;
         }
         
-        /* Demon Content - ВЫРАВНИВАНИЕ ПО ЦЕНТРУ */
         .demon-content {
             padding: 40px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        .content-row {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            width: 100%;
-            max-width: 1400px;
-        }
-        
-        @media (max-width: 1024px) {
-            .content-row {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        
-        /* Video Section - УВЕЛИЧЕННЫЙ РАЗМЕР */
-        .video-section {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-            max-width: 800px;
             text-align: center;
         }
         
-        .video-section h2 {
-            margin-bottom: 25px;
-            color: var(--accent-red);
-            font-size: 28px;
-        }
-        
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 0 auto;
-        }
-        
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        /* Completions Section - УВЕЛИЧЕННЫЙ РАЗМЕР */
-        .completions-section {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            width: 100%;
-            max-width: 800px;
-            text-align: center;
-        }
-        
-        .completions-section h2 {
-            margin-bottom: 25px;
-            color: var(--accent-blue);
-            font-size: 28px;
-        }
-        
-        .completions-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 600px; /* УВЕЛИЧЕНА ВЫСОТА */
-            overflow-y: auto;
-            padding: 10px;
-        }
-        
-        .completion-item {
-            display: flex;
-            align-items: center;
-            gap: 20px; /* УВЕЛИЧЕН РАЗРЫВ */
-            padding: 20px; /* УВЕЛИЧЕН PADDING */
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
-        }
-        
-        .completion-item:hover {
-            transform: translateX(5px);
-            border-color: var(--accent-blue);
-        }
-        
-        .player-avatar {
-            width: 60px; /* УВЕЛИЧЕН РАЗМЕР */
-            height: 60px; /* УВЕЛИЧЕН РАЗМЕР */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-            color: white;
-            font-weight: bold;
-            font-size: 22px; /* УВЕЛИЧЕН ШРИФТ */
-            flex-shrink: 0;
-        }
-        
-        .player-info {
-            flex: 1;
-            text-align: left;
-        }
-        
-        .player-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 18px; /* УВЕЛИЧЕН ШРИФТ */
-        }
-        
-        .completion-date {
-            font-size: 14px; /* УВЕЛИЧЕН ШРИФТ */
-            color: var(--text-secondary);
-        }
-        
-        .no-completions {
-            text-align: center;
-            padding: 60px; /* УВЕЛИЧЕН PADDING */
-            color: var(--text-secondary);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            font-size: 18px;
+        .demon-name {
+            font-size: 48px;
             margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-        
-        .footer-section p, .footer-section a {
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .footer-section a:hover {
-            color: var(--text-primary);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        /* Loading Animation */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-secondary);
-        }
-        
-        .loading-spinner {
-            border: 3px solid var(--bg-tertiary);
-            border-top: 3px solid var(--accent-blue);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            color: var(--accent-blue);
         }
     </style>
 </head>
@@ -368,267 +127,187 @@
             </div>
         </div>
     </header>
-    
-    <div class="breadcrumb container">
-        <a href="index.html">Главная</a> &gt; <span id="breadcrumbDemonName">Загрузка...</span>
+
+    <div class="container">
+        <div id="content">
+            <div class="loading">
+                <h2>Загрузка...</h2>
+            </div>
+        </div>
     </div>
-    
-    <section class="demon-header">
-        <div class="container">
-            <h1 id="demonName">Загрузка...</h1>
-            <p class="demon-description" id="demonDescription"></p>
-            <div class="demon-meta">
-                <div class="meta-item">
-                    <div class="meta-value" id="demonRank">#0</div>
-                    <div class="meta-label">Ранг</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-value" id="demonPoints">0 pts</div>
-                    <div class="meta-label">Очки</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-value" id="demonCreator">Загрузка...</div>
-                    <div class="meta-label">Создатель</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-value" id="completionsCount">0</div>
-                    <div class="meta-label">Пройдено игроками</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="demon-content">
-        <div class="content-row">
-            <div class="video-section">
-                <h2>🎥 Видео верификация</h2>
-                <div class="video-container" id="videoContainer">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Загрузка видео...</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="completions-section">
-                <h2>🏆 Игроки, прошедшие демона</h2>
-                <div class="completions-list" id="completionsList">
-                    <div class="loading">
-                        <div class="loading-spinner"></div>
-                        <div>Загрузка списка игроков...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Geometry Dash Demon List</h3>
-                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Ссылки</h3>
-                    <a href="index.html">Главная</a>
-                    <a href="players.html">Топ игроков</a>
-                    <a href="contacts.html">Контакты</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <a href="contacts.html">Команда</a>
-                    <a href="#">Discord</a>
-                    <a href="#">YouTube</a>
-                    <a href="#">Twitter</a>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
-            </div>
-        </div>
-    </footer>
 
     <script>
-        // ========== UNIVERSAL DEMON PAGE ==========
-        // Работает для ЛЮБОГО демона через параметры URL
+        // ========== ДЕБАГ И ОТЛАДКА ==========
         
-        let currentDemon = null;
-        let allDemons = [];
-        let players = [];
-
-        // Получаем ID демона из параметров URL
+        console.log('🚀 demon.html загружен');
+        
+        // Получаем ID демона из URL
         function getDemonIdFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
+            const demonId = urlParams.get('id');
+            console.log('🔍 ID демона из URL:', demonId);
+            return demonId;
         }
 
-        async function loadDemonData() {
-            const demonId = getDemonIdFromURL();
+        // Показываем ошибку с деталями
+        function showError(message, details = '') {
+            console.error('❌ Ошибка:', message, details);
             
-            if (!demonId) {
-                showError('ID демона не указан');
-                return;
-            }
-
-            try {
-                // Загружаем demons.json
-                const demonsResponse = await fetch('./data/demons.json');
-                const demonsData = await demonsResponse.json();
-                allDemons = demonsData.demons || [];
-                
-                // Находим текущего демона
-                currentDemon = allDemons.find(d => d.id === demonId);
-                
-                if (!currentDemon) {
-                    showError('Демон не найден');
-                    return;
-                }
-                
-                // Загружаем players.json
-                const playersResponse = await fetch('./data/players.json');
-                const playersData = await playersResponse.json();
-                players = playersData.players || [];
-                
-                renderDemonPage();
-                
-            } catch (error) {
-                console.error('Ошибка загрузки данных:', error);
-                showError('Ошибка загрузки данных');
-            }
-        }
-
-        function renderDemonPage() {
-            if (!currentDemon) return;
-            
-            // Обновляем заголовок страницы
-            document.title = `${currentDemon.name} - Geometry Dash Demon List`;
-            
-            // Обновляем хлебные крошки
-            document.getElementById('breadcrumbDemonName').textContent = currentDemon.name;
-            
-            // Обновляем заголовок и описание
-            document.getElementById('demonName').textContent = currentDemon.name;
-            if (currentDemon.description) {
-                document.getElementById('demonDescription').textContent = currentDemon.description;
-            }
-            
-            // Обновляем мета-информацию
-            const rank = calculateDemonRank();
-            const points = calculatePointsByRank(rank);
-            
-            document.getElementById('demonRank').textContent = `#${rank}`;
-            document.getElementById('demonPoints').textContent = `${points} pts`;
-            document.getElementById('demonCreator').textContent = currentDemon.creator;
-            
-            // Вставляем видео
-            renderVideo();
-            
-            // Рендерим список игроков
-            renderCompletionsList();
-        }
-
-        function calculateDemonRank() {
-            // Находим позицию демона в отсортированном списке
-            const sortedDemons = [...allDemons].sort((a, b) => {
-                // Здесь можно добавить свою логику сортировки
-                // Пока просто по порядку в JSON
-                return allDemons.indexOf(a) - allDemons.indexOf(b);
-            });
-            
-            return sortedDemons.findIndex(d => d.id === currentDemon.id) + 1;
-        }
-
-        function calculatePointsByRank(rank) {
-            return Math.max(1000 - (rank - 1) * 50, 100);
-        }
-
-        function renderVideo() {
-            const videoContainer = document.getElementById('videoContainer');
-            
-            if (currentDemon.videoUrl) {
-                const videoId = extractYouTubeId(currentDemon.videoUrl);
-                if (videoId) {
-                    videoContainer.innerHTML = `
-                        <iframe src="https://www.youtube.com/embed/${videoId}" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    `;
-                } else {
-                    videoContainer.innerHTML = `
-                        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                            <p>Видео недоступно</p>
-                            <a href="${currentDemon.videoUrl}" target="_blank" style="color: var(--accent-blue);">Смотреть на YouTube</a>
-                        </div>
-                    `;
-                }
-            } else {
-                videoContainer.innerHTML = `
-                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                        <p>Видео верификация отсутствует</p>
-                    </div>
-                `;
-            }
-        }
-
-        function renderCompletionsList() {
-            const completionsList = document.getElementById('completionsList');
-            const completionsCount = document.getElementById('completionsCount');
-            
-            // Находим игроков, прошедших этого демона
-            const playersWhoCompleted = players.filter(player => 
-                player.completedDemons && player.completedDemons.includes(currentDemon.id)
-            );
-            
-            completionsCount.textContent = playersWhoCompleted.length;
-            
-            if (playersWhoCompleted.length === 0) {
-                completionsList.innerHTML = `
-                    <div class="no-completions">
-                        <div style="font-size: 48px; margin-bottom: 20px;">😔</div>
-                        <div>Пока никто не прошел этого демона</div>
-                        <div style="font-size: 14px; margin-top: 10px;">Будьте первым!</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            completionsList.innerHTML = '';
-            
-            playersWhoCompleted.forEach(player => {
-                const completionDate = player.completions ? player.completions[currentDemon.id] : 'Дата неизвестна';
-                
-                const completionItem = document.createElement('div');
-                completionItem.className = 'completion-item';
-                completionItem.innerHTML = `
-                    <div class="player-avatar">${player.avatar}</div>
-                    <div class="player-info">
-                        <div class="player-name">${player.name}</div>
-                        <div class="completion-date">Прошел: ${completionDate}</div>
-                    </div>
-                `;
-                completionsList.appendChild(completionItem);
-            });
-        }
-
-        function extractYouTubeId(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-
-        function showError(message) {
-            document.body.innerHTML = `
-                <div style="text-align: center; padding: 100px; color: var(--text-secondary);">
-                    <h1>❌ ${message}</h1>
-                    <p>Вернитесь на <a href="index.html" style="color: var(--accent-blue);">главную страницу</a></p>
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="error-container">
+                    <div class="error-title">❌ Ошибка</div>
+                    <h2>${message}</h2>
+                    ${details ? `<div class="debug-info">${details}</div>` : ''}
+                    <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
                 </div>
             `;
         }
 
+        // Проверяем существование файлов
+        async function checkFiles() {
+            console.log('📁 Проверка файлов...');
+            
+            try {
+                // Проверяем demons.json
+                const demonsResponse = await fetch('./data/demons.json');
+                console.log('📋 demons.json статус:', demonsResponse.status);
+                if (!demonsResponse.ok) {
+                    throw new Error(`demons.json не найден (статус: ${demonsResponse.status})`);
+                }
+                
+                // Проверяем players.json
+                const playersResponse = await fetch('./data/players.json');
+                console.log('👥 players.json статус:', playersResponse.status);
+                if (!playersResponse.ok) {
+                    throw new Error(`players.json не найден (статус: ${playersResponse.status})`);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Ошибка проверки файлов:', error);
+                throw error;
+            }
+        }
+
+        // Загружаем данные
+        async function loadData() {
+            const demonId = getDemonIdFromURL();
+            
+            if (!demonId) {
+                showError('ID демона не указан в URL', 'Пример правильного URL: demon.html?id=mihadifficult');
+                return;
+            }
+
+            try {
+                // Сначала проверяем файлы
+                await checkFiles();
+                
+                // Загружаем demons.json
+                console.log('📥 Загрузка demons.json...');
+                const demonsResponse = await fetch('./data/demons.json');
+                const demonsData = await demonsResponse.json();
+                console.log('📋 Данные demons.json:', demonsData);
+                
+                if (!demonsData.demons || !Array.isArray(demonsData.demons)) {
+                    throw new Error('Неверный формат demons.json - отсутствует массив demons');
+                }
+                
+                // Загружаем players.json
+                console.log('📥 Загрузка players.json...');
+                const playersResponse = await fetch('./data/players.json');
+                const playersData = await playersResponse.json();
+                console.log('👥 Данные players.json:', playersData);
+                
+                if (!playersData.players || !Array.isArray(playersData.players)) {
+                    throw new Error('Неверный формат players.json - отсутствует массив players');
+                }
+
+                // Находим демона
+                const demon = demonsData.demons.find(d => d.id === demonId);
+                console.log('🎯 Найденный демон:', demon);
+                
+                if (!demon) {
+                    const availableDemons = demonsData.demons.map(d => d.id).join(', ');
+                    throw new Error(`Демон с ID "${demonId}" не найден`, `Доступные демоны: ${availableDemons}`);
+                }
+
+                // Отображаем данные
+                renderDemonPage(demon, playersData.players);
+                
+            } catch (error) {
+                console.error('❌ Критическая ошибка:', error);
+                showError('Ошибка загрузки данных', error.message);
+            }
+        }
+
+        // Отображаем страницу демона
+        function renderDemonPage(demon, players) {
+            console.log('🎨 Рендерим страницу демона:', demon.name);
+            
+            // Находим игроков, прошедших этого демона
+            const playersWhoCompleted = players.filter(player => 
+                player.completedDemons && player.completedDemons.includes(demon.id)
+            );
+            
+            console.log(`👥 Игроков прошло демон: ${playersWhoCompleted.length}`);
+
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="demon-content">
+                    <h1 class="demon-name">${demon.name}</h1>
+                    <p><strong>Создатель:</strong> ${demon.creator}</p>
+                    ${demon.description ? `<p>${demon.description}</p>` : ''}
+                    
+                    <div style="margin: 40px 0;">
+                        <h3>🎥 Видео</h3>
+                        ${demon.videoUrl ? 
+                            `<p><a href="${demon.videoUrl}" target="_blank" style="color: var(--accent-blue);">Смотреть на YouTube</a></p>` :
+                            '<p>Видео не указано</p>'
+                        }
+                    </div>
+                    
+                    <div style="margin: 40px 0;">
+                        <h3>🏆 Игроки, прошедшие демона (${playersWhoCompleted.length})</h3>
+                        ${playersWhoCompleted.length > 0 ? 
+                            playersWhoCompleted.map(player => `
+                                <div style="background: var(--bg-secondary); padding: 10px; margin: 10px 0; border-radius: 5px;">
+                                    <strong>${player.name}</strong>
+                                    ${player.completions && player.completions[demon.id] ? 
+                                        ` - ${player.completions[demon.id]}` : ''
+                                    }
+                                </div>
+                            `).join('') :
+                            '<p>Пока никто не прошел этого демона</p>'
+                        }
+                    </div>
+                    
+                    <div class="debug-info" style="margin-top: 40px;">
+                        <strong>Отладочная информация:</strong><br>
+                        - ID демона: ${demon.id}<br>
+                        - Всего демонов в базе: ${players.reduce((total, player) => total + (player.completedDemons ? player.completedDemons.length : 0), 0)}<br>
+                        - Всего игроков: ${players.length}<br>
+                        - URL: ${window.location.href}
+                    </div>
+                </div>
+            `;
+            
+            // Обновляем заголовок страницы
+            document.title = `${demon.name} - Geometry Dash Demon List`;
+        }
+
         // Запускаем при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadDemonData);
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM загружен, начинаем загрузку данных...');
+            loadData();
+        });
+
+        // Обработчик ошибок
+        window.addEventListener('error', function(e) {
+            console.error('💥 Глобальная ошибка:', e.error);
+            showError('Произошла непредвиденная ошибка', e.error ? e.error.message : 'Неизвестная ошибка');
+        });
     </script>
 </body>
 </html>
+[file content end]
