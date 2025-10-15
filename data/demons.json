@@ -1,20 +1,21 @@
 {
   "demons": [
+        {
+      "id": "mihadifficult",
+      "name": "Miha Difficult",
+      "creator": "KuraTheGuy",
+      "image": "images/mihadifficult.png",
+      "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
+      "description": "Легендарный экстрим демон"
+    }
     {
-      "id": "test",
-      "name": "Test Demon",
-      "creator": "Test Creator",
+      "id": "voidstorm",
+      "name": "Void Storm",
+      "creator": "NICEPEEK",
       "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Test",
       "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Тестовый демон для проверки"
     },
-    {
-      "id": "mihadifficult",
-      "name": "Miha Difficult",
-      "creator": "KuraTheGuy",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Miha+Difficult",
-      "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
-      "description": "Легендарный экстрим демон"
-    }
+
   ]
 }
