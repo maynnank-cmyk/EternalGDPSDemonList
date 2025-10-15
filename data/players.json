@@ -1,12 +1,12 @@
 {
   "players": [
     {
-      "id": "testplayer",
-      "name": "Test Player",
-      "avatar": "T",
-      "completedDemons": ["test"],
+      "id": "nicepeek",
+      "name": "NICEPEEK",
+      "avatar": "N",
+      "completedDemons": ["voidstorm"],
       "completions": {
-        "test": "2023-01-01"
+        "voidstorm": "2023-01-01"
       }
     }
   ]
