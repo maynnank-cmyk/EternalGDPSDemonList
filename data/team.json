@@ -1,0 +1,100 @@
+{
+  "team": [
+    {
+      "id": "riot",
+      "name": "Riot",
+      "avatar": "R",
+      "role": "Основатель",
+      "roleClass": "role-leader",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Riot#1234"
+      }
+    },
+    {
+      "id": "sunix",
+      "name": "Sunix",
+      "avatar": "S",
+      "role": "Главный модератор",
+      "roleClass": "role-admin",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Sunix#5678"
+      }
+    },
+    {
+      "id": "viprin",
+      "name": "ViPriN",
+      "avatar": "V",
+      "role": "Администратор",
+      "roleClass": "role-admin",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "ViPriN#9012"
+      }
+    },
+    {
+      "id": "cursed",
+      "name": "Cursed",
+      "avatar": "C",
+      "role": "Модератор",
+      "roleClass": "role-moderator",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Cursed#3456"
+      }
+    },
+    {
+      "id": "trust",
+      "name": "TrusTa",
+      "avatar": "T",
+      "role": "Модератор",
+      "roleClass": "role-moderator",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "TrusTa#7890"
+      }
+    },
+    {
+      "id": "neigefeu",
+      "name": "Neigefeu",
+      "avatar": "N",
+      "role": "Модератор",
+      "roleClass": "role-moderator",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Neigefeu#1234"
+      }
+    },
+    {
+      "id": "ggboy",
+      "name": "Ggb0y",
+      "avatar": "G",
+      "role": "Модератор",
+      "roleClass": "role-moderator",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Ggb0y#5678"
+      }
+    },
+    {
+      "id": "zobros",
+      "name": "Zobros",
+      "avatar": "Z",
+      "role": "Модератор",
+      "roleClass": "role-moderator",
+      "social": {
+        "youtube": "https://youtube.com/...",
+        "twitter": "https://twitter.com/...",
+        "discord": "Zobros#9012"
+      }
+    }
+  ]
+}
