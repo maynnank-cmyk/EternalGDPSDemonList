@@ -77,8 +77,8 @@
             font-weight: 500;
         }
         
-        /* Error and Debug Styles */
-        .error-container {
+        /* Error and Loading */
+        .error-container, .loading {
             text-align: center;
             padding: 100px 20px;
             color: var(--text-secondary);
@@ -88,16 +88,6 @@
             font-size: 48px;
             margin-bottom: 20px;
             color: var(--accent-red);
-        }
-        
-        .debug-info {
-            background: var(--bg-secondary);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: left;
-            font-family: monospace;
-            font-size: 14px;
         }
         
         .demon-content {
@@ -131,63 +121,28 @@
     <div class="container">
         <div id="content">
             <div class="loading">
-                <h2>Загрузка...</h2>
+                <h2>Загрузка демона...</h2>
             </div>
         </div>
     </div>
 
     <script>
-        // ========== ДЕБАГ И ОТЛАДКА ==========
-        
-        console.log('🚀 demon.html загружен');
-        
         // Получаем ID демона из URL
         function getDemonIdFromURL() {
             const urlParams = new URLSearchParams(window.location.search);
-            const demonId = urlParams.get('id');
-            console.log('🔍 ID демона из URL:', demonId);
-            return demonId;
+            return urlParams.get('id');
         }
 
-        // Показываем ошибку с деталями
-        function showError(message, details = '') {
-            console.error('❌ Ошибка:', message, details);
-            
+        // Показываем ошибку
+        function showError(message) {
             const content = document.getElementById('content');
             content.innerHTML = `
                 <div class="error-container">
                     <div class="error-title">❌ Ошибка</div>
                     <h2>${message}</h2>
-                    ${details ? `<div class="debug-info">${details}</div>` : ''}
                     <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
                 </div>
             `;
-        }
-
-        // Проверяем существование файлов
-        async function checkFiles() {
-            console.log('📁 Проверка файлов...');
-            
-            try {
-                // Проверяем demons.json
-                const demonsResponse = await fetch('./data/demons.json');
-                console.log('📋 demons.json статус:', demonsResponse.status);
-                if (!demonsResponse.ok) {
-                    throw new Error(`demons.json не найден (статус: ${demonsResponse.status})`);
-                }
-                
-                // Проверяем players.json
-                const playersResponse = await fetch('./data/players.json');
-                console.log('👥 players.json статус:', playersResponse.status);
-                if (!playersResponse.ok) {
-                    throw new Error(`players.json не найден (статус: ${playersResponse.status})`);
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('❌ Ошибка проверки файлов:', error);
-                throw error;
-            }
         }
 
         // Загружаем данные
@@ -195,62 +150,42 @@
             const demonId = getDemonIdFromURL();
             
             if (!demonId) {
-                showError('ID демона не указан в URL', 'Пример правильного URL: demon.html?id=mihadifficult');
+                showError('ID демона не указан');
                 return;
             }
 
             try {
-                // Сначала проверяем файлы
-                await checkFiles();
-                
                 // Загружаем demons.json
-                console.log('📥 Загрузка demons.json...');
                 const demonsResponse = await fetch('./data/demons.json');
+                if (!demonsResponse.ok) throw new Error('Файл demons.json не найден');
                 const demonsData = await demonsResponse.json();
-                console.log('📋 Данные demons.json:', demonsData);
-                
-                if (!demonsData.demons || !Array.isArray(demonsData.demons)) {
-                    throw new Error('Неверный формат demons.json - отсутствует массив demons');
-                }
                 
                 // Загружаем players.json
-                console.log('📥 Загрузка players.json...');
                 const playersResponse = await fetch('./data/players.json');
+                if (!playersResponse.ok) throw new Error('Файл players.json не найден');
                 const playersData = await playersResponse.json();
-                console.log('👥 Данные players.json:', playersData);
-                
-                if (!playersData.players || !Array.isArray(playersData.players)) {
-                    throw new Error('Неверный формат players.json - отсутствует массив players');
-                }
 
                 // Находим демона
                 const demon = demonsData.demons.find(d => d.id === demonId);
-                console.log('🎯 Найденный демон:', demon);
-                
                 if (!demon) {
-                    const availableDemons = demonsData.demons.map(d => d.id).join(', ');
-                    throw new Error(`Демон с ID "${demonId}" не найден`, `Доступные демоны: ${availableDemons}`);
+                    showError(`Демон "${demonId}" не найден`);
+                    return;
                 }
 
                 // Отображаем данные
                 renderDemonPage(demon, playersData.players);
                 
             } catch (error) {
-                console.error('❌ Критическая ошибка:', error);
-                showError('Ошибка загрузки данных', error.message);
+                console.error('Ошибка:', error);
+                showError('Ошибка загрузки данных: ' + error.message);
             }
         }
 
         // Отображаем страницу демона
         function renderDemonPage(demon, players) {
-            console.log('🎨 Рендерим страницу демона:', demon.name);
-            
-            // Находим игроков, прошедших этого демона
             const playersWhoCompleted = players.filter(player => 
                 player.completedDemons && player.completedDemons.includes(demon.id)
             );
-            
-            console.log(`👥 Игроков прошло демон: ${playersWhoCompleted.length}`);
 
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -281,32 +216,14 @@
                             '<p>Пока никто не прошел этого демона</p>'
                         }
                     </div>
-                    
-                    <div class="debug-info" style="margin-top: 40px;">
-                        <strong>Отладочная информация:</strong><br>
-                        - ID демона: ${demon.id}<br>
-                        - Всего демонов в базе: ${players.reduce((total, player) => total + (player.completedDemons ? player.completedDemons.length : 0), 0)}<br>
-                        - Всего игроков: ${players.length}<br>
-                        - URL: ${window.location.href}
-                    </div>
                 </div>
             `;
             
-            // Обновляем заголовок страницы
             document.title = `${demon.name} - Geometry Dash Demon List`;
         }
 
         // Запускаем при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ DOM загружен, начинаем загрузку данных...');
-            loadData();
-        });
-
-        // Обработчик ошибок
-        window.addEventListener('error', function(e) {
-            console.error('💥 Глобальная ошибка:', e.error);
-            showError('Произошла непредвиденная ошибка', e.error ? e.error.message : 'Неизвестная ошибка');
-        });
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html>
