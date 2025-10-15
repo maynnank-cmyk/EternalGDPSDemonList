@@ -1,0 +1,54 @@
+[file name]: check-json.html
+[file content begin]
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка JSON файлов</title>
+</head>
+<body>
+    <h1>Проверка доступности JSON файлов</h1>
+    
+    <div id="results"></div>
+
+    <script>
+        async function checkFile(path) {
+            const results = document.getElementById('results');
+            try {
+                const response = await fetch(path);
+                if (!response.ok) {
+                    results.innerHTML += `<div style="color: red; margin: 10px 0;">❌ ${path} - Ошибка: ${response.status} ${response.statusText}</div>`;
+                    return;
+                }
+                
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    results.innerHTML += `<div style="color: green; margin: 10px 0;">✅ ${path} - Успешно! Демонов: ${data.demons ? data.demons.length : 'N/A'}</div>`;
+                    console.log(`✅ ${path}:`, data);
+                } catch (e) {
+                    results.innerHTML += `<div style="color: red; margin: 10px 0;">❌ ${path} - Ошибка парсинга JSON: ${e.message}</div>`;
+                    console.error(`❌ ${path} JSON error:`, e);
+                }
+            } catch (error) {
+                results.innerHTML += `<div style="color: red; margin: 10px 0;">❌ ${path} - Ошибка сети: ${error.message}</div>`;
+            }
+        }
+
+        // Проверяем все возможные пути
+        const paths = [
+            'data/demons.json',
+            './data/demons.json',
+            '/EternalGDPSDemonList/data/demons.json',
+            './EternalGDPSDemonList/data/demons.json',
+            'data/players.json',
+            './data/players.json',
+            '/EternalGDPSDemonList/data/players.json',
+            './EternalGDPSDemonList/data/players.json'
+        ];
+
+        paths.forEach(path => checkFile(path));
+    </script>
+</body>
+</html>
+[file content end]
