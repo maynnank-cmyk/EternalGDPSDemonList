@@ -7,7 +7,7 @@
       "image": "images/mihadifficult.png",
       "videoUrl": "https://www.youtube.com/watch?v=cLTTnC6Xkng",
       "description": "Легендарный экстрим демон"
-    }
+    },
     {
       "id": "voidstorm",
       "name": "Void Storm",
@@ -15,7 +15,7 @@
       "image": "https://via.placeholder.com/240x135/ff3333/ffffff?text=Test",
       "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       "description": "Тестовый демон для проверки"
-    },
+    }
 
   ]
 }
