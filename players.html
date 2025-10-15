@@ -524,9 +524,6 @@
                 <div class="footer-section">
                     <h3>Контакты</h3>
                     <a href="contacts.html">Команда</a>
-                    <a href="#">Discord</a>
-                    <a href="#">YouTube</a>
-                    <a href="#">Twitter</a>
                 </div>
             </div>
             <div class="copyright">
@@ -698,12 +695,6 @@
                                     <span class="stat-value">${player.completedCount > 0 ? Math.round(player.totalPoints / player.completedCount) : 0}</span>
                                     <span>средний счёт</span>
                                 </div>
-                                ${firstCompletion ? `
-                                    <div class="stat-item">
-                                        <span class="stat-icon">📅</span>
-                                        <span>с ${firstCompletion}</span>
-                                    </div>
-                                ` : ''}
                             </div>
                         </div>
                         <div class="player-score">${player.totalPoints} pts</div>
@@ -782,5 +773,3 @@
     </script>
 </body>
 </html>
-
-
