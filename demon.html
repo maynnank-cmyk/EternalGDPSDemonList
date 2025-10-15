@@ -38,7 +38,6 @@
             padding: 0 20px;
         }
         
-        /* Header */
         header {
             background-color: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
@@ -77,8 +76,7 @@
             font-weight: 500;
         }
         
-        /* Error and Loading */
-        .error-container, .loading {
+        .error-container {
             text-align: center;
             padding: 100px 20px;
             color: var(--text-secondary);
@@ -90,15 +88,14 @@
             color: var(--accent-red);
         }
         
-        .demon-content {
-            padding: 40px 0;
-            text-align: center;
-        }
-        
-        .demon-name {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: var(--accent-blue);
+        .debug-info {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -120,34 +117,16 @@
 
     <div class="container">
         <div id="content">
-            <div class="loading">
+            <div style="text-align: center; padding: 100px 20px;">
                 <h2>Загрузка демона...</h2>
             </div>
         </div>
     </div>
 
     <script>
-        // Получаем ID демона из URL
-        function getDemonIdFromURL() {
+        async function loadDemonData() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
-        }
-
-        // Показываем ошибку
-        function showError(message) {
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div class="error-container">
-                    <div class="error-title">❌ Ошибка</div>
-                    <h2>${message}</h2>
-                    <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
-                </div>
-            `;
-        }
-
-        // Загружаем данные
-        async function loadData() {
-            const demonId = getDemonIdFromURL();
+            const demonId = urlParams.get('id');
             
             if (!demonId) {
                 showError('ID демона не указан');
@@ -155,33 +134,38 @@
             }
 
             try {
-                // Загружаем demons.json
+                console.log('Загрузка demons.json...');
                 const demonsResponse = await fetch('./data/demons.json');
-                if (!demonsResponse.ok) throw new Error('Файл demons.json не найден');
-                const demonsData = await demonsResponse.json();
+                if (!demonsResponse.ok) throw new Error('demons.json не найден');
                 
+                const demonsText = await demonsResponse.text();
+                console.log('Raw demons.json:', demonsText.substring(0, 200));
+                
+                const demonsData = JSON.parse(demonsText);
+                console.log('Parsed demons data:', demonsData);
+                
+                if (!demonsData.demons) throw new Error('Нет массива demons в JSON');
+                
+                const demon = demonsData.demons.find(d => d.id === demonId);
+                if (!demon) throw new Error(`Демон ${demonId} не найден`);
+
                 // Загружаем players.json
                 const playersResponse = await fetch('./data/players.json');
-                if (!playersResponse.ok) throw new Error('Файл players.json не найден');
-                const playersData = await playersResponse.json();
-
-                // Находим демона
-                const demon = demonsData.demons.find(d => d.id === demonId);
-                if (!demon) {
-                    showError(`Демон "${demonId}" не найден`);
-                    return;
-                }
-
-                // Отображаем данные
-                renderDemonPage(demon, playersData.players);
+                if (!playersResponse.ok) throw new Error('players.json не найден');
+                
+                const playersText = await playersResponse.text();
+                console.log('Raw players.json:', playersText.substring(0, 200));
+                
+                const playersData = JSON.parse(playersText);
+                
+                renderDemonPage(demon, playersData.players || []);
                 
             } catch (error) {
                 console.error('Ошибка:', error);
-                showError('Ошибка загрузки данных: ' + error.message);
+                showError('Ошибка загрузки: ' + error.message);
             }
         }
 
-        // Отображаем страницу демона
         function renderDemonPage(demon, players) {
             const playersWhoCompleted = players.filter(player => 
                 player.completedDemons && player.completedDemons.includes(demon.id)
@@ -189,8 +173,8 @@
 
             const content = document.getElementById('content');
             content.innerHTML = `
-                <div class="demon-content">
-                    <h1 class="demon-name">${demon.name}</h1>
+                <div style="padding: 40px 0; text-align: center;">
+                    <h1 style="font-size: 48px; color: var(--accent-blue); margin-bottom: 20px;">${demon.name}</h1>
                     <p><strong>Создатель:</strong> ${demon.creator}</p>
                     ${demon.description ? `<p>${demon.description}</p>` : ''}
                     
@@ -222,8 +206,18 @@
             document.title = `${demon.name} - Geometry Dash Demon List`;
         }
 
-        // Запускаем при загрузке страницы
-        document.addEventListener('DOMContentLoaded', loadData);
+        function showError(message) {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="error-container">
+                    <div class="error-title">❌ Ошибка</div>
+                    <h2>${message}</h2>
+                    <p><a href="index.html" style="color: var(--accent-blue);">Вернуться на главную</a></p>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDemonData);
     </script>
 </body>
 </html>
