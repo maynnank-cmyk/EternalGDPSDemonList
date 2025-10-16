@@ -537,6 +537,14 @@
             `;
         }
 
+        function calculatePointsByRank(rank) {
+            if (rank <= 50) {
+                return Math.max(1000 - (rank - 1) * 20, 300);
+            } else {
+                return Math.max(300 - (rank - 51) * 5, 5);
+            }
+        }
+
         async function loadDataFromJSON() {
             try {
                 console.log('📥 Загрузка данных из demons.json...');
@@ -574,10 +582,6 @@
                 showError(error.message);
                 return false;
             }
-        }
-
-        function calculatePointsByRank(rank) {
-            return Math.max(1000 - (rank - 1) * 50, 100);
         }
 
         function updateSyncStatus(message) {
@@ -708,6 +712,3 @@
     </script>
 </body>
 </html>
-
-
-
