@@ -588,6 +588,14 @@
             return urlParams.get('id');
         }
 
+        function calculatePointsByRank(rank) {
+            if (rank <= 50) {
+                return Math.max(1000 - (rank - 1) * 20, 300);
+            } else {
+                return Math.max(300 - (rank - 51) * 5, 5);
+            }
+        }
+
         async function loadPlayerData() {
             const playerId = getPlayerIdFromURL();
             
@@ -754,10 +762,6 @@
             return sortedDemons.findIndex(d => d.id === demonId) + 1;
         }
 
-        function calculatePointsByRank(rank) {
-            return Math.max(1000 - (rank - 1) * 50, 100);
-        }
-
         function renderHardestDemon(hardestDemon) {
             const container = document.getElementById('hardestDemonContainer');
             
@@ -840,4 +844,3 @@
     </script>
 </body>
 </html>
-
