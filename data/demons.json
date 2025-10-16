@@ -69,7 +69,7 @@
       "name": "Limbo X",
       "creator": "altfunYT",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/limbox.png",
       "description": "Один из самых известных демонов"
      },
      {
@@ -85,7 +85,7 @@
       "name": "True Hardcore",
       "creator": "Syntezz1",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/truehardcore.png",
       "description": "Один из самых известных демонов"
      },
      {
@@ -117,7 +117,7 @@
       "name": "Electrostatic",
       "creator": "Syntezz1",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/electrostatic.png",
       "description": "Один из самых известных демонов"
      },
      {
@@ -141,7 +141,7 @@
       "name": "Generic Processing",
       "creator": "Syntezz1",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/genericprocessing.png",
       "description": "Один из самых известных демонов"
      },
      {
@@ -237,7 +237,7 @@
       "name": "Kai Kai Kitan Cover",
       "creator": "Bl3von",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/kaikaikitancover.png",
       "description": "Один из самых известных демонов"
      },
      {
