@@ -273,6 +273,29 @@
       "completions": {
         "difficult": "2025-01-15"
       }
+    },
+     {
+      "id": "vladgmd",
+      "name": "VladGMD",
+      "avatar": "V",
+      "completedDemons": ["slonikwave", "acheroncircles"],
+      "completions": {
+        "slonikwave": "2025-01-15",
+        "acheroncircles": "2025-04-04"
+      }
+    },
+     {
+      "id": "%",
+      "name": "%",
+      "avatar": "%",
+      "completedDemons": ["slonikwave", "acheroncircles", "difficult", "thehellverity", "retrojumper"],
+      "completions": {
+        "slonikwave": "2025-01-15",
+        "acheroncircles": "2025-04-04",
+        "difficult": "2025-04-04",
+        "thehellverity": "2025-04-04",
+        "retrojumper": "2025-04-04"
+      }
     }
   ]
 }
