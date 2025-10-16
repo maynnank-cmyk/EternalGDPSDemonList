@@ -6,26 +6,94 @@
       "avatar": "S",
       "completedDemons": ["mihadifficult"],
       "completions": {
-        "mihadifficult": "2023-01-15"
+        "mihadifficult": "2025-01-15"
       }
     },
     {
       "id": "nicepeek",
       "name": "NICEPEEK",
       "avatar": "N",
-      "completedDemons": ["voidstorm", "hardtimes"],
+      "completedDemons": ["voidstorm", "hardtimes", "millioner", "disturb"],
       "completions": {
-        "voidstorm": "2023-03-10",
-        "hardtimes": "2023-03-10"
+        "voidstorm": "2025-03-10",
+        "hardtimes": "2025-03-10",
+        "milloner": "2025-03-10",
+        "dirturb": "2025-03-10"
       }
     },
           {
       "id": "freedom",
       "name": "Freedom",
       "avatar": "F",
-      "completedDemons": ["tsfeeling"],
+      "completedDemons": ["tsfeeling", "nodrop", "disturb", "unnamed", "limbox", "sleepwalker", "truehardcore", "angela", "electrostatic", "sapphire"],
       "completions": {
-        "tsfeeling": "2023-01-15"
+        "tsfeeling": "2025-01-15",
+        "nodrop": "2025-01-15",
+        "disturb": "2025-03-10",
+        "unnamed": "2025-03-10",
+        "limbox": "2025-03-10",
+        "sleepwalker": "2025-03-10",
+        "truehardcore": "2025-03-10",
+        "angela": "2025-03-10",
+        "electrostatic": "2025-01-15",
+        "sapphire": "2025-01-15"
+      }
+    },
+          {
+      "id": "syro",
+      "name": "Syro",
+      "avatar": "S",
+      "completedDemons": ["disturb"],
+      "completions": {
+        "disturb": "2025-01-15"
+      }
+    },
+      {
+      "id": "nikedloon",
+      "name": "Nikedloon",
+      "avatar": "N",
+      "completedDemons": ["limbox", "electrostatic", "sapphire"],
+      "completions": {
+        "limbox": "2025-01-15",
+        "electrostatic": "2025-01-15",
+        "sapphire": "2025-01-15"
+      }
+    },
+     {
+      "id": "shampyx",
+      "name": "Shampyx",
+      "avatar": "S",
+      "completedDemons": ["sleepwalker"],
+      "completions": {
+        "sleepwalker": "2025-01-15"
+      }
+    },
+        {
+      "id": "igorchal",
+      "name": "Igorchal",
+      "avatar": "I",
+      "completedDemons": ["consteration"],
+      "completions": {
+        "consteration": "2025-01-15"
+      }
+    },
+    {
+      "id": "dewabi",
+      "name": "Dewabi",
+      "avatar": "D",
+      "completedDemons": ["gravitronlastphase"],
+      "completions": {
+        "gravitronlastphase": "2025-01-15"
+      }
+    },
+     {
+      "id": "thartish",
+      "name": "Thartish",
+      "avatar": "T",
+      "completedDemons": ["electrostatic", "sapphire"],
+      "completions": {
+        "electrostatic": "2025-01-15",
+        "sapphire": "2025-01-15"
       }
     }
   ]
