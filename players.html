@@ -520,6 +520,14 @@
             `;
         }
 
+        function calculatePointsByRank(rank) {
+            if (rank <= 50) {
+                return Math.max(1000 - (rank - 1) * 20, 300);
+            } else {
+                return Math.max(300 - (rank - 51) * 5, 5);
+            }
+        }
+
         async function loadPlayersFromJSON() {
             try {
                 console.log('📥 Загрузка игроков из players.json...');
@@ -558,7 +566,7 @@
                     demons = data.demons.map((demon, index) => ({
                         ...demon,
                         rank: index + 1,
-                        points: Math.max(1000 - index * 50, 100)
+                        points: calculatePointsByRank(index + 1)
                     }));
                     console.log('✅ Демоны загружены для расчета очков:', demons.length);
                     return true;
@@ -722,4 +730,3 @@
     </script>
 </body>
 </html>
-
