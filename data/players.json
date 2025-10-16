@@ -194,10 +194,13 @@
       "id": "maskexe",
       "name": "MaskEXE",
       "avatar": "M",
-      "completedDemons": ["acheroncircles", "thehellverity"],
+      "completedDemons": ["acheroncircles", "thehellverity", "retrojumper", "slonikwave", "difficult"],
       "completions": {
         "acheroncircles": "2025-01-15",
-        "thehellverity": "2025-01-15"
+        "thehellverity": "2025-01-15",
+         "retrojumper": "2025-01-15",
+        "slonikwave": "2025-01-15",
+        "difficult": "2025-01-15"
       }
     },
      {
@@ -240,17 +243,6 @@
       "completedDemons": ["thehellverity", "difficult"],
       "completions": {
         "thehellverity": "2025-01-15",
-        "difficult": "2025-01-15"
-      }
-    },
-    {
-      "id": "bloodmask",
-      "name": "BloodMask",
-      "avatar": "B",
-      "completedDemons": ["retrojumper", "slonikwave", "difficult"],
-      "completions": {
-        "retrojumper": "2025-01-15",
-        "slonikwave": "2025-01-15",
         "difficult": "2025-01-15"
       }
     },
