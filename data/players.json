@@ -25,7 +25,7 @@
       "id": "freedom",
       "name": "Freedom",
       "avatar": "F",
-      "completedDemons": ["tsfeeling", "nodrop", "disturb", "unnamed", "limbox", "sleepwalker", "truehardcore", "angela", "electrostatic", "sapphire"],
+      "completedDemons": ["tsfeeling", "nodrop", "disturb", "unnamed", "limbox", "sleepwalker", "truehardcore", "angela", "electrostatic", "sapphire", "genericprocessing", "whitesynergy"],
       "completions": {
         "tsfeeling": "2025-01-15",
         "nodrop": "2025-01-15",
@@ -36,7 +36,9 @@
         "truehardcore": "2025-03-10",
         "angela": "2025-03-10",
         "electrostatic": "2025-01-15",
-        "sapphire": "2025-01-15"
+        "sapphire": "2025-01-15",
+        "genericprocessing": "2025-01-15",
+        "whitesynergy": "2025-01-15"
       }
     },
           {
@@ -81,19 +83,57 @@
       "id": "dewabi",
       "name": "Dewabi",
       "avatar": "D",
-      "completedDemons": ["gravitronlastphase"],
+      "completedDemons": ["gravitronlastphase", "gravitronsilent"],
       "completions": {
-        "gravitronlastphase": "2025-01-15"
+        "gravitronlastphase": "2025-01-15",
+        "gravitronsilent": "vya"
       }
     },
      {
       "id": "thartish",
       "name": "Thartish",
       "avatar": "T",
-      "completedDemons": ["electrostatic", "sapphire"],
+      "completedDemons": ["electrostatic", "sapphire", "whitesynergy"],
       "completions": {
         "electrostatic": "2025-01-15",
-        "sapphire": "2025-01-15"
+        "sapphire": "2025-01-15",
+        "whitesynergy": "2025-01-15"
+      }
+    },
+     {
+      "id": "gmdbanonde",
+      "name": "GMDbanonde",
+      "avatar": "G",
+      "completedDemons": ["zerocircles"],
+      "completions": {
+        "zerocircles": "2025-01-15"
+      }
+    },
+     {
+      "id": "technoknight",
+      "name": "TechnoKnight",
+      "avatar": "T",
+      "completedDemons": ["theoryofworld"],
+      "completions": {
+        "theoryofworld": "2025-01-15"
+      }
+    },
+     {
+      "id": "syntezz1",
+      "name": "Syntezz1",
+      "avatar": "S",
+      "completedDemons": ["whitesynergy"],
+      "completions": {
+        "whitesynergy": "2025-01-15"
+      }
+    },
+     {
+      "id": "jahp",
+      "name": "Jahp",
+      "avatar": "J",
+      "completedDemons": ["whitesynergy"],
+      "completions": {
+        "whitesynergy": "2025-01-15"
       }
     }
   ]
