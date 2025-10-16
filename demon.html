@@ -424,6 +424,14 @@
             return match ? match[1] : null;
         }
 
+        function calculatePointsByRank(rank) {
+            if (rank <= 50) {
+                return Math.max(1000 - (rank - 1) * 20, 300);
+            } else {
+                return Math.max(300 - (rank - 51) * 5, 5);
+            }
+        }
+
         // Загружаем данные
         async function loadDemonData() {
             const demonId = getDemonIdFromURL();
@@ -479,6 +487,11 @@
             const firstCompletion = playersWhoCompleted.length > 0 ? 
                 Object.values(playersWhoCompleted[0].completions || {})[0] : 'Неизвестно';
 
+            // Рассчитываем ранг и очки демона
+            const demonRank = playersWhoCompleted.length > 0 ? 
+                playersWhoCompleted[0].completedDemons.indexOf(demon.id) + 1 : 0;
+            const points = calculatePointsByRank(demonRank);
+
             const content = document.getElementById('content');
             content.innerHTML = `
                 <div class="demon-content">
@@ -500,6 +513,10 @@
                             <div class="meta-item">
                                 <div class="meta-value">${completionRate}%</div>
                                 <div class="meta-label">Процент прохождения</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-value">${points}</div>
+                                <div class="meta-label">Очки</div>
                             </div>
                         </div>
                     </div>
@@ -577,6 +594,10 @@
                                     <div class="stat-card">
                                         <div class="stat-value">${firstCompletion}</div>
                                         <div class="stat-label">Первое прохождение</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-value">${points}</div>
+                                        <div class="stat-label">Очки за прохождение</div>
                                     </div>
                                 </div>
                             ` : ''}
