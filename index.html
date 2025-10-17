@@ -109,6 +109,96 @@
             margin: 0 auto;
         }
         
+        /* Search Section */
+        .search-section {
+            padding: 30px 0;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(51, 102, 255, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        
+        .search-result-item:hover {
+            background-color: var(--bg-secondary);
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .search-result-creator {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
         /* Demon List */
         .demon-list {
             padding: 40px 0;
@@ -118,10 +208,18 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: between;
+            align-items: center;
         }
         
         .list-header h2 {
             font-size: 28px;
+        }
+        
+        .list-stats {
+            color: var(--text-secondary);
+            font-size: 14px;
         }
         
         .list-container {
@@ -419,6 +517,12 @@
             .footer-content {
                 flex-direction: column;
             }
+            
+            .list-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -445,10 +549,24 @@
         </div>
     </section>
     
+    <!-- Поиск демонов -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск демона по названию...">
+                <div class="search-icon">🔍</div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+    </section>
+    
     <section class="demon-list">
         <div class="container">
             <div class="list-header">
                 <h2>Топ Демонов</h2>
+                <div class="list-stats" id="listStats">
+                    Всего демонов: <span id="totalDemons">0</span> | Показано: <span id="shownDemons">0</span>
+                </div>
             </div>
 
             <!-- Кнопка обновления и статус -->
@@ -524,6 +642,69 @@
         ];
 
         let demons = [];
+        let filteredDemons = [];
+
+        // ========== SEARCH SYSTEM ==========
+
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                if (searchTerm.length === 0) {
+                    searchResults.style.display = 'none';
+                    filteredDemons = [...demons];
+                    renderDemons();
+                    return;
+                }
+                
+                // Фильтруем демонов по названию и создателю
+                const results = demons.filter(demon => 
+                    demon.name.toLowerCase().includes(searchTerm) || 
+                    demon.creator.toLowerCase().includes(searchTerm)
+                );
+                
+                displaySearchResults(results);
+                filteredDemons = results;
+                renderDemons();
+            });
+            
+            // Закрываем результаты поиска при клике вне поля
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+        
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">😔 Демоны не найдены</div>';
+                searchResults.style.display = 'block';
+                return;
+            }
+            
+            searchResults.innerHTML = '';
+            
+            results.slice(0, 8).forEach(demon => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'search-result-item';
+                resultItem.innerHTML = `
+                    <div class="search-result-name">${demon.name}</div>
+                    <div class="search-result-creator">by ${demon.creator}</div>
+                `;
+                resultItem.addEventListener('click', function() {
+                    openDemonPage(demon.id);
+                });
+                searchResults.appendChild(resultItem);
+            });
+            
+            searchResults.style.display = 'block';
+        }
 
         // ========== DATA MANAGEMENT ==========
 
@@ -562,6 +743,8 @@
                         rank: index + 1
                     }));
                     
+                    filteredDemons = [...demons];
+                    
                     console.log('✅ Данные загружены из demons.json:', demons.length);
                     updateSyncStatus(`✅ Загружено ${demons.length} демонов`);
                     return true;
@@ -577,6 +760,8 @@
                     ...demon,
                     rank: index + 1
                 }));
+                
+                filteredDemons = [...demons];
                 
                 updateSyncStatus('❌ Используются стандартные демоны');
                 showError(error.message);
@@ -596,26 +781,33 @@
 
         function renderDemons() {
             const demonList = document.getElementById('demonList');
+            const totalDemons = document.getElementById('totalDemons');
+            const shownDemons = document.getElementById('shownDemons');
+            
             if (!demonList) {
                 console.error('❌ Element demonList not found');
                 return;
             }
             
+            // Обновляем статистику
+            totalDemons.textContent = demons.length;
+            shownDemons.textContent = filteredDemons.length;
+            
             demonList.innerHTML = '';
             
-            if (demons.length === 0) {
+            if (filteredDemons.length === 0) {
                 demonList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                        <div style="font-size: 48px; margin-bottom: 20px;">😔</div>
+                        <div style="font-size: 48px; margin-bottom: 20px;">🔍</div>
                         <div>Демоны не найдены</div>
-                        <div style="font-size: 14px; margin-top: 10px;">Проверьте файл data/demons.json</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Попробуйте изменить поисковый запрос</div>
                     </div>
                 `;
                 return;
             }
             
             // Демоны уже отсортированы по rank (который назначен автоматически)
-            demons.forEach(demon => {
+            filteredDemons.forEach(demon => {
                 const points = calculatePointsByRank(demon.rank);
                 const rankClass = demon.rank === 1 ? 'top-1' : 
                                 demon.rank <= 3 ? 'top-3' : 
@@ -682,6 +874,7 @@
         async function initializeData() {
             console.log('🎮 Инициализация Geometry Dash Demon List...');
             await loadDataFromJSON();
+            initializeSearch();
             renderDemons();
             
             // Анимация появления
