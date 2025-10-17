@@ -5,7 +5,7 @@
       "name": "VladGMD",
       "avatar": "V",
       "avatarImage": "images/vladgmd.png", 
-      "role": "Основатель",
+      "role": "Создатель листа",
       "roleClass": "role-leader"
     },
     {
@@ -13,7 +13,7 @@
       "name": "Sintezz",
       "avatar": "",
       "avatarImage": "images/syntezz.png", 
-      "role": "Главный модератор",
+      "role": "Создатель ГДПС",
       "roleClass": "role-admin"
     },
     {
@@ -21,7 +21,7 @@
       "name": "MaskEXE",
       "avatar": "M",
       "avatarImage": "images/maskexe.png", 
-      "role": "Администратор",
+      "role": "Администратор ГДПС",
       "roleClass": "role-admin"
     }
   ]
