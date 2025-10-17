@@ -164,18 +164,65 @@
         
         .news-content {
             color: var(--text-secondary);
-            margin-bottom: 15px;
+            line-height: 1.6;
         }
         
-        .read-more {
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
+        /* Status */
+        .sync-status {
+            text-align: center;
+            padding: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
         }
         
-        .read-more:hover {
-            color: var(--accent-purple);
+        .sync-status.synced {
+            color: #00cc66;
+            border-left: 3px solid #00cc66;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-red);
+            border-radius: 8px;
+            margin: 20px 0;
+            color: var(--accent-red);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        /* Refresh Button */
+        .refresh-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: var(--accent-purple);
+            transform: translateY(-2px);
         }
         
         /* Footer */
@@ -283,34 +330,19 @@
     
     <section class="news-section">
         <div class="container">
-            <div class="news-grid">
-                <div class="news-card">
-                    <div class="news-date">15 марта 2024</div>
-                    <h3 class="news-title">Запуск EternalGDPS Demon List</h3>
-                    <p class="news-content">Мы рады объявить о запуске нашего нового Demon List! Теперь все демоны и игроки собраны в одном месте с удобной системой рейтингов.</p>
-                    <a href="#" class="read-more">Читать далее →</a>
-                </div>
-                
-                <div class="news-card">
-                    <div class="news-date">10 марта 2024</div>
-                    <h3 class="news-title">Новые демоны добавлены в список</h3>
-                    <p class="news-content">В список были добавлены новые демоны: Miha Difficult, Void Storm, Hard Times и другие. Проверьте их в основном списке!</p>
-                    <a href="#" class="read-more">Читать далее →</a>
-                </div>
-                
-                <div class="news-card">
-                    <div class="news-date">5 марта 2024</div>
-                    <h3 class="news-title">Обновление системы очков</h3>
-                    <p class="news-content">Мы обновили систему начисления очков за прохождение демонов. Теперь она более точно отражает сложность уровней.</p>
-                    <a href="#" class="read-more">Читать далее →</a>
-                </div>
-                
-                <div class="news-card">
-                    <div class="news-date">1 марта 2024</div>
-                    <h3 class="news-title">Топ игроков обновлен</h3>
-                    <p class="news-content">Рейтинг лучших игроков был полностью обновлен. Проверьте, кто сейчас возглавляет список!</p>
-                    <a href="#" class="read-more">Читать далее →</a>
-                </div>
+            <!-- Кнопка обновления и статус -->
+            <button class="refresh-btn" onclick="refreshData()">
+                🔄 Обновить новости
+            </button>
+            
+            <div id="syncStatus" class="sync-status">
+                Загрузка новостей...
+            </div>
+
+            <div id="errorContainer"></div>
+            
+            <div class="news-grid" id="newsGrid">
+                <!-- Новости будут загружены через JavaScript -->
             </div>
         </div>
     </section>
@@ -342,5 +374,160 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // ========== NEWS DATA SYSTEM ==========
+        
+        let news = [];
+
+        // ========== DATA MANAGEMENT ==========
+
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <strong>❌ Ошибка:</strong> ${message}
+                    <br><small>Проверьте консоль для подробностей</small>
+                </div>
+            `;
+        }
+
+        async function loadNewsFromJSON() {
+            try {
+                console.log('📥 Загрузка новостей из news.json...');
+                
+                const response = await fetch('data/news.json');
+                if (!response.ok) throw new Error('Файл news.json не найден');
+                
+                const data = await response.json();
+                
+                if (data.news && Array.isArray(data.news)) {
+                    // Сортируем новости по дате (новые сверху)
+                    news = data.news.sort((a, b) => {
+                        // Простая сортировка по ID (чем больше ID, тем новее)
+                        return parseInt(b.id) - parseInt(a.id);
+                    });
+                    
+                    console.log('✅ Новости загружены из news.json:', news.length);
+                    return true;
+                } else {
+                    throw new Error('Неверный формат news.json - отсутствует массив news');
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка загрузки новостей:', error);
+                showError('Ошибка загрузки новостей: ' + error.message);
+                return false;
+            }
+        }
+
+        function updateSyncStatus(message) {
+            const statusElement = document.getElementById('syncStatus');
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = 'sync-status ' + (message.includes('✅') ? 'synced' : '');
+            }
+        }
+
+        // ========== RENDERING ==========
+
+        function renderNews() {
+            const newsGrid = document.getElementById('newsGrid');
+            
+            if (!newsGrid) {
+                console.error('❌ Element newsGrid not found');
+                return;
+            }
+            
+            newsGrid.innerHTML = '';
+            
+            if (news.length === 0) {
+                newsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📰</div>
+                        <div style="font-size: 20px; margin-bottom: 10px;">Новости не найдены</div>
+                        <div style="font-size: 14px;">Проверьте файл data/news.json</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Рендерим новости
+            news.forEach(newsItem => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.innerHTML = `
+                    <div class="news-date">${newsItem.date}</div>
+                    <h3 class="news-title">${newsItem.title}</h3>
+                    <div class="news-content">${newsItem.content}</div>
+                `;
+                newsGrid.appendChild(newsCard);
+            });
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+
+        async function refreshData() {
+            console.log('🔄 Обновление новостей...');
+            await loadNewsFromJSON();
+            renderNews();
+            updateSyncStatus(`✅ Загружено ${news.length} новостей`);
+            
+            // Анимация обновления
+            document.querySelectorAll('.news-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s, transform 0.5s';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        // ========== INITIALIZATION ==========
+
+        async function initializeData() {
+            console.log('🎮 Инициализация страницы новостей...');
+            try {
+                await loadNewsFromJSON();
+                renderNews();
+                updateSyncStatus(`✅ Загружено ${news.length} новостей`);
+                
+                // Анимация появления
+                setTimeout(() => {
+                    document.querySelectorAll('.news-card').forEach((card, index) => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            card.style.transition = 'opacity 0.5s, transform 0.5s';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+                }, 100);
+            } catch (error) {
+                console.error('❌ Ошибка инициализации:', error);
+                showError('Ошибка загрузки данных: ' + error.message);
+            }
+        }
+
+        // Глобальные функции
+        window.refreshData = refreshData;
+
+        // Запуск при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 News.html загружен, начинаем инициализацию...');
+            initializeData();
+        });
+
+        // Обработчик глобальных ошибок
+        window.addEventListener('error', function(e) {
+            console.error('💥 Глобальная ошибка:', e.error);
+            showError('Произошла непредвиденная ошибка: ' + (e.error ? e.error.message : 'Неизвестная ошибка'));
+        });
+    </script>
 </body>
 </html>
