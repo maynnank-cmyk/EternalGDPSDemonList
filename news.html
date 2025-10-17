@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости - Geometry Dash Demon List</title>
+    <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-red: #ff3333;
+            --accent-blue: #3366ff;
+            --accent-purple: #9933ff;
+            --border-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-red);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 15px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* News Section */
+        .news-section {
+            padding: 40px 0;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .news-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-blue);
+        }
+        
+        .news-date {
+            color: var(--accent-red);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .news-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .news-content {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .read-more {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .read-more:hover {
+            color: var(--accent-purple);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .footer-section p, .footer-section a {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">Eternal <span>GDPS</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="players.html">Топ игроков</a></li>
+                        <li><a href="news.html" style="color: var(--text-primary);">Новости</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="breadcrumb container">
+        <a href="index.html">Главная</a> &gt; Новости
+    </div>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Новости</h1>
+            <p>Последние обновления и события EternalGDPS Demon List</p>
+        </div>
+    </section>
+    
+    <section class="news-section">
+        <div class="container">
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-date">15 марта 2024</div>
+                    <h3 class="news-title">Запуск EternalGDPS Demon List</h3>
+                    <p class="news-content">Мы рады объявить о запуске нашего нового Demon List! Теперь все демоны и игроки собраны в одном месте с удобной системой рейтингов.</p>
+                    <a href="#" class="read-more">Читать далее →</a>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-date">10 марта 2024</div>
+                    <h3 class="news-title">Новые демоны добавлены в список</h3>
+                    <p class="news-content">В список были добавлены новые демоны: Miha Difficult, Void Storm, Hard Times и другие. Проверьте их в основном списке!</p>
+                    <a href="#" class="read-more">Читать далее →</a>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-date">5 марта 2024</div>
+                    <h3 class="news-title">Обновление системы очков</h3>
+                    <p class="news-content">Мы обновили систему начисления очков за прохождение демонов. Теперь она более точно отражает сложность уровней.</p>
+                    <a href="#" class="read-more">Читать далее →</a>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-date">1 марта 2024</div>
+                    <h3 class="news-title">Топ игроков обновлен</h3>
+                    <p class="news-content">Рейтинг лучших игроков был полностью обновлен. Проверьте, кто сейчас возглавляет список!</p>
+                    <a href="#" class="read-more">Читать далее →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Geometry Dash Demon List</h3>
+                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Ссылки</h3>
+                    <a href="index.html">Главная</a>
+                    <a href="players.html">Топ игроков</a>
+                    <a href="news.html">Новости</a>
+                    <a href="contacts.html">Контакты</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <a href="contacts.html">Команда</a>
+                    <a href="#">Discord</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
