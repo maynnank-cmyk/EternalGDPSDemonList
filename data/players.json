@@ -275,6 +275,15 @@
       }
     },
      {
+      "id": "egor16i",
+      "name": "Egor16i",
+      "avatar": "E",
+      "completedDemons": ["retrojumper"],
+      "completions": {
+        "retrojumper": "2025-01-15"
+      }
+    },
+     {
       "id": "vladgmd",
       "name": "VladGMD",
       "avatar": "V",
