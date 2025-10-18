@@ -91,13 +91,14 @@
       "id": "igorchal",
       "name": "Igorchal",
       "avatar": "I",
-      "completedDemons": ["consteration", "acheroncircles", "thehellverity", "kaikaikitancover", "difficult"],
+      "completedDemons": ["consteration", "acheroncircles", "thehellverity", "kaikaikitancover", "difficult", "electroglow"],
       "completions": {
         "consteration": "2025-01-15",
         "acheroncircles": "2025-01-15",
         "thehellverity": "2025-01-15",
         "kaikaikitancover": "2025-01-15",
-        "difficult": "2025-01-15"
+        "difficult": "2025-01-15",
+        "electroglow": "2025-01-15"
       }
     },
     {
@@ -299,11 +300,12 @@
       "id": "vladgmd",
       "name": "VladGMD",
       "avatar": "V",
-      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover"],
+      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover", "fanera"],
       "completions": {
         "slonikwave": "2025-01-15",
         "acheroncircles": "2025-04-04",
-        "kaikaikitancover": "2025-01-15"
+        "kaikaikitancover": "2025-01-15",
+        "fanera": "2025-01-15"
       }
     },
      {
