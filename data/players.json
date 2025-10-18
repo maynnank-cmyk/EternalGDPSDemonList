@@ -104,10 +104,12 @@
       "id": "dewabi",
       "name": "Dewabi",
       "avatar": "D",
-      "completedDemons": ["gravitronlastphase", "gravitronsilent"],
+      "completedDemons": ["gravitronlastphase", "gravitronsilent", "hailfire", "horseman2"],
       "completions": {
         "gravitronlastphase": "2025-01-15",
-        "gravitronsilent": "2025-05-04"
+        "gravitronsilent": "2025-05-04",
+        "hailfire": "2025-05-04",
+        "horseman2": "2025-05-04"
       }
     },
      {
@@ -278,9 +280,10 @@
       "id": "krimux",
       "name": "Krimux",
       "avatar": "K",
-      "completedDemons": ["difficult"],
+      "completedDemons": ["difficult", "intercept"],
       "completions": {
-        "difficult": "2025-01-15"
+        "difficult": "2025-01-15",
+        "intercept": "2025-01-15"
       }
     },
      {
