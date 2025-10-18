@@ -300,12 +300,13 @@
       "id": "vladgmd",
       "name": "VladGMD",
       "avatar": "V",
-      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover", "fanera"],
+      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover", "fanera", "angela"],
       "progress": {
         "slonikwave": 100,
         "acheroncircles": 100,
         "kaikaikitancover": 100,
-        "fanera": 100
+        "fanera": 100,
+        "angela": 74
       }
     },
     {
