@@ -125,7 +125,7 @@
       "name": "Consteration",
       "creator": "Igorchal",
       "videoUrl": "https://www.youtube.com/watch?v=...",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/consteration.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -173,7 +173,7 @@
       "name": "Electro Glow",
       "creator": "Igorchal",
       "videoUrl": "https://youtu.be/tMSDV4oq0ps?si=cNMq-v0DlYVNyutV",
-      "image": "images/electroglow.png",
+      "image": "images/electroglow.jpg",
       "description": "Один из самых известных демонов"
      },
      {
