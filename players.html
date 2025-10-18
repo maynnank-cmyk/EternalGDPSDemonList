@@ -356,6 +356,19 @@
             box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
         }
         
+        .player-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
         .player-score {
             font-size: 26px;
             font-weight: bold;
@@ -368,6 +381,30 @@
             border: 2px solid var(--border-color);
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Progress Badge */
+        .progress-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .progress-full {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        .progress-partial {
+            background: rgba(255, 107, 0, 0.2);
+            color: var(--accent-orange);
+            border: 1px solid var(--accent-orange);
         }
 
         /* Refresh Button */
@@ -541,6 +578,10 @@
                 width: 100%;
             }
             
+            .player-stats {
+                justify-content: center;
+            }
+            
             .player-score {
                 text-align: center;
                 min-width: auto;
@@ -568,6 +609,11 @@
             
             .player-name {
                 font-size: 22px;
+            }
+            
+            .player-stats {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
@@ -690,6 +736,46 @@
             }
         }
 
+        // 🔥 НОВАЯ ФУНКЦИЯ: Расчет очков с учетом прогресса
+        function calculatePointsWithProgress(demonRank, progress) {
+            const basePoints = calculatePointsByRank(demonRank);
+            
+            if (progress === 100) {
+                return basePoints; // Полные очки за 100%
+            } else if (progress >= 51) {
+                return Math.floor(basePoints / 4); // 1/4 очков за 51%+
+            } else {
+                return 0; // Нет очков за прогресс менее 51%
+            }
+        }
+
+        // 🔥 ФУНКЦИЯ: Подсчет статистики игрока
+        function calculatePlayerStats(player) {
+            if (!player.completedDemons || player.completedDemons.length === 0) {
+                return { totalPoints: 0, fullCompletions: 0, partialCompletions: 0 };
+            }
+            
+            let totalPoints = 0;
+            let fullCompletions = 0;
+            let partialCompletions = 0;
+            
+            player.completedDemons.forEach(demonId => {
+                const demonRank = calculateDemonRank(demonId);
+                const progress = player.progress ? player.progress[demonId] || 100 : 100;
+                const points = calculatePointsWithProgress(demonRank, progress);
+                
+                totalPoints += points;
+                
+                if (progress === 100) {
+                    fullCompletions++;
+                } else if (progress >= 51) {
+                    partialCompletions++;
+                }
+            });
+            
+            return { totalPoints, fullCompletions, partialCompletions };
+        }
+
         async function loadPlayersFromJSON() {
             try {
                 console.log('📥 Загрузка игроков из players.json...');
@@ -744,16 +830,23 @@
         }
 
         function calculatePlayerPoints(player) {
-            let totalPoints = 0;
-            if (player && player.completedDemons) {
-                player.completedDemons.forEach(demonId => {
-                    const demon = demons.find(d => d.id === demonId);
-                    if (demon) {
-                        totalPoints += demon.points;
-                    }
-                });
-            }
-            return totalPoints;
+            if (!player.completedDemons) return 0;
+            
+            return player.completedDemons.reduce((total, demonId) => {
+                const demonRank = calculateDemonRank(demonId);
+                const progress = player.progress ? player.progress[demonId] || 100 : 100;
+                return total + calculatePointsWithProgress(demonRank, progress);
+            }, 0);
+        }
+
+        function calculateDemonRank(demonId) {
+            // Находим позицию демона в отсортированном списке
+            const sortedDemons = [...demons].sort((a, b) => {
+                // Простая сортировка по порядку в JSON
+                return demons.indexOf(a) - demons.indexOf(b);
+            });
+            
+            return sortedDemons.findIndex(d => d.id === demonId) + 1;
         }
 
         function updateSyncStatus(message) {
@@ -789,6 +882,7 @@
             // Считаем очки для каждого игрока и сортируем
             players.forEach(player => {
                 player.totalPoints = calculatePlayerPoints(player);
+                player.stats = calculatePlayerStats(player);
             });
             
             // Сортируем по очкам (по убыванию)
@@ -803,6 +897,11 @@
                                 rank <= 3 ? 'top-3' : 
                                 rank <= 10 ? 'top-10' : '';
                 
+                const hasPartialProgress = player.stats.partialCompletions > 0;
+                const progressBadge = hasPartialProgress ? 
+                    `<span class="progress-badge progress-partial">${player.stats.partialCompletions} частичных</span>` : 
+                    `<span class="progress-badge progress-full">${player.stats.fullCompletions} полных</span>`;
+                
                 const playerRow = document.createElement('div');
                 playerRow.className = 'player-row';
                 playerRow.innerHTML = `
@@ -814,6 +913,23 @@
                         <div class="player-main-info">
                             <div class="player-name" onclick="openPlayerProfile('${player.id}')">
                                 ${player.name}
+                                ${progressBadge}
+                            </div>
+                            <div class="player-stats">
+                                <div class="stat-item">
+                                    <span>🎯 Демонов:</span>
+                                    <span>${player.completedDemons ? player.completedDemons.length : 0}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span>⭐ Полных:</span>
+                                    <span>${player.stats.fullCompletions}</span>
+                                </div>
+                                ${player.stats.partialCompletions > 0 ? `
+                                <div class="stat-item">
+                                    <span>📊 Частичных:</span>
+                                    <span>${player.stats.partialCompletions}</span>
+                                </div>
+                                ` : ''}
                             </div>
                         </div>
                         <div class="player-score">${player.totalPoints} pts</div>
