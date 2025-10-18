@@ -322,13 +322,13 @@
       }
     },
     {
-      "id": "testplayer",
-      "name": "TestPlayer",
-      "avatar": "T",
-      "completedDemons": ["mihadifficult", "voidstorm"],
+      "id": "zelanya",
+      "name": "Zelanya",
+      "avatar": "Z",
+      "completedDemons": ["thehellverity", "slonikwave"],
       "progress": {
-        "mihadifficult": 100,
-        "voidstorm": 51
+        "thehellverity": 82,
+        "thehellverity": 71
       }
     }
   ]
