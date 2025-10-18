@@ -36,7 +36,7 @@
       "id": "diamondcircles",
       "name": "Diamond Circles",
       "creator": "Dark",
-      "videoUrl": "https://www.youtube.com/watch?v=j5cnBMmOLRs",
+      "videoUrl": " https://www.youtube.com/watch?v=j5cnBMmOLRs",
       "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
       "description": "Один из самых известных демонов"
      },
@@ -94,6 +94,14 @@
       "creator": "Syntezz1",
       "videoUrl": "https://www.youtube.com/watch?v=...",
       "image": "images/truehardcore.png",
+      "description": "Один из самых известных демонов"
+     },
+     {
+      "id": "hailfire",
+      "name": "Hailfire",
+      "creator": "Dewabi",
+      "videoUrl": "https://www.youtube.com/watch?v=lRrc_sUwUJc",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
       "description": "Один из самых известных демонов"
      },
      {
@@ -190,6 +198,22 @@
       "creator": "Bl3von",
       "videoUrl": "https://www.youtube.com/watch?v=...",
       "image": "images/longadrive.jpg",
+      "description": "Один из самых известных демонов"
+     },
+    {
+      "id": "intercent",
+      "name": "Intercent",
+      "creator": "Krimux",
+      "videoUrl": "https://youtu.be/hD3CywiTivM?si=sTLxrTIWEQcogR4Q",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "description": "Один из самых известных демонов"
+     },
+     {
+      "id": "horseman2",
+      "name": "Horseman 2",
+      "creator": "Dewabi",
+      "videoUrl": " https://www.youtube.com/watch?v=GRvNcOr80Qk",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
       "description": "Один из самых известных демонов"
      },
      {
