@@ -525,6 +525,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            min-height: 80px; /* Минимальная высота для предотвращения сжатия */
         }
         
         .completion-item:hover {
@@ -575,6 +576,7 @@
         .demon-info {
             flex: 1;
             text-align: left;
+            min-width: 0; /* Предотвращает сжатие текста */
         }
         
         .demon-name {
@@ -582,11 +584,17 @@
             margin-bottom: 5px;
             font-size: 18px;
             color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .demon-creator {
             font-size: 14px;
             color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .demon-points {
@@ -596,6 +604,7 @@
             min-width: 80px;
             text-align: right;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            flex-shrink: 0;
         }
         
         /* Progress Styles */
@@ -604,6 +613,7 @@
             align-items: center;
             gap: 10px;
             margin-top: 8px;
+            min-width: 0; /* Предотвращает сжатие */
         }
         
         .progress-bar {
@@ -613,6 +623,7 @@
             border-radius: 4px;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            min-width: 100px; /* Минимальная ширина прогресс-бара */
         }
         
         .progress-fill {
@@ -637,6 +648,7 @@
             min-width: 40px;
             text-align: right;
             font-weight: bold;
+            flex-shrink: 0;
         }
         
         .no-completions {
@@ -651,72 +663,6 @@
         .no-completions .icon {
             font-size: 64px;
             margin-bottom: 20px;
-        }
-        
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            border-top: 3px solid var(--border-color);
-            padding: 50px 0;
-            margin-top: 80px;
-            position: relative;
-        }
-
-        footer::before {
-            content: "🦇 Happy Halloween! 🎃";
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, var(--halloween-orange), var(--halloween-purple));
-            color: white;
-            padding: 10px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-        }
-        
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-section h3 {
-            font-size: 20px;
-            margin-bottom: 25px;
-            color: var(--halloween-orange);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .footer-section p, .footer-section a {
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            display: block;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .footer-section a:hover {
-            color: var(--accent-green);
-            transform: translateX(5px);
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 2px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 20px;
         }
         
         /* Loading Animation */
