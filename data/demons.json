@@ -33,6 +33,14 @@
       "description": "Один из самых известных демонов"
      },
      {
+      "id": "diamondcircles",
+      "name": "Diamond Circles",
+      "creator": "Dark",
+      "videoUrl": "https://www.youtube.com/watch?v=j5cnBMmOLRs",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "description": "Один из самых известных демонов"
+     },
+     {
       "id": "millioner",
       "name": "Millioner",
       "creator": "nicepeek",
