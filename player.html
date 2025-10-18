@@ -6,15 +6,17 @@
     <title>Профиль игрока - Geometry Dash Demon List</title>
     <style>
         :root {
-            --bg-primary: #0d0d0d;
-            --bg-secondary: #1a1a1a;
-            --bg-tertiary: #262626;
+            --bg-primary: #1a0f0f;
+            --bg-secondary: #2a1515;
+            --bg-tertiary: #3a1a1a;
             --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --accent-red: #ff3333;
-            --accent-blue: #3366ff;
-            --accent-purple: #9933ff;
-            --border-color: #333333;
+            --text-secondary: #ffa500;
+            --accent-orange: #ff6b00;
+            --accent-purple: #8a2be2;
+            --accent-green: #00ff00;
+            --border-color: #ff4500;
+            --halloween-orange: #ff7518;
+            --halloween-purple: #8b00ff;
         }
         
         * {
@@ -28,7 +30,49 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 117, 24, 0.05) 0%, transparent 50%);
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* Halloween decorations */
+        .halloween-decoration {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.1;
+            font-size: 24px;
+        }
+
+        .decoration-1 { top: 10%; left: 5%; }
+        .decoration-2 { top: 20%; right: 8%; }
+        .decoration-3 { bottom: 30%; left: 7%; }
+        .decoration-4 { bottom: 15%; right: 5%; }
+        .decoration-5 { top: 50%; left: 3%; }
+        
+        /* Animated background elements */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        @keyframes spooky {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        .floating-ghost {
+            position: fixed;
+            font-size: 30px;
+            animation: float 6s ease-in-out infinite, spooky 4s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .ghost-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .ghost-2 { top: 60%; right: 15%; animation-delay: 2s; }
+        .ghost-3 { bottom: 20%; left: 20%; animation-delay: 4s; }
         
         .container {
             max-width: 1200px;
@@ -38,12 +82,13 @@
         
         /* Header */
         header {
-            background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-bottom: 3px solid var(--border-color);
             padding: 20px 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
         }
         
         .header-content {
@@ -53,14 +98,23 @@
         }
         
         .logo {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: bold;
             color: var(--text-primary);
             text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, var(--halloween-orange), var(--halloween-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 5px 15px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
         }
         
         .logo span {
-            color: var(--accent-red);
+            color: var(--accent-green);
+            text-shadow: 0 0 10px var(--accent-green);
         }
         
         nav ul {
@@ -70,57 +124,90 @@
         
         nav ul li {
             margin-left: 25px;
+            position: relative;
         }
         
         nav ul li a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid transparent;
         }
         
         nav ul li a:hover {
             color: var(--text-primary);
+            background: rgba(255, 107, 0, 0.2);
+            border-color: var(--border-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
         }
         
         /* Breadcrumb */
         .breadcrumb {
-            padding: 15px 0;
+            padding: 20px 0;
             color: var(--text-secondary);
-            font-size: 14px;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 16px;
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-secondary);
         }
         
         .breadcrumb a {
             color: var(--text-secondary);
             text-decoration: none;
+            transition: all 0.3s;
         }
         
         .breadcrumb a:hover {
-            color: var(--text-primary);
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         
         /* Player Header */
         .player-header {
-            padding: 40px 0;
+            padding: 60px 0;
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 3px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(rgba(42, 21, 21, 0.9), rgba(58, 26, 26, 0.9));
+        }
+        
+        .player-header::before {
+            content: "👻🎃💀";
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            font-size: 24px;
+            opacity: 0.1;
+            animation: spooky 3s ease-in-out infinite;
         }
         
         .player-header h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            font-size: 52px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--halloween-orange), var(--accent-green), var(--halloween-purple));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 30px rgba(255, 117, 24, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 117, 24, 0.5); }
+            to { text-shadow: 0 0 30px rgba(255, 117, 24, 0.8), 0 0 40px rgba(139, 0, 255, 0.6); }
         }
         
         .player-description {
-            font-size: 18px;
+            font-size: 20px;
             color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .player-meta {
@@ -133,12 +220,18 @@
         
         .meta-item {
             text-align: center;
+            background: var(--bg-tertiary);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         
         .meta-value {
             font-size: 24px;
             font-weight: bold;
-            color: var(--accent-red);
+            color: var(--accent-green);
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         
         .meta-label {
@@ -147,9 +240,9 @@
             margin-top: 5px;
         }
         
-        /* Player Content - ВЫРАВНИВАНИЕ ПО ЦЕНТРУ */
+        /* Player Content */
         .player-content {
-            padding: 40px 0;
+            padding: 60px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -173,19 +266,53 @@
         
         /* Profile Section */
         .profile-section {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 15px;
+            padding: 35px;
+            border: 2px solid var(--border-color);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.4);
+            border-color: var(--accent-green);
+        }
+        
+        .profile-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .profile-section:hover::before {
+            left: 100%;
         }
         
         .profile-section h2 {
             margin-bottom: 25px;
-            color: var(--accent-blue);
+            color: var(--halloween-orange);
             font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .profile-section h2::before {
+            content: "👤";
+            font-size: 24px;
         }
         
         .player-avatar-large {
@@ -196,11 +323,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
+            background: linear-gradient(45deg, var(--halloween-orange), var(--halloween-purple));
             color: white;
             font-size: 48px;
             font-weight: bold;
-            border: 4px solid var(--accent-red);
+            border: 4px solid var(--accent-orange);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .profile-section:hover .player-avatar-large {
+            border-color: var(--accent-green);
+            transform: scale(1.1);
         }
         
         .player-stats {
@@ -213,7 +347,7 @@
         .stat-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid var(--border-color);
         }
         
@@ -228,33 +362,69 @@
         
         /* Hardest Demon Section */
         .hardest-demon-section {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 15px;
+            padding: 35px;
+            border: 2px solid var(--border-color);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hardest-demon-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.4);
+            border-color: var(--accent-green);
+        }
+        
+        .hardest-demon-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .hardest-demon-section:hover::before {
+            left: 100%;
         }
         
         .hardest-demon-section h2 {
             margin-bottom: 25px;
-            color: var(--accent-red);
+            color: var(--halloween-orange);
             font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hardest-demon-section h2::before {
+            content: "🏆";
+            font-size: 24px;
         }
         
         .hardest-demon-card {
             background: var(--bg-tertiary);
-            border-radius: 8px;
-            padding: 20px;
-            border: 2px solid var(--accent-red);
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid var(--accent-orange);
             transition: all 0.3s;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         
         .hardest-demon-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 51, 51, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.4);
+            border-color: var(--accent-green);
         }
         
         .hardest-demon-name {
@@ -271,8 +441,9 @@
         
         .hardest-demon-points {
             font-size: 18px;
-            color: var(--accent-blue);
+            color: var(--accent-green);
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         
         .completion-date {
@@ -282,21 +453,55 @@
             font-style: italic;
         }
         
-        /* Completions Section - УВЕЛИЧЕННЫЙ РАЗМЕР */
+        /* Completions Section */
         .completions-section {
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 15px;
+            padding: 35px;
+            border: 2px solid var(--border-color);
             width: 100%;
             max-width: 800px;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .completions-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 107, 0, 0.4);
+            border-color: var(--accent-green);
+        }
+        
+        .completions-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .completions-section:hover::before {
+            left: 100%;
         }
         
         .completions-section h2 {
             margin-bottom: 25px;
-            color: var(--accent-purple);
+            color: var(--halloween-orange);
             font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .completions-section h2::before {
+            content: "🎯";
+            font-size: 24px;
         }
         
         .completions-list {
@@ -314,15 +519,33 @@
             gap: 20px;
             padding: 20px;
             background: var(--bg-tertiary);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
         
         .completion-item:hover {
             transform: translateX(5px);
-            border-color: var(--accent-blue);
+            border-color: var(--accent-green);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        }
+        
+        .completion-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .completion-item:hover::before {
+            left: 100%;
         }
         
         .demon-rank {
@@ -331,18 +554,22 @@
             font-weight: bold;
             color: var(--text-secondary);
             flex-shrink: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .rank.top-1 {
             color: gold;
+            text-shadow: 0 0 10px gold, 0 0 20px rgba(255, 215, 0, 0.5);
         }
         
         .rank.top-3 {
             color: silver;
+            text-shadow: 0 0 8px silver;
         }
         
         .rank.top-10 {
             color: #cd7f32;
+            text-shadow: 0 0 6px #cd7f32;
         }
         
         .demon-info {
@@ -364,10 +591,11 @@
         
         .demon-points {
             font-size: 16px;
-            color: var(--accent-blue);
+            color: var(--accent-green);
             font-weight: bold;
             min-width: 80px;
             text-align: right;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         
         /* Progress Styles */
@@ -384,13 +612,23 @@
             background: var(--bg-secondary);
             border-radius: 4px;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
             border-radius: 4px;
             transition: width 0.3s ease;
+        }
+        
+        .progress-100 {
+            background: linear-gradient(90deg, #00ff00, #00cc00);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .progress-partial {
+            background: linear-gradient(90deg, var(--halloween-orange), var(--halloween-purple));
+            box-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
         }
         
         .progress-text {
@@ -398,28 +636,45 @@
             color: var(--text-secondary);
             min-width: 40px;
             text-align: right;
-        }
-        
-        .progress-100 {
-            background: linear-gradient(90deg, #00ff00, #00cc00);
-        }
-        
-        .progress-partial {
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            font-weight: bold;
         }
         
         .no-completions {
             text-align: center;
             padding: 60px;
             color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 2px dashed var(--border-color);
+        }
+        
+        .no-completions .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
         }
         
         /* Footer */
         footer {
-            background-color: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            padding: 40px 0;
-            margin-top: 60px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-top: 3px solid var(--border-color);
+            padding: 50px 0;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        footer::before {
+            content: "🦇 Happy Halloween! 🎃";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--halloween-orange), var(--halloween-purple));
+            color: white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
         }
         
         .footer-content {
@@ -435,28 +690,33 @@
         }
         
         .footer-section h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--halloween-orange);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .footer-section p, .footer-section a {
             color: var(--text-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: block;
             text-decoration: none;
+            transition: all 0.3s;
         }
         
         .footer-section a:hover {
-            color: var(--text-primary);
+            color: var(--accent-green);
+            transform: translateX(5px);
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         
         .copyright {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+            border-top: 2px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 14px;
+            margin-top: 20px;
         }
         
         /* Loading Animation */
@@ -468,7 +728,7 @@
         
         .loading-spinner {
             border: 3px solid var(--bg-tertiary);
-            border-top: 3px solid var(--accent-blue);
+            border-top: 3px solid var(--accent-orange);
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -480,9 +740,39 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Scrollbar Styling */
+        .completions-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .completions-list::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+        
+        .completions-list::-webkit-scrollbar-thumb {
+            background: var(--accent-orange);
+            border-radius: 3px;
+        }
+        
+        .completions-list::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-purple);
+        }
     </style>
 </head>
 <body>
+    <!-- Halloween decorations -->
+    <div class="halloween-decoration decoration-1">🎃</div>
+    <div class="halloween-decoration decoration-2">👻</div>
+    <div class="halloween-decoration decoration-3">💀</div>
+    <div class="halloween-decoration decoration-4">🦇</div>
+    <div class="halloween-decoration decoration-5">🕷️</div>
+    
+    <div class="floating-ghost ghost-1">👻</div>
+    <div class="floating-ghost ghost-2">👻</div>
+    <div class="floating-ghost ghost-3">👻</div>
+    
     <header>
         <div class="container">
             <div class="header-content">
@@ -533,7 +823,7 @@
         <div class="content-row">
             <!-- Профиль игрока -->
             <div class="profile-section">
-                <h2>👤 Профиль</h2>
+                <h2>Профиль</h2>
                 <div class="player-avatar-large" id="playerAvatarLarge">
                     <div class="loading-spinner"></div>
                 </div>
@@ -559,7 +849,7 @@
             
             <!-- Сложнейший демон -->
             <div class="hardest-demon-section">
-                <h2>🏆 Сложнейший демон</h2>
+                <h2>Сложнейший демон</h2>
                 <div id="hardestDemonContainer">
                     <div class="loading">
                         <div class="loading-spinner"></div>
@@ -572,7 +862,7 @@
         <div class="content-row">
             <!-- Все пройденные демоны -->
             <div class="completions-section">
-                <h2>🎯 Все пройденные демоны</h2>
+                <h2>Все пройденные демоны</h2>
                 <div class="completions-list" id="completionsList">
                     <div class="loading">
                         <div class="loading-spinner"></div>
@@ -588,13 +878,14 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Geometry Dash Demon List</h3>
-                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Только проверенные экстрим демоны.</p>
+                    <p>Неофициальный рейтинг самых сложных уровней в Geometry Dash. Специальная Halloween версия!</p>
                 </div>
                 <div class="footer-section">
                     <h3>Ссылки</h3>
                     <a href="index.html">Главная</a>
                     <a href="players.html">Топ игроков</a>
                     <a href="contacts.html">Контакты</a>
+                    <a href="news.html">Новости</a>
                     <a href="rules.html">Правила</a>
                 </div>
                 <div class="footer-section">
@@ -606,7 +897,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам.</p>
+                <p>&copy; 2025 Geometry Dash Demon List. Неофициальный фанатский проект. Все права принадлежат их соответствующим владельцам. 🎃</p>
             </div>
         </div>
     </footer>
