@@ -13,7 +13,7 @@
       "id": "dark",
       "name": "Dark",
       "avatar": "D",
-      "completedDemons": ["diamoncircles"],
+      "completedDemons": ["diamondcircles"],
       "completions": {
         "diamondcircles": "2025-01-15"
       }
