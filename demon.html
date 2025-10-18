@@ -301,9 +301,41 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
         
-        .completion-date {
-            font-size: 14px;
+        /* Progress Styles */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-100 {
+            background: linear-gradient(90deg, #00ff00, #00cc00);
+        }
+        
+        .progress-partial {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+        }
+        
+        .progress-text {
+            font-size: 12px;
             color: var(--text-secondary);
+            min-width: 40px;
+            text-align: right;
         }
         
         .no-completions {
@@ -433,6 +465,19 @@
             }
         }
 
+        // 🔥 НОВАЯ ФУНКЦИЯ: Расчет очков с учетом прогресса
+        function calculatePointsWithProgress(demonRank, progress) {
+            const basePoints = calculatePointsByRank(demonRank);
+            
+            if (progress === 100) {
+                return basePoints; // Полные очки за 100%
+            } else if (progress >= 51) {
+                return Math.floor(basePoints / 4); // 1/4 очков за 51%+
+            } else {
+                return 0; // Нет очков за прогресс менее 51%
+            }
+        }
+
         // Загружаем данные
         async function loadDemonData() {
             const demonId = getDemonIdFromURL();
@@ -485,13 +530,20 @@
 
             // Рассчитываем статистику
             const completionRate = players.length > 0 ? (playersWhoCompleted.length / players.length * 100).toFixed(1) : 0;
-            const firstCompletion = playersWhoCompleted.length > 0 ? 
-                Object.values(playersWhoCompleted[0].completions || {})[0] : 'Неизвестно';
 
             // Рассчитываем ранг и очки демона
             const demonRank = playersWhoCompleted.length > 0 ? 
                 playersWhoCompleted[0].completedDemons.indexOf(demon.id) + 1 : 0;
             const points = calculatePointsByRank(demonRank);
+
+            // 🔥 Считаем статистику по прогрессу
+            const fullCompletions = playersWhoCompleted.filter(player => 
+                player.progress && player.progress[demon.id] === 100
+            ).length;
+            
+            const partialCompletions = playersWhoCompleted.filter(player => 
+                player.progress && player.progress[demon.id] >= 51 && player.progress[demon.id] < 100
+            ).length;
 
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -517,7 +569,7 @@
                             </div>
                             <div class="meta-item">
                                 <div class="meta-value">${points}</div>
-                                <div class="meta-label">Очки</div>
+                                <div class="meta-label">Очки за 100%</div>
                             </div>
                         </div>
                     </div>
@@ -558,21 +610,32 @@
                             
                             <div class="completions-list" id="completionsList">
                                 ${playersWhoCompleted.length > 0 ? 
-                                    playersWhoCompleted.map(player => `
-                                        <div class="completion-item">
-                                            <div class="player-avatar">${player.avatar}</div>
-                                            <div class="player-info">
-                                                <div class="player-name" onclick="openPlayerProfile('${player.id}')">
-                                                    ${player.name}
+                                    playersWhoCompleted.map(player => {
+                                        const progress = player.progress ? player.progress[demon.id] || 100 : 100;
+                                        const progressClass = progress === 100 ? 'progress-100' : 'progress-partial';
+                                        const progressText = progress === 100 ? '100%' : `${progress}%`;
+                                        const earnedPoints = calculatePointsWithProgress(demonRank, progress);
+                                        
+                                        return `
+                                            <div class="completion-item">
+                                                <div class="player-avatar">${player.avatar}</div>
+                                                <div class="player-info">
+                                                    <div class="player-name" onclick="openPlayerProfile('${player.id}')">
+                                                        ${player.name}
+                                                    </div>
+                                                    <div class="progress-container">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-fill ${progressClass}" style="width: ${progress}%"></div>
+                                                        </div>
+                                                        <div class="progress-text">${progressText}</div>
+                                                    </div>
                                                 </div>
-                                                <div class="completion-date">
-                                                    ${player.completions && player.completions[demon.id] ? 
-                                                        `Прошел: ${player.completions[demon.id]}` : 'Дата прохождения неизвестна'
-                                                    }
+                                                <div style="font-size: 14px; color: var(--accent-blue); font-weight: bold;">
+                                                    ${earnedPoints} pts
                                                 </div>
                                             </div>
-                                        </div>
-                                    `).join('') :
+                                        `;
+                                    }).join('') :
                                     `<div class="no-completions">
                                         <div class="icon">😔</div>
                                         <div style="font-size: 18px; margin-bottom: 10px;">Пока никто не прошел этого демона</div>
@@ -589,16 +652,16 @@
                                         <div class="stat-label">Всего прохождений</div>
                                     </div>
                                     <div class="stat-card">
-                                        <div class="stat-value">${completionRate}%</div>
-                                        <div class="stat-label">Процент прохождения</div>
+                                        <div class="stat-value">${fullCompletions}</div>
+                                        <div class="stat-label">Полных прохождений</div>
                                     </div>
                                     <div class="stat-card">
-                                        <div class="stat-value">${firstCompletion}</div>
-                                        <div class="stat-label">Первое прохождение</div>
+                                        <div class="stat-value">${partialCompletions}</div>
+                                        <div class="stat-label">Частичных прохождений</div>
                                     </div>
                                     <div class="stat-card">
                                         <div class="stat-value">${points}</div>
-                                        <div class="stat-label">Очки за прохождение</div>
+                                        <div class="stat-label">Очки за 100%</div>
                                     </div>
                                 </div>
                             ` : ''}
