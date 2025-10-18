@@ -105,6 +105,14 @@
       "description": "Один из самых известных демонов"
      },
      {
+      "id": "fanera",
+      "name": "Fanera",
+      "creator": "VladGMD",
+      "videoUrl": "https://youtu.be/MI93QKreROk?si=erscfC3otA_FQwSX",
+      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "description": "Один из самых известных демонов"
+     },
+     {
       "id": "angela",
       "name": "Angela",
       "creator": "yoyechka",
@@ -158,6 +166,14 @@
       "creator": "Syntezz1",
       "videoUrl": "https://www.youtube.com/watch?v=...",
       "image": "images/genericprocessing.png",
+      "description": "Один из самых известных демонов"
+     },
+    {
+      "id": "electroglow",
+      "name": "Electro Glow",
+      "creator": "Igorchal",
+      "videoUrl": "https://youtu.be/tMSDV4oq0ps?si=cNMq-v0DlYVNyutV",
+      "image": "images/electroglow.png",
       "description": "Один из самых известных демонов"
      },
      {
