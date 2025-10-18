@@ -370,6 +370,44 @@
             text-align: right;
         }
         
+        /* Progress Styles */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 40px;
+            text-align: right;
+        }
+        
+        .progress-100 {
+            background: linear-gradient(90deg, #00ff00, #00cc00);
+        }
+        
+        .progress-partial {
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+        }
+        
         .no-completions {
             text-align: center;
             padding: 60px;
@@ -515,10 +553,6 @@
                         <span class="stat-label">Средний ранг:</span>
                         <span class="stat-value" id="statAverageRank">0</span>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">В списке с:</span>
-                        <span class="stat-value" id="statFirstCompletion">Неизвестно</span>
-                    </div>
                 </div>
             </div>
             
@@ -597,6 +631,19 @@
             }
         }
 
+        // 🔥 НОВАЯ ФУНКЦИЯ: Расчет очков с учетом прогресса
+        function calculatePointsWithProgress(demonRank, progress) {
+            const basePoints = calculatePointsByRank(demonRank);
+            
+            if (progress === 100) {
+                return basePoints; // Полные очки за 100%
+            } else if (progress >= 51) {
+                return Math.floor(basePoints / 4); // 1/4 очков за 51%+
+            } else {
+                return 0; // Нет очков за прогресс менее 51%
+            }
+        }
+
         async function loadPlayerData() {
             const playerId = getPlayerIdFromURL();
             
@@ -662,7 +709,6 @@
             document.getElementById('statTotalPoints').textContent = playerStats.totalPoints;
             document.getElementById('statCompletedDemons').textContent = playerStats.completedCount;
             document.getElementById('statAverageRank').textContent = playerStats.averageRank.toFixed(1);
-            document.getElementById('statFirstCompletion').textContent = playerStats.firstCompletion;
             
             // Рендерим сложнейший демон
             renderHardestDemon(playerStats.hardestDemon);
@@ -676,7 +722,6 @@
                 totalPoints: 0,
                 completedCount: 0,
                 averageRank: 0,
-                firstCompletion: 'Неизвестно',
                 hardestDemon: null,
                 completedDemons: [],
                 rank: 1
@@ -705,13 +750,14 @@
                 const demon = allDemons.find(d => d.id === demonId);
                 if (demon) {
                     const demonRank = calculateDemonRank(demon.id);
-                    const points = calculatePointsByRank(demonRank);
+                    const progress = currentPlayer.progress ? currentPlayer.progress[demonId] || 100 : 100;
+                    const points = calculatePointsWithProgress(demonRank, progress);
                     
                     const completionInfo = {
                         demon: demon,
                         rank: demonRank,
                         points: points,
-                        completionDate: currentPlayer.completions ? currentPlayer.completions[demonId] : 'Дата неизвестна'
+                        progress: progress
                     };
                     
                     stats.totalPoints += points;
@@ -732,15 +778,6 @@
                 stats.averageRank = totalRank / stats.completedCount;
             }
             
-            // Находим первую дату прохождения
-            if (currentPlayer.completions) {
-                const dates = Object.values(currentPlayer.completions).filter(date => date);
-                if (dates.length > 0) {
-                    dates.sort();
-                    stats.firstCompletion = dates[0];
-                }
-            }
-            
             return stats;
         }
 
@@ -749,7 +786,8 @@
             
             return player.completedDemons.reduce((total, demonId) => {
                 const demonRank = calculateDemonRank(demonId);
-                return total + calculatePointsByRank(demonRank);
+                const progress = player.progress ? player.progress[demonId] || 100 : 100;
+                return total + calculatePointsWithProgress(demonRank, progress);
             }, 0);
         }
 
@@ -780,13 +818,21 @@
                             hardestDemon.rank <= 3 ? 'top-3' : 
                             hardestDemon.rank <= 10 ? 'top-10' : '';
             
+            const progressClass = hardestDemon.progress === 100 ? 'progress-100' : 'progress-partial';
+            const progressText = hardestDemon.progress === 100 ? '100% (Полное)' : `${hardestDemon.progress}% (Частичное)`;
+            
             container.innerHTML = `
                 <div class="hardest-demon-card" onclick="openDemonPage('${hardestDemon.demon.id}')">
                     <div class="hardest-demon-name">${hardestDemon.demon.name}</div>
                     <div class="hardest-demon-creator">by ${hardestDemon.demon.creator}</div>
                     <div class="hardest-demon-points">${hardestDemon.points} pts</div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill ${progressClass}" style="width: ${hardestDemon.progress}%"></div>
+                        </div>
+                        <div class="progress-text">${progressText}</div>
+                    </div>
                     <div class="completion-date">Ранг: #${hardestDemon.rank}</div>
-                    <div class="completion-date">Пройден: ${hardestDemon.completionDate}</div>
                 </div>
             `;
         }
@@ -812,6 +858,9 @@
                                 completion.rank <= 3 ? 'top-3' : 
                                 completion.rank <= 10 ? 'top-10' : '';
                 
+                const progressClass = completion.progress === 100 ? 'progress-100' : 'progress-partial';
+                const progressText = completion.progress === 100 ? '100%' : `${completion.progress}%`;
+                
                 const completionItem = document.createElement('div');
                 completionItem.className = 'completion-item';
                 completionItem.onclick = () => openDemonPage(completion.demon.id);
@@ -819,7 +868,13 @@
                     <div class="demon-rank ${rankClass}">#${completion.rank}</div>
                     <div class="demon-info">
                         <div class="demon-name">${completion.demon.name}</div>
-                        <div class="demon-creator">by ${completion.demon.creator} • ${completion.completionDate}</div>
+                        <div class="demon-creator">by ${completion.demon.creator}</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill ${progressClass}" style="width: ${completion.progress}%"></div>
+                            </div>
+                            <div class="progress-text">${progressText}</div>
+                        </div>
                     </div>
                     <div class="demon-points">${completion.points} pts</div>
                 `;
