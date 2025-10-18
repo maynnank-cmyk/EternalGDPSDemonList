@@ -868,27 +868,40 @@
 
         // Отображаем страницу демона
         function renderDemonPage(demon, players) {
-            // Находим игроков, прошедших этого демона
-            const playersWhoCompleted = players.filter(player => 
-                player.completedDemons && player.completedDemons.includes(demon.id)
-            );
+            // Находим всех игроков, которые имеют прогресс на этом демоне (51%+)
+            const playersWithProgress = players.filter(player => {
+                if (!player.completedDemons || !player.completedDemons.includes(demon.id)) {
+                    return false;
+                }
+                const progress = player.progress ? player.progress[demon.id] || 100 : 100;
+                return progress >= 51; // Показываем только игроков с прогрессом 51% и выше
+            });
+
+            // Сортируем игроков по прогрессу (сначала 100%, потом по убыванию прогресса)
+            playersWithProgress.sort((a, b) => {
+                const progressA = a.progress ? a.progress[demon.id] || 100 : 100;
+                const progressB = b.progress ? b.progress[demon.id] || 100 : 100;
+                
+                if (progressA === 100 && progressB === 100) return 0;
+                if (progressA === 100) return -1;
+                if (progressB === 100) return 1;
+                return progressB - progressA;
+            });
 
             // Рассчитываем статистику
-            const completionRate = players.length > 0 ? (playersWhoCompleted.length / players.length * 100).toFixed(1) : 0;
+            const fullCompletions = playersWithProgress.filter(player => {
+                const progress = player.progress ? player.progress[demon.id] || 100 : 100;
+                return progress === 100;
+            }).length;
+            
+            const partialCompletions = playersWithProgress.filter(player => {
+                const progress = player.progress ? player.progress[demon.id] || 100 : 100;
+                return progress >= 51 && progress < 100;
+            }).length;
 
             // Рассчитываем ранг и очки демона
-            const demonRank = playersWhoCompleted.length > 0 ? 
-                playersWhoCompleted[0].completedDemons.indexOf(demon.id) + 1 : 0;
+            const demonRank = fullCompletions > 0 ? 1 : 0; // Упрощенный расчет ранга
             const points = calculatePointsByRank(demonRank);
-
-            // 🔥 Считаем статистику по прогрессу
-            const fullCompletions = playersWhoCompleted.filter(player => 
-                player.progress && player.progress[demon.id] === 100
-            ).length;
-            
-            const partialCompletions = playersWhoCompleted.filter(player => 
-                player.progress && player.progress[demon.id] >= 51 && player.progress[demon.id] < 100
-            ).length;
 
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -906,12 +919,8 @@
                                     <div class="meta-label">Создатель</div>
                                 </div>
                                 <div class="meta-item">
-                                    <div class="meta-value">${playersWhoCompleted.length}</div>
-                                    <div class="meta-label">Пройдено игроками</div>
-                                </div>
-                                <div class="meta-item">
-                                    <div class="meta-value">${completionRate}%</div>
-                                    <div class="meta-label">Процент прохождения</div>
+                                    <div class="meta-value">${playersWithProgress.length}</div>
+                                    <div class="meta-label">Игроков с прогрессом</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-value">${points}</div>
@@ -959,11 +968,11 @@
 
                             <!-- Секция игроков -->
                             <div class="completions-section">
-                                <h2>Игроки, прошедшие демона</h2>
+                                <h2>Игроки с прогрессом</h2>
                                 
                                 <div class="completions-list" id="completionsList">
-                                    ${playersWhoCompleted.length > 0 ? 
-                                        playersWhoCompleted.map(player => {
+                                    ${playersWithProgress.length > 0 ? 
+                                        playersWithProgress.map(player => {
                                             const progress = player.progress ? player.progress[demon.id] || 100 : 100;
                                             const progressClass = progress === 100 ? 'progress-100' : 'progress-partial';
                                             const progressText = progress === 100 ? '100%' : `${progress}%`;
@@ -996,11 +1005,11 @@
                                 </div>
 
                                 <!-- Статистика -->
-                                ${playersWhoCompleted.length > 0 ? `
+                                ${playersWithProgress.length > 0 ? `
                                     <div class="stats-grid">
                                         <div class="stat-card">
-                                            <div class="stat-value">${playersWhoCompleted.length}</div>
-                                            <div class="stat-label">Всего прохождений</div>
+                                            <div class="stat-value">${playersWithProgress.length}</div>
+                                            <div class="stat-label">Всего игроков</div>
                                         </div>
                                         <div class="stat-card">
                                             <div class="stat-value">${fullCompletions}</div>
