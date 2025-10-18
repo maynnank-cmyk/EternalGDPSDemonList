@@ -430,6 +430,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            min-height: 80px; /* Минимальная высота для предотвращения сжатия */
         }
         
         .completion-item:hover {
@@ -472,6 +473,7 @@
         .player-info {
             flex: 1;
             text-align: left;
+            min-width: 0; /* Предотвращает сжатие текста */
         }
         
         .player-name {
@@ -485,6 +487,9 @@
             padding: 2px 8px;
             border-radius: 4px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .player-name:hover {
@@ -498,6 +503,7 @@
             align-items: center;
             gap: 10px;
             margin-top: 8px;
+            min-width: 0; /* Предотвращает сжатие */
         }
         
         .progress-bar {
@@ -507,6 +513,7 @@
             border-radius: 4px;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            min-width: 100px; /* Минимальная ширина прогресс-бара */
         }
         
         .progress-fill {
@@ -531,6 +538,7 @@
             min-width: 40px;
             text-align: right;
             font-weight: bold;
+            flex-shrink: 0;
         }
         
         .points-badge {
@@ -538,6 +546,9 @@
             color: var(--accent-green);
             font-weight: bold;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            flex-shrink: 0;
+            min-width: 60px;
+            text-align: right;
         }
         
         .no-completions {
@@ -554,61 +565,6 @@
             margin-bottom: 20px;
         }
         
-        /* Stats Section */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .stat-card {
-            background: var(--bg-tertiary);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border: 2px solid var(--border-color);
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent-green);
-        }
-        
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--accent-green);
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-        
-        /* Scrollbar Styling */
-        .completions-list::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .completions-list::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-            border-radius: 3px;
-        }
-        
-        .completions-list::-webkit-scrollbar-thumb {
-            background: var(--accent-blue);
-            border-radius: 3px;
-        }
-        
-        .completions-list::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-purple);
-        }
-
         /* Refresh Button */
         .refresh-btn {
             display: block;
@@ -888,19 +844,11 @@
                 return progressB - progressA;
             });
 
-            // Рассчитываем статистику
-            const fullCompletions = playersWithProgress.filter(player => {
-                const progress = player.progress ? player.progress[demon.id] || 100 : 100;
-                return progress === 100;
-            }).length;
-            
-            const partialCompletions = playersWithProgress.filter(player => {
-                const progress = player.progress ? player.progress[demon.id] || 100 : 100;
-                return progress >= 51 && progress < 100;
-            }).length;
-
             // Рассчитываем ранг и очки демона
-            const demonRank = fullCompletions > 0 ? 1 : 0; // Упрощенный расчет ранга
+            const demonRank = playersWithProgress.filter(p => {
+                const progress = p.progress ? p.progress[demon.id] || 100 : 100;
+                return progress === 100;
+            }).length > 0 ? 1 : 0; // Упрощенный расчет ранга
             const points = calculatePointsByRank(demonRank);
 
             const content = document.getElementById('content');
@@ -917,10 +865,6 @@
                                 <div class="meta-item">
                                     <div class="meta-value">${demon.creator}</div>
                                     <div class="meta-label">Создатель</div>
-                                </div>
-                                <div class="meta-item">
-                                    <div class="meta-value">${playersWithProgress.length}</div>
-                                    <div class="meta-label">Игроков с прогрессом</div>
                                 </div>
                                 <div class="meta-item">
                                     <div class="meta-value">${points}</div>
@@ -1003,28 +947,6 @@
                                         </div>`
                                     }
                                 </div>
-
-                                <!-- Статистика -->
-                                ${playersWithProgress.length > 0 ? `
-                                    <div class="stats-grid">
-                                        <div class="stat-card">
-                                            <div class="stat-value">${playersWithProgress.length}</div>
-                                            <div class="stat-label">Всего игроков</div>
-                                        </div>
-                                        <div class="stat-card">
-                                            <div class="stat-value">${fullCompletions}</div>
-                                            <div class="stat-label">Полных прохождений</div>
-                                        </div>
-                                        <div class="stat-card">
-                                            <div class="stat-value">${partialCompletions}</div>
-                                            <div class="stat-label">Частичных прохождений</div>
-                                        </div>
-                                        <div class="stat-card">
-                                            <div class="stat-value">${points}</div>
-                                            <div class="stat-label">Очки за 100%</div>
-                                        </div>
-                                    </div>
-                                ` : ''}
                             </div>
                         </div>
                     </div>
@@ -1044,8 +966,11 @@
         // Глобальные функции
         window.openPlayerProfile = openPlayerProfile;
         window.refreshData = refreshData;
+        window.extractYouTubeId = extractYouTubeId;
+        window.calculatePointsByRank = calculatePointsByRank;
+        window.calculatePointsWithProgress = calculatePointsWithProgress;
 
-        // Запускаем при загрузке страницы
+        // Загружаем данные при загрузке страницы
         document.addEventListener('DOMContentLoaded', loadDemonData);
     </script>
 </body>
