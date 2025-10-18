@@ -10,6 +10,15 @@
       }
     },
     {
+      "id": "dark",
+      "name": "Dark",
+      "avatar": "D",
+      "completedDemons": ["diamoncircles"],
+      "completions": {
+        "diamondcircles": "2025-01-15"
+      }
+    },
+    {
       "id": "nicepeek",
       "name": "NICEPEEK",
       "avatar": "N",
