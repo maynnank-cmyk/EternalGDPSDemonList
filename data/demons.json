@@ -37,7 +37,7 @@
       "name": "Diamond Circles",
       "creator": "Dark",
       "videoUrl": " https://www.youtube.com/watch?v=j5cnBMmOLRs",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/diamondcircles.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -53,7 +53,7 @@
       "name": "No Drop",
       "creator": "MaskEXE",
       "videoUrl": "https://youtu.be/kRIl4861V_c?si=JoAFX3xnVgC3EX5b",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/nodrop.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -61,7 +61,7 @@
       "name": "Disturb",
       "creator": "MaskEXE",
       "videoUrl": "https://youtu.be/d35KbSJN50Y?si=B_qh_Y7i_YsdT4TG",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/disturb.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -85,7 +85,7 @@
       "name": "Sleepwalker",
       "creator": "yarik",
       "videoUrl": "https://www.youtube.com/watch?v=EU2OB7UTu2U",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/sleepwalker.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -101,7 +101,7 @@
       "name": "Hailfire",
       "creator": "Dewabi",
       "videoUrl": "https://www.youtube.com/watch?v=lRrc_sUwUJc",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/hailfire.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -117,7 +117,7 @@
       "name": "Angela",
       "creator": "yoyechka",
       "videoUrl": "https://www.youtube.com/watch?v=1I6QU5aw3uE",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/hailfire.jpg",
       "description": "Один из самых известных демонов"
      },
      {
@@ -133,7 +133,7 @@
       "name": "Gravitron Last Phase",
       "creator": "Dewabi",
       "videoUrl": "https://www.youtube.com/watch?v=t4wIZ_x3tgo",
-      "image": "https://via.placeholder.com/240x135/3366ff/ffffff?text=Cataclysm",
+      "image": "images/gravitronlastphase.jpg",
       "description": "Один из самых известных демонов"
      },
      {
