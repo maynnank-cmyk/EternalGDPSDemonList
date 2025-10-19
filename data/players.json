@@ -281,10 +281,11 @@
       "id": "krimux",
       "name": "Krimux",
       "avatar": "K",
-      "completedDemons": ["difficult", "intercept"],
+      "completedDemons": ["difficult", "intercept", "kaikaikitancover"],
       "progress": {
         "difficult": 100,
-        "intercept": 100
+        "intercept": 100,
+        "kaikaikitancover": 100
       }
     },
     {
@@ -300,12 +301,13 @@
       "id": "vladgmd",
       "name": "VladGMD",
       "avatar": "V",
-      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover", "fanera", "angela"],
+      "completedDemons": ["slonikwave", "acheroncircles", "kaikaikitancover", "fanera", "noonewillescape", "angela"],
       "progress": {
         "slonikwave": 100,
         "acheroncircles": 100,
         "kaikaikitancover": 100,
         "fanera": 100,
+        "noonewillescape": 100,
         "angela": 74
       }
     },
