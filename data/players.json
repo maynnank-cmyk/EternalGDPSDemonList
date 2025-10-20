@@ -315,13 +315,15 @@
       "id": "%",
       "name": "%",
       "avatar": "%",
-      "completedDemons": ["slonikwave", "acheroncircles", "difficult", "thehellverity", "retrojumper"],
+      "completedDemons": ["slonikwave", "acheroncircles", "difficult", "thehellverity", "retrojumper", "clutter", "kaikaikitancover"],
       "progress": {
         "slonikwave": 100,
         "acheroncircles": 100,
         "difficult": 100,
         "thehellverity": 100,
-        "retrojumper": 100
+        "retrojumper": 100,
+        "clutter": 100,
+        "kaikaikitancover": 100
       }
     },
     {
